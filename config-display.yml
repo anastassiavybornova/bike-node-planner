@@ -1,0 +1,4 @@
+# display settings for QGIS layers
+display_study_area: True
+display_technical_network: True
+display_communication_network: True

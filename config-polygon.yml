@@ -1,0 +1,7 @@
+# provide distance threshold for each polygon evaluation layer
+# (for each file in /data/input/polygon/)
+agriculture: 50
+culture: 100
+nature: 100
+sommerhus: 200
+verify: 250

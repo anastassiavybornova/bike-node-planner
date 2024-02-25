@@ -1,0 +1,5 @@
+# provide distance threshold for each point evaluation layer
+# (for each file in /data/input/point/)
+"facility": 100
+"poi": 750
+"service": 1500
