@@ -1,14 +1,9 @@
-display_studyarea = True
-
 # import python packages
 import sys
 import os
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
-import geopandas as gpd
 import yaml
 from qgis.core import *
-import pandas as pd
-import json
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -20,10 +15,15 @@ if homepath not in sys.path:
 # import functions
 exec(open(homepath + "/src/eval_func.py").read())
 
-# load configs
+# load configs (global)
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
-configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
-proj_crs = configs["proj_crs"]  # projected CRS
+config = yaml.load(open(configfile), Loader=yaml.FullLoader)
+proj_crs = config["proj_crs"]  # projected CRS
+
+# load configs (display)
+configdisplayfile = os.path.join(homepath, "config-display.yml")  # filepath of config-display file
+config_display = yaml.load(open(configdisplayfile), Loader=yaml.FullLoader)
+display_studyarea = config_display["display_study_area"]
 
 # set to projected CRS
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
