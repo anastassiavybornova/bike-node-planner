@@ -12,3 +12,10 @@
 * script03 evaluation (point/polygon/linestring)
 * script04 elevation
 * script05 network statistics
+* script06 generate summary statistics plots
+
+## todos...
+* script00
+* script01: add basemap (osm)
+* script03: how to remove existing layers without knowing their name?
+* script03: visualization part (grouping layers)
