@@ -1,6 +1,13 @@
 from random import randrange
 # from qgis.core import QgsVectorLayer
 from qgis.core import *
+from ast import literal_eval
+
+def rgb_shade(rgb_string, shade = 0.6):
+    # return rgb string shaded (darkened) by a factor of *shade*
+    rbg_shaded = [int(shade*v) for v in literal_eval(rgb_string)]
+    rgb_shaded_string = str(rbg_shaded).replace("[", "").replace("]", "")
+    return rgb_shaded_string
 
 def move_study_area_front(layer_name="Study area"):
     # get basemap layer

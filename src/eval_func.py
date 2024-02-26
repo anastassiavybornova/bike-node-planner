@@ -135,32 +135,27 @@ def evaluate_export_plot_point(
 
     if display_output:
         output_layer_name_outside = f"{name} outside reach"
-
         vlayer_outside = QgsVectorLayer(
             outside_reach_output_fp, output_layer_name_outside, "ogr"
         )
-
         QgsProject.instance().addMapLayer(vlayer_outside)
-        draw_categorical_layer(
+        draw_simple_point_layer(
             output_layer_name_outside,
-            type_col,
-            predefined_color = output_color_not_reached,
-            alpha=output_alpha,
+            color=output_color_not_reached + "," + output_alpha,
             marker_size=output_size_not_reached,
+            outline_width=0,
         )
 
         output_layer_name_within = f"{name} within reach"
         vlayer_within = QgsVectorLayer(
             within_reach_output_fp, output_layer_name_within, "ogr"
         )
-
         QgsProject.instance().addMapLayer(vlayer_within)
-        draw_categorical_layer(
+        draw_simple_point_layer(
             output_layer_name_within,
-            type_col,
-            predefined_color = output_color_reached,
-            alpha=output_alpha,
+            color=output_color_reached + "," + output_alpha,
             marker_size=output_size_reached,
+            outline_width=0,
         )
 
     return input_layer_name, output_layer_name_within, output_layer_name_outside, res
