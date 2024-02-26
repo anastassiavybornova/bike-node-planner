@@ -1,0 +1,5 @@
+# custom color settings:
+# provide colors for each layer
+# format: dict with key=layername; value=rgbvalue, both as strings
+# for example:
+# "nature": "0,128,0"
