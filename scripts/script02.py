@@ -29,8 +29,10 @@ technical_nodes_exist = os.path.isfile(
 
 if communication_edges_exist:
     print("Communication network found. Will ignore data (if any) in /data/input/network/technical/")
+    print("script02.py finished successfully")
 elif not (technical_edges_exist and technical_nodes_exist): 
     print("No network data found. Please provide network data in /data/input/communication/ and/or /data/input/technical/")
+    print("script02.py finished")
 else:
     print("Technical network found. Creating a communication network...")
     # read in technical network data
@@ -56,3 +58,4 @@ else:
         communication_folder + "edges_parallel.gpkg", 
         index = False)
     print("...Communication nodes and edges for study area saved!")
+    print("script02.py finished successfully")

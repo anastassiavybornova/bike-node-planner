@@ -14,6 +14,7 @@ if homepath not in sys.path:
 
 # import functions
 exec(open(homepath + "/src/eval_func.py").read())
+exec(open(homepath + "/src/plot_func.py").read())
 
 # load configs (global)
 configfile = os.path.join(homepath, "config.yml")  # filepath of config file
@@ -32,8 +33,6 @@ QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 filepath_study = homepath + "/data/input/studyarea/studyarea.gpkg"
 
 if display_studyarea == True:
-    # import qgis-based plotting functions
-    exec(open(homepath + "/src/plot_func.py").read())
 
     remove_existing_layers(["Study area", "Basemap"])
 
@@ -48,3 +47,5 @@ if display_studyarea == True:
             outline_color="black",
             outline_width=0.5,
         )
+        
+print("script01.py finished successfully")
