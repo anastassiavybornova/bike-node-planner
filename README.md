@@ -17,5 +17,7 @@
 ## todos...
 * script00
 * script01: add basemap (osm)
-* script03: how to remove existing layers without knowing their name?
-* script03: visualization part (grouping layers)
+* script03: rerunning script03 twice gives error message about gpkg-shm...
+* script04: slope
+* script05: network stats
+* script06: summary stats
