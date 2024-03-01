@@ -1,0 +1,9 @@
+### CONFIGURATION FOR SLOPE COMPUTATION
+segment_length: 100  # max segment length in meters (slope will be computed for each segment separately)
+slope_ranges: [0, 3, 5, 7] # in percent (%) elevation
+# in the format [0, a, b, c]
+# this will be used to classify the edges by slope:
+# edges with a slope within the interval [0, a] --> "Manageable elevation"
+# edges with a slope within the interval [a, b] --> "Noticeable elevation"
+# edges with a slope within the interval [b, c] --> "Steep elevation"
+# edges with a slope above c --> "Very steep elevation"

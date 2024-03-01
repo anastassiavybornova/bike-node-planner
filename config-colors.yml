@@ -1,5 +1,14 @@
-# custom color settings:
+### custom color settings
+
+# EVALUATION
 # provide colors for each layer
 # format: dict with key=layername; value=rgbvalue, both as strings
 # for example:
 # "nature": "0,128,0"
+
+# SLOPE
+slope:
+  "slope_0" : "255, 186, 186" #  "#ffbaba"
+  "slope_a" : "255, 82, 82" # #ff5252 
+  "slope_b":  "255, 0, 0" # #ff0000 
+  "slope_c" : "167, 0, 0" # #a70000 
