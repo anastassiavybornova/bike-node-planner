@@ -29,10 +29,8 @@ technical_nodes_exist = os.path.isfile(
 
 if communication_edges_exist:
     print("Communication network found. Will ignore data (if any) in /data/input/network/technical/")
-    print("script02.py finished successfully")
 elif not (technical_edges_exist and technical_nodes_exist): 
     print("No network data found. Please provide network data in /data/input/communication/ and/or /data/input/technical/")
-    print("script02.py finished")
 else:
     print("Technical network found. Creating a communication network...")
     # read in technical network data
@@ -58,4 +56,16 @@ else:
         communication_folder + "edges_parallel.gpkg", 
         index = False)
     print("...Communication nodes and edges for study area saved!")
-    print("script02.py finished successfully")
+
+# check again whether communication edges exist
+communication_edges_path = homepath + "/data/input/network/communication/edges.gpkg"
+communication_edges_exist = os.path.isfile(communication_edges_path)
+# if so, plot edges
+if communication_edges_exist:
+    vlayer_network = QgsVectorLayer(communication_edges_path, "Network", "ogr")
+    QgsProject.instance().addMapLayer(vlayer_network)
+    draw_simple_line_layer("Network", color="black", line_width=0.5, line_style="dash")
+    zoom_to_layer("Network")
+    input_layers.append("Network")
+
+print("script02.py finished")
