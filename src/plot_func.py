@@ -467,26 +467,11 @@ def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid")
     iface.activeLayer().triggerRepaint()
     iface.layerTreeView().refreshLayerSymbology(iface.activeLayer().id())
 
-
-def remove_existing_layers(layer_name_list):
-    clean_layer_names = [l.replace(" ", "_") for l in layer_name_list]
-    clean_layer_names = [l.replace("(", "_") for l in clean_layer_names]
-    clean_layer_names = [l.replace(")", "_") for l in clean_layer_names]
-    clean_layer_names = [l.replace("/", "_") for l in clean_layer_names]
-    clean_layer_names = [l.replace(":", "_") for l in clean_layer_names]
-    clean_layer_names = [l.replace("-", "_") for l in clean_layer_names]
-
-    existing_layers_ids = [
-        layer.id() for layer in QgsProject.instance().mapLayers().values()
-    ]
-
-    remove_layers = [
-        e for e in existing_layers_ids if e.startswith(tuple(clean_layer_names))
-    ]
-
-    for r in remove_layers:
+def remove_existing_layers(nameparts):
+    existing_layers = [layer.id() for layer in QgsProject.instance().mapLayers().values()]
+    layers_to_remove = [l for l in existing_layers if any([e in l for e in nameparts])]
+    for r in layers_to_remove:
         QgsProject.instance().removeMapLayer(r)
-
     return None
 
 def draw_slope_layer(
