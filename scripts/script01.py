@@ -48,4 +48,4 @@ if display_studyarea == True:
             outline_width=0.5,
         )
         
-print("script01.py finished successfully")
+print("script01.py finished")
