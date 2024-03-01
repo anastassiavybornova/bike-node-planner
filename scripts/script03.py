@@ -34,6 +34,7 @@ for geomtype in ["point", "linestring", "polygon"]:
     geompath = homepath + f"/data/input/{geomtype}/"
     if os.path.exists(geompath):
         geomlayers = os.listdir(geompath)
+        geomlayers = [g for g in geomlayers if not("gpkg-wal" in g or "gpkg-shm" in g)]
         evaldict[geomtype] = {}
         # read in configs for this geometry type
         config_geomtype = yaml.load(
@@ -50,12 +51,8 @@ for geomtype in ["point", "linestring", "polygon"]:
             os.makedirs(geompath.replace("input", "output"), exist_ok=True)
 
 # remove existing layers...
-# TODO!
-remove_existing_layers(
-    [
-        "Network",
-    ]
-)
+eval_layers = [item for v in evaldict.values() for item in v]
+remove_existing_layers(eval_layers)
 
 # define root
 root = QgsProject.instance().layerTreeRoot()
@@ -71,13 +68,6 @@ for group in [child for child in root.children() if child.nodeType() == 0]:
 # Initialize list of layers for layer grouping
 input_layers = []
 output_layers = []
-
-# plot edges
-vlayer_network = QgsVectorLayer(edgepath, "Network", "ogr")
-QgsProject.instance().addMapLayer(vlayer_network)
-draw_simple_line_layer("Network", color="black", line_width=0.5, line_style="dash")
-zoom_to_layer("Network")
-input_layers.append("Network")
 
 # load colors for plotting of evaluation layers, if available; if not, create own palette
 config_colors = yaml.load(
@@ -167,7 +157,20 @@ if evaldict["polygon"]:
         res = res | res_current
 
 # save results of summary statistics
-with open(homepath + "results/stats/stats_evaluation.json", "w") as opened_file:
+with open(homepath + "/results/stats/stats_evaluation.json", "w") as opened_file:
     json.dump(res, opened_file, indent=6)
 
-### VISUALIZATION (order layers) - to be implemented
+### VISUALIZATION (order layers) 
+all_layers = input_layers + output_layers
+
+main_group = root.insertGroup(0, main_group_name)
+
+# evaldict[geomtype].keys() contains all the group layers (geomtype is one of "point", "linestring", "polygon")
+for geomtype, geomdict in evaldict.items():
+    for sublayer in geomdict.keys():
+        layernames = [n for n in all_layers if sublayer in n or sublayer.lower() in n]
+        sub_group = main_group.addGroup(sublayer)
+        for n in layernames:
+            add_layer_to_group(n, sub_group)
+
+print("script03.py finished")
