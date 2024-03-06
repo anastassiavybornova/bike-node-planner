@@ -5,3 +5,4 @@ display_communication_network: True
 display_evaluation_input: True
 display_evaluation_output: True
 display_slope: True
+display_network_statistics: True
