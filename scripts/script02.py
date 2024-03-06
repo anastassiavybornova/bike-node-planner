@@ -66,6 +66,5 @@ if communication_edges_exist:
     QgsProject.instance().addMapLayer(vlayer_network)
     draw_simple_line_layer("Network", color="black", line_width=0.5, line_style="dash")
     zoom_to_layer("Network")
-    input_layers.append("Network")
 
 print("script02.py finished")

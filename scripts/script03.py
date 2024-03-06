@@ -58,7 +58,7 @@ remove_existing_layers(eval_layers)
 root = QgsProject.instance().layerTreeRoot()
 
 # make main group for layers
-main_group_name = "Evaluate network"
+main_group_name = "Evaluation"
 
 # Check if group already exists
 for group in [child for child in root.children() if child.nodeType() == 0]:
@@ -71,9 +71,10 @@ output_layers = []
 
 # load colors for plotting of evaluation layers, if available; if not, create own palette
 config_colors = yaml.load(
-    open(homepath + "/config-colors.yml"), 
+    open(homepath + "/config-colors-eval.yml"), 
     Loader=yaml.FullLoader
     )
+
 if not config_colors:
     # get colors (as rgb strings) from seaborn colorblind palette 
     layernames = sorted([item for v in evaldict.values() for item in v.keys()])
@@ -81,6 +82,9 @@ if not config_colors:
     config_colors = {}
     for k, v in zip(layernames, layercolors):
         config_colors[k] = str([int(rgba*255) for rgba in v]).replace("[", "").replace("]", "")
+    # and save as separate yml
+    with open(homepath + "/config-colors-eval-auto.yml", "w") as opened_file:
+        yaml.dump(config_colors, opened_file, indent=6)
 
 # initialize stats results dictionary
 res = {}  
