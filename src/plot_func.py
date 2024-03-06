@@ -1,4 +1,6 @@
+import random
 from random import randrange
+random.seed(42)
 # from qgis.core import QgsVectorLayer
 from qgis.core import *
 from ast import literal_eval
@@ -79,6 +81,8 @@ def add_layer_to_group(layer_name, group, position=-1):
 def group_layers(group_name, layer_names, remove_group_if_exists=True):
     """
     Create new group and add layers to it.
+    group_name ... name of the new group.
+    layer_names ... names of (already existing in the project) layers to add.
     """
     root = QgsProject.instance().layerTreeRoot()
 
