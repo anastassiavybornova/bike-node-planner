@@ -472,6 +472,7 @@ def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid")
     iface.layerTreeView().refreshLayerSymbology(iface.activeLayer().id())
 
 def remove_existing_layers(nameparts):
+    nameparts = [n.replace(" ", "_") for n in nameparts]
     existing_layers = [layer.id() for layer in QgsProject.instance().mapLayers().values()]
     layers_to_remove = [l for l in existing_layers if any([e in l for e in nameparts])]
     for r in layers_to_remove:
