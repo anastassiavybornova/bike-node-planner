@@ -29,13 +29,23 @@ display_studyarea = config_display["display_study_area"]
 # set to projected CRS
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 
-# define location of study area polygon (union of user-provided municipality polygons)
-filepath_study = homepath + "/data/input/studyarea/studyarea.gpkg"
+# Add basemap
+remove_existing_layers(["Basemap"])
+epsg = proj_crs.replace(":", "")
+url = f'type=xyz&url=https://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0&crs={epsg}'
+basemap = QgsRasterLayer(url, 'Basemap', 'wms')  
+if basemap.isValid():
+    QgsProject.instance().addMapLayer(basemap, False)
+root = QgsProject.instance().layerTreeRoot()
+root.insertLayer(-1, basemap)
 
+# Add study area (if requested)
+remove_existing_layers(["Study area"])
 if display_studyarea == True:
 
-    remove_existing_layers(["Study area", "Basemap"])
-
+    # define location of study area polygon (union of user-provided municipality polygons)
+    filepath_study = homepath + "/data/input/studyarea/studyarea.gpkg"
+    
     sa_layer = QgsVectorLayer(filepath_study, "Study area", "ogr")
     if not sa_layer.isValid():
         print("Study area layer failed to load!")
@@ -47,5 +57,5 @@ if display_studyarea == True:
             outline_color="black",
             outline_width=0.5,
         )
-        
+
 print("script01.py finished")

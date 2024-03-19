@@ -11,7 +11,7 @@
 * script02 communication network
 * script03 evaluation (point/polygon/linestring)
 * script04 elevation
-* script05 network statistics
+* script05 network statistics & component plotting
 * script06 generate summary statistics plots
 
 ## todos...

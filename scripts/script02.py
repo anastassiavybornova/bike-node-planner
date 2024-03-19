@@ -62,6 +62,7 @@ communication_edges_path = homepath + "/data/input/network/communication/edges.g
 communication_edges_exist = os.path.isfile(communication_edges_path)
 # if so, plot edges
 if communication_edges_exist:
+    remove_existing_layers(["Network"])
     vlayer_network = QgsVectorLayer(communication_edges_path, "Network", "ogr")
     QgsProject.instance().addMapLayer(vlayer_network)
     draw_simple_line_layer("Network", color="black", line_width=0.5, line_style="dash")

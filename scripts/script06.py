@@ -4,6 +4,7 @@ import os
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import json
 import yaml
@@ -80,115 +81,156 @@ if not config_colors:
     for k, v in zip(layernames, layercolors):
         config_colors[k] = str([int(rgba*255) for rgba in v]).replace("[", "").replace("]", "")
 
-# ### READ IN NETWORK DATA
+### READ IN NETWORK DATA
 
-# muni = gpd.read_file(homepath + "/data/raw/municipality_boundaries/muni_boundary.gpkg")
+study_area = gpd.read_file(
+    homepath + "/data/input/studyarea/studyarea.gpkg"
+    )
+network_edges = gpd.read_file(
+    homepath + "/data/input/network/communication/edges.gpkg"
+)
 
-# # paths
-# path = homepath + "/data/processed/workflow_steps/"
-# edge_file = "network_edges_no_parallel.gpkg"
-# # node_file = "nodes_edges_parallel.gpkg"
+### READ IN STATS
 
-# # read in
-# edges = gpd.read_file(path + edge_file)
-# # nodes = gpd.read_file(path + node_file)
+eval_stats = json.load(
+    open(
+        homepath + "/results/stats/stats_evaluation.json", 
+        "r"
+    )
+)
 
-# ### READ IN EVALUATION RESULTS
+fig, ax = plt.subplots(1,1)
 
-# # paths
-# filenames = os.listdir(homepath + "/results/data/")
-# path = homepath + "/results/data/"
+# plot study area
+study_area.plot(
+    ax = ax,
+    color = rgb2hex("250,181,127"),
+    alpha = 0.5,
+    zorder = 1
+    )
+# plot network
+network_edges.plot(
+    ax = ax,
+    color = "black",
+    linewidth = 1
+)
+cx.add_basemap(
+    ax = ax, 
+    source = cx.providers.CartoDB.Voyager,
+    crs = study_area.crs)
 
-# # read in segments
-# # segments = gpd.read_file(path + "segments_slope.gpkg")
+ax.set_title("Study area & network")
 
-# # define distance thresholds for polygon layers
-# dist_veri = configs["polygon_buffers"]["dist_verify"]
-# dist_agri = configs["polygon_buffers"]["dist_agriculture"]
-# dist_culture = configs["polygon_buffers"]["dist_culture"]
-# dist_nature = configs["polygon_buffers"]["dist_nature"]
-# dist_summer = configs["polygon_buffers"]["dist_summer"]
+ax.set_axis_off()
 
-# # define distance thresholds for point layers
-# dist_faci = configs["point_distances"]["dist_facilities"]
-# dist_serv = configs["point_distances"]["dist_service"]
-# dist_pois = configs["point_distances"]["dist_pois"]
+fig.savefig(
+    homepath + "/results/plots/studyarea_network.png", 
+    dpi = 300,
+    bbox_inches = "tight"
+)
 
-# # read in polygon layers
-# agri_path = path + f"agriculture_network_{dist_agri}.gpkg"
-# if os.path.exists(agri_path):
-#     agriculture = gpd.read_file(agri_path)
-# else:
-#     agriculture = gpd.GeoDataFrame()
+# for each polygon layer, plot the amounts of network within
+for k, v in evaldict["polygon"].items():
 
-# verify_path = path + f"verify_network_{dist_veri}.gpkg"
-# if os.path.exists(verify_path):
-#     verify = gpd.read_file(verify_path)
-# else:
-#     verify = gpd.GeoDataFrame()
+    # k is the name of the layer
+    # v is a dict: v["gpkg"] contains the network _within_
+    #              v["bufferdistance"] contains the bufferdistance (in meters)
+    # plot in color config_colors[k]
 
-# culture_path = path + f"culture_network_{dist_culture}.gpkg"
-# if os.path.exists(culture_path):
-#     culture = gpd.read_file(culture_path)
-# else:
-#     culture = gpd.GeoDataFrame()
+    # get stats on percent within
+    percent_within = np.round(
+        100 * eval_stats[k]["within"] / (eval_stats[k]["outside"] + eval_stats[k]["within"]), 
+        1
+    )
 
-# nature_path = path + f"nature_network_{dist_nature}.gpkg"
-# if os.path.exists(nature_path):
-#     nature = gpd.read_file(nature_path)
-# else:
-#     nature = gpd.GeoDataFrame()
+    # get bufferdistance
+    bufferdistance = v["bufferdistance"]
 
-# summer_path = path + f"summer_network_{dist_summer}.gpkg"
-# if os.path.exists(summer_path):
-#     summer = gpd.read_file(summer_path)
-# else:
-#     summer = gpd.GeoDataFrame()
+    # plot
+    fig, ax = plt.subplots(1,1)
+    network_edges.plot(
+        ax = ax,
+        color = "#D3D3D3",
+        linewidth = 0.8,
+        linestyle = "solid",
+        zorder = 0,
+    )
+    v["gpkg"].plot(
+        ax=ax,
+        color = rgb2hex(config_colors[k]),
+        linewidth = 1.5,
+        zorder = 1,
+        label = f"{percent_within}%"
+    )
+    ax.set_title(f"{k.capitalize()} within {bufferdistance}m from network")
+    ax.set_axis_off()
+    ax.legend(loc = "lower right")
 
-# ## FOR NOW: MERGE POINT LAYERS
-# # (later: make output 1 layer)
+    fig.savefig(
+        homepath + f"/results/plots/{k}.png", 
+        dpi = 300,
+        bbox_inches = "tight"
+    )
 
-# facilities_within = gpd.read_file(path + f"facilities_within_reach_{dist_faci}.gpkg")
-# facilities_outside = gpd.read_file(path + f"facilities_outside_reach_{dist_faci}.gpkg")
-# facilities = pd.concat([facilities_outside, facilities_within], ignore_index=True)
+    plt.close()
 
-# service_within = gpd.read_file(path + f"service_within_reach_{dist_serv}.gpkg")
-# service_outside = gpd.read_file(path + f"service_outside_reach_{dist_serv}.gpkg")
-# service = pd.concat([service_outside, service_within], ignore_index=True)
+# for each point layer, plot points reached / unreached separately (colors!)
+for k, v in evaldict["point"].items():
+    
+    # k is the layername
+    # v is a dict: v["bufferdistance"], v["gpkg_within"], v["gpkg_without"]
 
-# pois_within = gpd.read_file(path + f"pois_within_reach_{dist_pois}.gpkg")
-# pois_outside = gpd.read_file(path + f"pois_outside_reach_{dist_pois}.gpkg")
-# pois = pd.concat([pois_outside, pois_within], ignore_index=True)
+    # get stats on percent within / outside
 
-# ### READ IN STATS RESULTS
-# # with open(homepath + "/results/stats/stats_studyarea.json") as opened_file:
-# #     stats_studyarea = json.load(opened_file)
-# #
-# # with open(homepath + "/results/stats/stats_evaluation.json") as opened_file:
-# #     stats_evaluation = json.load(opened_file)
-# #
-# # with open(homepath + "/results/stats/stats_network.json") as opened_file:
-# #     stats_network = json.load(opened_file)
+    percent_within = np.round(
+        100 * eval_stats[k]["within"] / eval_stats[k]["total"], 
+        1
+    )
 
-# ### MAKE FIGURE
-# stats_fig = plot_overview(
-#     my_markersize=30,
-#     my_linewidth=3,
-#     configs=configs,
-#     colors=colors,
-#     edges=edges,
-#     muni=muni,
-#     nature=nature,
-#     agriculture=agriculture,
-#     culture=culture,
-#     verify=verify,
-#     summer=summer,
-#     facilities=facilities,
-#     service=service,
-#     pois=pois
-#     )
+    percent_outside = np.round(
+        100 - percent_within, 
+        1
+    )
 
-# stats_fig.savefig(homepath + f"/results/plots/evaluation.png", dpi = 300)
-# print(f"Summary statistics plot saved")
+    # get bufferdistance
+    bufferdistance = v["bufferdistance"]
 
-# print("script06.py finished")
+    fig, ax = plt.subplots(1,1)
+    network_edges.plot(
+        ax = ax,
+        color = "#D3D3D3",
+        linewidth = 0.8,
+        linestyle = "solid",
+        zorder = 0,
+    )
+
+    v["gpkg_outside"].plot(
+        ax=ax,
+        color = rgb2hex(config_colors[k]),
+        zorder = 1,
+        label = f"Outside reach ({percent_outside}%)",
+        markersize = 2,
+        alpha = 0.3
+    )
+
+    v["gpkg_within"].plot(
+        ax=ax,
+        color = rgb2hex(config_colors[k]),
+        zorder = 2,
+        label = f"Within reach ({percent_within}%)",
+        markersize = 2
+    )
+    ax.set_title(f"{k.capitalize()} within {bufferdistance}m from network")
+    ax.set_axis_off()
+    ax.legend(loc = "lower right")
+
+    fig.savefig(
+        homepath + f"/results/plots/{k}.png", 
+        dpi = 300,
+        bbox_inches = "tight"
+    )
+
+    plt.close()
+
+print("Plots saved to /results/plots/")
+print("script06.py finished")

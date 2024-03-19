@@ -147,7 +147,9 @@ print(f"Network statistics saved to {stats_path}")
 # remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
 
 if display_network_statistics:
-    
+
+    remove_existing_layers(["Component"])
+
     comp_files = os.listdir(comppath)
     comp_numbers = [int(re.findall(r'\d+', file)[0]) for file in comp_files]
     comp_layer_names = []

@@ -108,9 +108,11 @@ vlayer_edges = QgsVectorLayer(
 )
 
 # ##### IMPORT DIGITAL ELEVATION MODEL AS QGIS LAYER
+remove_existing_layers(["DEM terrain"])
+
 dem_terrain = QgsRasterLayer(
     homepath + "/data/input/dem/dem.tif", 
-    "dem_terrain"
+    "DEM terrain"
 )
 QgsProject.instance().addMapLayer(dem_terrain)
 
@@ -273,6 +275,7 @@ vlayer_slope = QgsVectorLayer(
 )
 
 if display_slope:
+    remove_existing_layers(["Segments slope"])
 
     QgsProject.instance().addMapLayer(vlayer_slope)
 
@@ -309,12 +312,15 @@ edges.to_file(edges_slope_fp, mode="w")
 ##### PLOT RESULTS (SLOPE BY EDGE)
 
 if display_slope:
+    
+    remove_existing_layers(["Edges average slope"])
+    
     vlayer_edge_slope = QgsVectorLayer(
         edges_slope_fp,
         "Edges average slope",
         "ogr",
     )
-
+    
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
     draw_slope_layer(
@@ -344,6 +350,9 @@ with open(stats_path, "w") as opened_file:
 # ##### PLOT RESULTS (STEEP SEGMENTS)
 
 if display_slope:
+
+    remove_existing_layers(["Segments with slope"])
+
     vlayer_steep_segments = QgsVectorLayer(
         steep_segments_fp,
         f"Segments with slope > {slope_threshold}%",
