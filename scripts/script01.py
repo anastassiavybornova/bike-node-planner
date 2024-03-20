@@ -58,4 +58,11 @@ if display_studyarea == True:
             outline_width=0.5,
         )
 
+# create subfolders for results
+for subfolder in ["plots", "stats", "pdf"]:
+    os.makedirs(
+        homepath + f"/results/{subfolder}",
+        exist_ok=True
+        )
+
 print("script01.py finished")
