@@ -123,6 +123,7 @@ nodes_undir.to_file(nodefile, mode="w")
 ### save component edges separately
 
 # make directory
+os.makedirs(homepath + "/data/output/network/", exist_ok=True)
 comppath = homepath + "/data/output/network/components/"
 os.makedirs(
     comppath, 
