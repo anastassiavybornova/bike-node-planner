@@ -1,23 +1,21 @@
 # bike-node-planner
 
-## to explain... 
+## prepare QGIS & Python environment
 
-* ./data/input/X & ./config-X.yml
+as for [knudepunkter](https://github.com/anastassiavybornova/knudepunkter) (for the future, possibly in docker?)
 
-## scripts...
+## prepare data
 
-* script00 check for correctness of all data
-* script01 study area
-* script02 communication network
-* script03 evaluation (point/polygon/linestring)
-* script04 elevation
-* script05 network statistics & component plotting
-* script06 generate summary statistics plots
+* download/clone this repo
+* provide data in `./data/input/` (if Denmark: data preprocessing is automatized, see [data-denmark repo](https://github.com/anastassiavybornova/bike-node-planner-data-denmark))
+* provide user settings in `./config-X.yml`
 
-## todos...
-* script00
-* script01: add basemap (osm)
-* script03: rerunning script03 twice gives error message about gpkg-shm...
-* script04: slope
-* script05: network stats
-* script06: summary stats
+## run scripts in QGIS
+
+* **TODO** script00 checks for correctness of all data
+* script01 plots study area
+* script02 makes and plots communication network
+* script03 makes and plots evaluation (point/polygon/linestring)
+* script04 makes and plots elevation (slope)
+* script05 makes and plots network statistics & disconnected components
+* script06 generates summary statistics plot in `results/plots/*.png`
