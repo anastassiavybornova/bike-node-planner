@@ -58,7 +58,10 @@ if display_studyarea == True:
             outline_width=0.5,
         )
 
-# create subfolders for results
+# create subfolders for output and results
+os.makedirs(homepath + "/data/output/", exist_ok=True)
+os.makedirs(homepath + "/results/", exist_ok=True)
+
 for subfolder in ["plots", "stats", "pdf"]:
     os.makedirs(
         homepath + f"/results/{subfolder}",
