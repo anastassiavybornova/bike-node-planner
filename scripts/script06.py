@@ -10,11 +10,20 @@ import json
 import yaml
 import contextily as cx
 import re
+import glob
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 if homepath not in sys.path:
     sys.path.append(homepath) # add project path to PATH
+
+# remove preexisting plots (if any)
+preexisting_plots = glob.glob(homepath + "/results/plots/*")    
+for plot in preexisting_plots:
+    try:
+        os.remove(plot)
+    except:
+        pass
 
 # read in custom functions
 exec(open(homepath + "/src/stat_func.py").read())

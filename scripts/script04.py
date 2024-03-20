@@ -42,6 +42,9 @@ else:
     slope_colors = ['255, 186, 186', '255, 82, 82', '255, 0, 0', '167, 0, 0']
 slope_colors = [rgb2hex(c) for c in slope_colors]
 
+# make output folder
+os.makedirs(homepath + "/data/output/elevation/", exist_ok=True)
+
 # #### PATHS
 
 # # input
@@ -368,14 +371,13 @@ if display_slope:
         line_style="solid",
     )
 
-
 group_layers(
     group_name = "Slope",
     layer_names = [
         "Edges average slope",
         "Segments slope",
         f"Segments with slope > {slope_threshold}%",
-        "dem_terrain"
+        "DEM terrain"
     ],
     remove_group_if_exists=True,
 )

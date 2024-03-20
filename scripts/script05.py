@@ -13,6 +13,7 @@ import re
 import seaborn as sns
 import random
 random.seed(42)
+import glob
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -119,18 +120,28 @@ ox.save_graphml(G_undirected, graph_file)
 edges_undir.to_file(edgefile, mode="w")
 nodes_undir.to_file(nodefile, mode="w")
 
-# save component edges separately
-comppath = homepath + "/data/output/network/components/"
+### save component edges separately
 
+# make directory
+comppath = homepath + "/data/output/network/components/"
 os.makedirs(
     comppath, 
     exist_ok=True
     )
+    
+# remove preexisting files, if any
+preexisting_files = glob.glob(comppath + "*")
+for file in preexisting_files:
+    try:
+        os.remove(file)
+    except:
+        pass
 
 zfill_regex = "{:0" + str(len(str(len(comps)))) + "d}" # add leading 0s to filename if needed
 for c in edges_undir.component.unique():
+    compfile = comppath + "comp" + zfill_regex.format(c) + ".gpkg"
     edges_undir.loc[edges_undir["component"]==c].to_file(
-        comppath + "comp" + zfill_regex.format(c) + ".gpkg",
+        compfile,
         index = False
         )
 

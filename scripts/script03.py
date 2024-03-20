@@ -54,6 +54,17 @@ for geomtype in ["point", "linestring", "polygon"]:
 eval_layers = [item for v in evaldict.values() for item in v]
 remove_existing_layers(eval_layers)
 
+# remove existing OUTPUT files, if any
+for geomtype in ["point", "linestring", "polygon"]:
+    geompath = homepath + f"/data/output/{geomtype}/"
+    if os.path.exists(geompath):
+        preexisting_files = glob.glob(geompath + "*")
+    for f in preexisting_files:
+        try:
+            os.remove(f)
+        except:
+            pass
+            
 # define root
 root = QgsProject.instance().layerTreeRoot()
 
