@@ -1,10 +1,2 @@
 # provide projected crs 
 proj_crs: "EPSG:25832"
-
-# buffer for polygon layers [meters]
-
-# buffer for point layers [meters]
-
-# segment lengths
-
-# elevation bands
