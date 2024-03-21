@@ -1,21 +1,27 @@
-# bike-node-planner
+# BikeNodePlanner
 
-## prepare QGIS & Python environment
+A Planning & Decision Support Tool for bicycle node networks
 
-as for [knudepunkter](https://github.com/anastassiavybornova/knudepunkter) (for the future, possibly in docker?)
+Explain in 3 sentences what this tool does.
 
-## prepare data
+Link to article.
 
-* download/clone this repo
-* provide data in `./data/input/` (if Denmark: data preprocessing is automatized, see [data-denmark repo](https://github.com/anastassiavybornova/bike-node-planner-data-denmark))
-* provide user settings in `./config-X.yml`
+## Step 1: Software installations
 
-## run scripts in QGIS
+First, set up the BikeNodePlanner environment on your machine. Detailed instructions are [here](./docs/step01_install_software.md).
 
-* **TODO** script00 checks for correctness of all data
-* script01 plots study area
-* script02 makes and plots communication network
-* script03 makes and plots evaluation (point/polygon/linestring)
-* script04 makes and plots elevation (slope)
-* script05 makes and plots network statistics & disconnected components
-* script06 generates summary statistics plot in `results/plots/*.png`
+## Step 2: Prepare your data
+
+Second, prepare your input data for the BikeNodePlanner:
+* the bicycle node network that you want to evaluate
+* the geospatial data for the evaluation
+
+Detailed instructions are [here](./docs/step02_prepare_data.md).
+
+## Step 3: Customize your user settings
+
+Third, customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions are [here](./docs/step03_customize_settings.md).
+
+## Step 4: Run the BikeNodePlanner evaluation in QGIS, and explore results!
+
+Fourth, the fun begins! Now you can run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions are [here](./docs/step04_run_evaluation.md).
