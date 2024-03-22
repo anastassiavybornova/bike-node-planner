@@ -1,16 +1,12 @@
 # Step 02: Prepare your input data 
 
-***
-
 ## 🇩🇰 If your study area is in Denmark 🇩🇰
 
 For all Danish municipalities, the steps below (how to provide input data for the BikeNodePlanner) have been **automatized**. Disregard all steps below; instead, find detailed instructions on how to automatically generate input data for your Danish study area [here](https://github.com/anastassiavybornova/bike-node-planner-data-denmark).
 
-***
-
 ## How to format and provide data
 
-You need to provide the following data sets:
+You need to provide the following data sets, described in detail below:
 * [study area polygon](/docs/step02_prepare_data.md#study-area-polygon)
 * network in study area: [nodes and edges](/docs/step02_prepare_data.md#network-data)
 * (optional) evaluation data for study area: [polygon layers](/docs/step02_prepare_data.md#optional-land-use-data-for-evaluation-polygon-geometries)
@@ -22,6 +18,7 @@ Requirements:
 * All data must be in the same **projected coordinate reference system**.
 * To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [previous step](/README.md#step-1-software-installations) for instructions on how to download the folder from GitHub.) 
 * All data sets described below need to be placed in the corresponding subfolders of `/bike-node-planner-main/data/input/`.
+* Once you run the BikeNodePlanner in QGIS, the first step will automatically make sure that the data sets you provided follow all the specifications (see [Step 04](/docs/step04_run_evaluation.md) for details).
 
 ## Study area polygon
 
