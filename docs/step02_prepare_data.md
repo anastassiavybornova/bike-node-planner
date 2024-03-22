@@ -1,20 +1,29 @@
 # Step 02: Prepare your input data 
 
-## If your study area is in Denmark
+***
+
+## 🇩🇰 If your study area is in Denmark 🇩🇰
 
 For all Danish municipalities, the steps below (how to provide input data for the BikeNodePlanner) have been **automatized**. Disregard all steps below; instead, find detailed instructions on how to automatically generate input data for your Danish study area [here](https://github.com/anastassiavybornova/bike-node-planner-data-denmark).
 
-## Format and provide data
+***
 
-All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html). 
+## How to format and provide data
 
-All data must be in the same **projected coordinate reference system**.
+You need to provide the following data sets:
+* [study area polygon](/docs/step02_prepare_data.md#study-area-polygon)
+* network in study area: [nodes and edges](/docs/step02_prepare_data.md#network-data)
+* (optional) evaluation data for study area: [polygon layers](/docs/step02_prepare_data.md#optional-land-use-data-for-evaluation-polygon-geometries)
+* (optional) evaluation data for study area: [point layers](/docs/step02_prepare_data.md#optional-points-of-interest-data-for-evaluation-point-geometries)
+* (optional) elevation data for study area: [a tif file](/docs/step02_prepare_data.md#optional-elevation-data-tif-file)
 
-To provide the necessary input data, navigate to the `bike-node-planner-main` folder on your local machine. (See previous step for instructions on how to download the folder from GitHub.) 
+Requirements:
+* All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html). 
+* All data must be in the same **projected coordinate reference system**.
+* To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [previous step](/README.md#step-1-software-installations) for instructions on how to download the folder from GitHub.) 
+* All data sets described below need to be placed in the corresponding subfolders of `/bike-node-planner-main/data/input/`.
 
-All data sets described below need to be placed in the corresponding subfolders of `bike-node-planner-main/data/input/`.
-
-## Provide study area polygon
+## Study area polygon
 
 To provide the study area, place this 1 file in the `studyarea` subfolder:
 
@@ -22,13 +31,14 @@ To provide the study area, place this 1 file in the `studyarea` subfolder:
 
 a single **polygon or multipolygon** delineating the extent of the study area.  
 
-## Provide network data
+## Network data
 
 To provide input network data, place these 2 files in the `/network/communication/` subfolder:
 
 1. `nodes.gpkg`: a set of point geometries representing the bicycle nodes 
 2. `edges.gpkg`: a set of linestring geometries representing the network edges in the bicycle network
 
+Requirements:
 * All nodes must have a unique node id and all edges must be uniquely indexed by their start and end node. 
 * The network must be simplified: each intersection must be represented by exactly one node, and each network segment must be represented by exactly one edge. **Note:** If your network data is more detailed (e.g. in a format used for routing on the road network or technical planning of signage at intersections), the BikeNodePlanner includes a pre-processing step that can convert the detailed network into the required simplified network; see the last section on this page for instructions, [Simplify network](/docs/step02_prepare_data.md#if-necessary-simplify-network). 
 * The network must be topologically correct, i.e. with snapping of edge and node geometries. 
@@ -36,7 +46,7 @@ To provide input network data, place these 2 files in the `/network/communicatio
 
 <p align="center"><img alt="Illustration of interstitial node" src="/img/inter_node.png" width=25%></p>
 
-## Optional: Provide land use data for evaluation (polygon geometries)
+## Optional: Land use data for evaluation (polygon geometries)
 
 This step is fully customizable. You can decide yourself which land use data to use here. The BikeNodePlanner will evaluate the network for each provided land use layer _separately_, analyzing which parts of the network run _through_ each of the land use layers. 
 
@@ -54,7 +64,7 @@ For each polygon layer, you can define a customized buffer distance: how close t
 
 If no data is provided in the `/polygon/` subfolder, the BikeNodePlanner will conduct no polygon layer analysis.
 
-## Optional: Provide points of interest data for evaluation (point geometries)
+## Optional: Points of interest data for evaluation (point geometries)
 
 This step is fully customizable. You can decide yourself which point of interest data to use here. The BikeNodePlanner will evaluate the network for each provided point layer _separately_, analyzing which points are _within_ and which points are _outside_ reach of the network. 
 
@@ -72,7 +82,7 @@ For each point layer, you can define a customized buffer distance: how close to 
 
 If no data is provided in the `/point/` subfolder, the BikeNodePlanner will conduct no point layer analysis.
 
-## Optional: Provide elevation data (tif file)
+## Optional: Elevation data (tif file)
 
 To provide elevation data for the area, place this 1 file in the `/elevation/` subfolder:
 
@@ -86,7 +96,7 @@ The elevation data set must:
 
 If no data is provided in the `/dem/` subfolder, the BikeNodePlanner will conduct no elevation analysis.
 
-## If necessary: simplify network
+## If necessary: Simplify network
 
 to do: provide here instructions on how to simplify network (cf. https://github.com/anastassiavybornova/knudepunkter/blob/main/docs/datarequirements.md)
 

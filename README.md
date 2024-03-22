@@ -25,6 +25,8 @@ Anastassia Vybornova<sup>1</sup>, Ane Rahbek Vierø<sup>1</sup>, Michael Szell<s
 
 2, 3 Michael's further affiliations
 
+***
+
 # Instructions
 
 To use the BikeNodePlanner, follow the detailed step-by-step instructions below. 
@@ -50,3 +52,9 @@ Third, customize the BikeNodePlanner analysis by providing your preferred user s
 ## Step 4: Run the BikeNodePlanner evaluation in QGIS, and explore results!
 
 Fourth, the fun begins! Now you can run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions are [here](./docs/step04_run_evaluation.md).
+
+***
+
+# Getting in touch
+
+Questions, comments, feedback? You can [reach out to us by email](mailto:anvy@itu.dk)!
