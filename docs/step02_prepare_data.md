@@ -8,3 +8,6 @@ Evaluation:
 
 Study area:
 * gpkg in data/input/studyarea
+
+If Denmark:
+* go here https://github.com/anastassiavybornova/bike-node-planner-data-denmark 

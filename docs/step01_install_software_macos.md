@@ -22,7 +22,7 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 
 4. Open your command line interface (Terminal on macOS)
 
-5. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` by the path from step 2, and hit enter.) Note that you have to be connected to the internet for the installs to work.
+5. Use the path from step 3 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` by the path from step 3, and hit enter.) Note that you have to be connected to the internet for the installs to work.
 
 ```
 <qgispythonpath> -m pip install --upgrade shapely  
@@ -32,7 +32,7 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4
 <qgispythonpath> -m pip install contextily
 ```
-Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate to the `knudepunkter-main` folder in your command line interface and run `./setuppython.sh <qgispythonpath>`.
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate `bike-node-planner-main` folder in your command line interface and run `./setuppython.sh <qgispythonpath>`.
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
 
