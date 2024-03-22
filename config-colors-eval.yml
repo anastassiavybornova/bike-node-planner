@@ -1,8 +1,8 @@
-### custom color settings
-
-# EVALUATION
-# provide colors for each layer
-# format: dict with key=layername; value=rgbvalue, both as strings
+# here you can provide custom colors for each layer from the two folders
+# `/data/input/point/` and `/data/input/polygon/`
+# format: "layername" : "X,Y,Z" 
+# where X, Y, Z are the RGB values (see e.g. https://rgbcolorpicker.com)
 # for example:
 # "nature": "0,128,0"
-# if not provided, will generate colors automatically.
+# unless you provide custom colors for all layers, 
+# the BikeNodePlanner will generate colors automatically.

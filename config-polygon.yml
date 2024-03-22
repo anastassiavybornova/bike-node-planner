@@ -1,5 +1,9 @@
 # provide distance threshold for each polygon evaluation layer
-# (for each file in /data/input/polygon/)
+# (for each file in /data/input/polygon/) in the format
+# "filename" : X 
+# where "filename" is the layer's filename without the .gpkg extension,
+# and X is the buffer distance in meters.
+# for example:
 agriculture: 50
 culture: 100
 nature: 100

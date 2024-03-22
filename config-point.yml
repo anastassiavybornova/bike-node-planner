@@ -1,5 +1,9 @@
-# provide distance threshold for each point evaluation layer
-# (for each file in /data/input/point/)
+# provide a distance threshold for each point evaluation layer
+# (for each file in /data/input/point/) in the format 
+# "filename" : X 
+# where "filename" is the layer's filename without the .gpkg extension,
+# and X is the distance threshold in meters.
+# for example:
 "facility": 100
 "poi": 750
 "service": 1500

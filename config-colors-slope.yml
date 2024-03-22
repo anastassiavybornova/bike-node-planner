@@ -1,4 +1,8 @@
 ### custom color settings
+# here you can edit the default colors for slope visualization
+# format: "sloperange" : "X,Y,Z" 
+# where 0, a, b, c refers to the corresponding slope range (see config-slope.yml for their values)
+# and X, Y, Z are RGB values (see e.g. https://rgbcolorpicker.com)
 
 # SLOPE
 slope:

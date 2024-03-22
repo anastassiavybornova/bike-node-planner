@@ -1,2 +1,2 @@
-# provide projected crs 
+# provide a projected crs for your study area in the format "EPSG:XXXX"
 proj_crs: "EPSG:25832"
