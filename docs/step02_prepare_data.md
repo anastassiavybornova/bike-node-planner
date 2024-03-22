@@ -1,12 +1,6 @@
-Network itself:
-* explain communication/technical
-* nodes, edges in data/input/network
+## If your study area is in Denmark
 
-If Denmark:
-* go here https://github.com/anastassiavybornova/bike-node-planner-data-denmark 
-
-
-***
+For all Danish municipalities, the steps below (how to provide input data for the BikeNodePlanner) have been **automatized**. Disregard all steps below; instead, find detailed instructions on how to automatically generate input data for your Danish study area [here](https://github.com/anastassiavybornova/bike-node-planner-data-denmark).
 
 ## Format and provide data
 
