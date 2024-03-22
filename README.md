@@ -2,7 +2,7 @@
 
 *A Decision Support Tool for Bicycle Node Networks*
 
-<p align="center"><img alt="The Cycle Node Network Planner" src="/images/social-preview.png" width=100%></p>
+<p align="center"><img alt="The Cycle Node Network Planner" src="/img/social-preview.png" width=100%></p>
 
 The BikeNodePlanner is an open-source, customizable, data-driven decision support tool for bicycle node network planning. The BikeNodePlanner runs in QGIS and Python. It can be used for any study area in the world. 
 
