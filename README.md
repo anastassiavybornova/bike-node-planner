@@ -31,7 +31,9 @@ To use the BikeNodePlanner, follow the detailed step-by-step instructions below.
 
 ## Step 1: Software installations
 
-First, set up the BikeNodePlanner environment on your machine. Detailed instructions are [here](./docs/step01_install_software.md).
+First, set up the BikeNodePlanner environment on your machine. Detailed instructions depend on your operating system:
+* [here for macOS/linux](./docs/step01_install_software_macos.md)
+* [here for Windows](./docs/step01_install_software_windows.md)
 
 ## Step 2: Prepare your data
 
