@@ -2,13 +2,6 @@ Network itself:
 * explain communication/technical
 * nodes, edges in data/input/network
 
-Evaluation:
-* gpkgs in data/input/point, data/input/polygon
-* elevation in data/input/dem
-
-Study area:
-* gpkg in data/input/studyarea
-
 If Denmark:
 * go here https://github.com/anastassiavybornova/bike-node-planner-data-denmark 
 
@@ -17,7 +10,7 @@ If Denmark:
 
 ## Format and provide data
 
-All files must be in the GeoPackage file format, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html). 
+All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html). 
 
 All data must be in the same **projected coordinate reference system**.
 
@@ -32,11 +25,12 @@ To provide input network data, place these 2 files in the `/network/communicatio
 1. `nodes.gpkg`: a set of point geometries representing the bicycle nodes 
 2. `edges.gpkg`: a set of linestring geometries representing the network edges in the bicycle network
 
-All nodes must have a unique node id and all edges must be uniquely indexed by their start and end node. 
+* All nodes must have a unique node id and all edges must be uniquely indexed by their start and end node. 
+* The network must be simplified: each intersection must be represented by exactly one node, and each network segment must be represented by exactly one edge. **Note:** If your network data is more detailed (e.g. in a format used for routing on the road network or technical planning of signage at intersections), the BikeNodePlanner includes a pre-processing step that can convert the detailed network into the required simplified network; see the last section on this page for instructions, [Simplify network](/docs/step02_prepare_data.md#if-necessary-simplify-network). 
+* The network must be topologically correct, i.e. with snapping of edge and node geometries. 
+* No parallel edges are allowed, so if more than one edge runs between the same node pair, the edge must be split by adding an interstitial node on one of the parallel edges (even if the edges have different geometries). For example in the illustration below, there are two edges between nodes (1) and (2); hence, the interstitial node (5) needs to be placed on one of the edges.
 
-No parallel edges are allowed, so if more than one edge runs between the same node pair, the edge must be split by adding an interstitial node on one of the parallel edges (even if the edges have different geometries). The data must be in a common geospatial format readable by both QGIS and GeoPandas and be provided in a projected coordinate reference system (CRS). The network must be topologically correct, i.e. with snapping of edge and node geometries.
-
-<p align="center"><img alt="Illustration of interstitial node" src="/img/inter_node.png" width=50%></p>
+<p align="center"><img alt="Illustration of interstitial node" src="/img/inter_node.png" width=25%></p>
 
 ## Provide study area polygon
 
@@ -44,7 +38,7 @@ To provide the study area, place this 1 file in the `studyarea` subfolder:
 
 1. `studyarea.gpkg`: 
 
-a single **polygon or multipoylgon** delineating the extent of the study area.  
+a single **polygon or multipolygon** delineating the extent of the study area.  
 
 ## Optional: Provide land use data for evaluation (polygon geometries)
 
@@ -95,6 +89,10 @@ The elevation data set must:
 * Be in a sufficiently high resolution to compute the slope of the network stretches: a resolution of 10 * 10 meters or higher is recommended.
 
 If no data is provided in the `/dem/` subfolder, the BikeNodePlanner will conduct no elevation analysis.
+
+## If necessary: simplify network
+
+to do: provide here instructions on how to simplify network
 
 ***
 
