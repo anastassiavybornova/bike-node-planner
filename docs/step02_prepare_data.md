@@ -1,3 +1,5 @@
+# Step 02: Prepare your input data 
+
 ## If your study area is in Denmark
 
 For all Danish municipalities, the steps below (how to provide input data for the BikeNodePlanner) have been **automatized**. Disregard all steps below; instead, find detailed instructions on how to automatically generate input data for your Danish study area [here](https://github.com/anastassiavybornova/bike-node-planner-data-denmark).
@@ -12,6 +14,14 @@ To provide the necessary input data, navigate to the `bike-node-planner-main` fo
 
 All data sets described below need to be placed in the corresponding subfolders of `bike-node-planner-main/data/input/`.
 
+## Provide study area polygon
+
+To provide the study area, place this 1 file in the `studyarea` subfolder:
+
+1. `studyarea.gpkg`: 
+
+a single **polygon or multipolygon** delineating the extent of the study area.  
+
 ## Provide network data
 
 To provide input network data, place these 2 files in the `/network/communication/` subfolder:
@@ -25,14 +35,6 @@ To provide input network data, place these 2 files in the `/network/communicatio
 * No parallel edges are allowed, so if more than one edge runs between the same node pair, the edge must be split by adding an interstitial node on one of the parallel edges (even if the edges have different geometries). For example in the illustration below, there are two edges between nodes (1) and (2); hence, the interstitial node (5) needs to be placed on one of the edges.
 
 <p align="center"><img alt="Illustration of interstitial node" src="/img/inter_node.png" width=25%></p>
-
-## Provide study area polygon
-
-To provide the study area, place this 1 file in the `studyarea` subfolder:
-
-1. `studyarea.gpkg`: 
-
-a single **polygon or multipolygon** delineating the extent of the study area.  
 
 ## Optional: Provide land use data for evaluation (polygon geometries)
 
@@ -86,7 +88,7 @@ If no data is provided in the `/dem/` subfolder, the BikeNodePlanner will conduc
 
 ## If necessary: simplify network
 
-to do: provide here instructions on how to simplify network
+to do: provide here instructions on how to simplify network (cf. https://github.com/anastassiavybornova/knudepunkter/blob/main/docs/datarequirements.md)
 
 ***
 

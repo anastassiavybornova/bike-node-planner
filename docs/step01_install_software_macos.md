@@ -1,4 +1,4 @@
-## Step 1: Software installations for macOS
+# Step 1: Install software for macOS
 
 Follow these step-by-step instructions to set up QGIS and Python for the BikeNodePlanner on your macOS machine.
 
