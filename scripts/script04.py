@@ -1,5 +1,5 @@
 # import packages
-import src.graphedit as graphedit
+
 import geopandas as gpd
 import osmnx as ox
 import networkx as nx
@@ -26,10 +26,11 @@ config_display = yaml.load(
 display_network_statistics = config_display["display_network_statistics"]
 
 # INPUT/OUTPUT FILE PATHS
+# input
 filepath_nodes_input = homepath + "/data/input/network/nodes_studyarea.gpkg"
 filepath_edges_input = homepath + "/data/input/network/edges_studyarea.gpkg"
 
-
+# output
 filepath_edge_output = homepath + "/data/output/network/edges.gpkg"
 filepath_node_output = homepath + "/data/output/network/nodes.gpkg"
 
@@ -171,7 +172,7 @@ if display_network_statistics:
         draw_simple_line_layer(
             comp_layer_name,
             color=comp_colors[comp_number],
-            line_width=0.5,
+            line_width=1,
             line_style="dash",
         )
 
@@ -183,64 +184,14 @@ if display_network_statistics:
         remove_group_if_exists=True,
     )
 
-    # group_layers(
-    #     "Connected components",
-    #     comp_layer_names,
-    #     remove_group_if_exists=True,
-    # )
-#     input_edges = QgsVectorLayer(filepath_edges_input, "Input edges", "ogr")
-#     input_nodes = QgsVectorLayer(filepath_nodes_input, "Input nodes", "ogr")
-
-#     QgsProject.instance().addMapLayer(input_edges)
-#     QgsProject.instance().addMapLayer(input_nodes)
-
-#     draw_simple_point_layer("Input nodes", marker_size=2, color="black")
-
-#     zoom_to_layer("Input edges")
-
-
-# if display_network_layer:
-#     vlayer_edges = QgsVectorLayer(filepath_edge_output, "Edges (beta)", "ogr")
-#     if not vlayer_edges.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_edges)
-
-#     vlayer_nodes = QgsVectorLayer(filepath_node_output, "Nodes (beta)", "ogr")
-#     if not vlayer_nodes.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_nodes)
-#         draw_simple_point_layer("Nodes (beta)", marker_size=2)
-
-#     draw_categorical_layer("Edges (beta)", "component", line_width=1)
-#     draw_categorical_layer("Nodes (beta)", "degree", marker_size=3)
-
-#     zoom_to_layer("Edges (beta)")
-
-# if display_input_data == False and display_network_layer == True:
-#     group_layers(
-#         "Make Beta Network",
-#         ["Edges (beta)", "Nodes (beta)"],
-#         remove_group_if_exists=True,
-#     )
-
-# if display_input_data == True and display_network_layer == False:
-#     group_layers(
-#         "Make Beta Network",
-#         ["Input edges", "Input nodes"],
-#         remove_group_if_exists=True,
-#     )
-
-# if display_input_data == True and display_network_layer == True:
-#     group_layers(
-#         "Make Beta Network",
-#         ["Input edges", "Input nodes", "Edges (beta)", "Nodes (beta)"],
-#         remove_group_if_exists=True,
-#     )
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
+turn_off_layer_names = ["Network edges", "Network nodes"]
+
+turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
+
+turn_off_layers(turn_off_layer_names)
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")

@@ -18,6 +18,10 @@ homepath = QgsProject.instance().homePath()
 if homepath not in sys.path:
     sys.path.append(homepath)  # add project path to PATH
 
+# PATHS
+filepath_studyarea = homepath + "/data/input/studyarea/studyarea.gpkg"
+filepath_edges = homepath + "/data/input/network/edges_studyarea.gpkg"
+
 # remove preexisting plots (if any)
 preexisting_plots = glob.glob(homepath + "/results/plots/*")
 for plot in preexisting_plots:
@@ -100,12 +104,11 @@ if not config_colors:
         )
 
 ### READ IN NETWORK DATA
+study_area = gpd.read_file(filepath_studyarea)
+network_edges = gpd.read_file(filepath_edges)
 
-study_area = gpd.read_file(homepath + "/data/input/studyarea/studyarea.gpkg")
-network_edges = gpd.read_file(homepath + "/data/input/network/edges_studyarea.gpkg")
 
 ### READ IN STATS
-
 eval_stats = json.load(open(homepath + "/results/stats/stats_evaluation.json", "r"))
 
 fig, ax = plt.subplots(1, 1)

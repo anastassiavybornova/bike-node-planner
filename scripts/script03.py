@@ -3,8 +3,6 @@ import sys
 import yaml
 import json
 import geopandas as gpd
-import seaborn as sns
-from ast import literal_eval
 from qgis.core import *
 
 # define homepath variable (where is the qgis project saved?)
@@ -46,20 +44,15 @@ os.makedirs(homepath + "/data/output/elevation/", exist_ok=True)
 edges_fp = homepath + "/data/input/network/edges_studyarea.gpkg"
 dem_fp = homepath + "/data/input/dem/dem.tif"
 
-# # output
-# elevation_vals_segments_fp = (
-#     homepath + "/data/processed/workflow_steps/elevation_values_segments.gpkg"
-# )
-# elevation_vals_edges_fp = (
-#
-# )
-# segments_fp =
-
-# segments_slope_fp = homepath + "/results/data/segments_slope.gpkg"
-# edges_slope_fp = homepath + "/results/data/edges_slope.gpkg"
-# steep_segments_fp = homepath + "/results/data/very_steep_segments.gpkg"
-# results_path = homepath + "/results/data/"  # store output geopackages here
-# stats_path = homepath + "/results/stats/"  # store output json here
+# output
+segments_fp = homepath + "/data/output/elevation/segments.gpkg"
+elevation_vals_segments_fp = (
+    homepath + "/data/output/elevation/elevation_values_edges.gpkg"
+)
+segments_slope_fp = homepath + "/data/output/elevation/segments_slope.gpkg"
+edges_slope_fp = homepath + "/data/output/elevation/edges_slope.gpkg"
+steep_segments_fp = homepath + "/data/output/elevation/steep_segments.gpkg"
+stats_path = homepath + "/results/stats/stats_slope.json"
 
 # print out user settings
 print("script04.py started with user settings:")
@@ -73,22 +66,6 @@ print(f"If the script fails to complete, please try again!")
 edges = gpd.read_file(edges_fp)
 assert len(edges) == len(edges.edge_id.unique())
 
-# #### REMOVE EXISTING LAYERS
-
-# remove_existing_layers(
-#     [
-#         "Network edges",
-#         "Split",
-#         "Segments",
-#         "Vertices",
-#         "Elevation values",
-#         "dhm_terraen_skyggekort",
-#         "dem_terrain",
-#         "Segments slope",
-#         "Edges average slope",
-#         "Very steep segments",
-#     ]
-# )
 
 # ##### IMPORT STUDY AREA EDGES AS QGIS LAYER
 vlayer_edges = QgsVectorLayer(edges_fp, "Network edges", "ogr")
@@ -123,7 +100,6 @@ segments_temp_layer.dataProvider().changeAttributeValues(atts_map)
 print("all good")
 
 # export
-segments_fp = homepath + "/data/output/elevation/segments.gpkg"
 _writer = QgsVectorFileWriter.writeAsVectorFormat(
     segments_temp_layer,
     segments_fp,
@@ -138,10 +114,6 @@ vlayer_segments = QgsVectorLayer(
     "ogr",
 )
 
-# # if plot_intermediate:
-# QgsProject.instance().addMapLayer(vlayer_segments)
-# draw_simple_line_layer("Segments", color="red", line_width=1, line_style="dash")
-
 print(f"done: line split into segments of max length {segment_length} meters.")
 
 # GET START AND END VERTICES
@@ -154,17 +126,6 @@ segment_vertices = processing.run(
     },
 )
 
-# if plot_intermediate:
-# QgsProject.instance().addMapLayer(segment_vertices["OUTPUT"])
-
-# vertices = QgsProject.instance().mapLayersByName("Vertices")[0]
-
-# draw_simple_point_layer(
-#     "Vertices",
-#     color="0,0,0,180",
-#     marker_size=1,
-#     outline_width=0,
-# )
 print(f"done: extracted segment start and end points")
 
 elevation_values = processing.run(
@@ -178,9 +139,6 @@ elevation_values = processing.run(
 )
 
 # export
-elevation_vals_segments_fp = (
-    homepath + "/data/output/elevation/elevation_values_edges.gpkg"
-)
 elevation_temp_layer = elevation_values["OUTPUT"]
 # delete "fid" field (to prevent problems when exporting a layer with non-unique fields)
 layer_provider = elevation_temp_layer.dataProvider()
@@ -195,21 +153,6 @@ _writer = QgsVectorFileWriter.writeAsVectorFormat(
     elevation_temp_layer.crs(),
     "GPKG",
 )
-
-# vlayer_elevation = QgsVectorLayer(
-#     elevation_vals_segments_fp,
-#     "Elevation values segments",
-#     "ogr",
-# )
-
-# QgsProject.instance().addMapLayer(vlayer_elevation)
-# draw_simple_point_layer(
-#     "Elevation values segments",
-#     color="255,0,0,180",
-#     marker_size=2,
-#     outline_color="white",
-#     outline_width=0.2,
-# )
 
 
 ele = gpd.read_file(elevation_vals_segments_fp)
@@ -230,7 +173,6 @@ for seg_id, group in grouped:
 
 segs["slope"].fillna(0, inplace=True)
 
-segments_slope_fp = homepath + "/data/output/elevation/segments_slope.gpkg"
 if os.path.exists(segments_slope_fp):
     os.remove(segments_slope_fp)
 segs.to_file(segments_slope_fp, mode="w")
@@ -273,7 +215,6 @@ for edge_id, group in grouped:
     edges["ave_slope"].loc[edges.edge_id == edge_id] = ave_slope
 
 ##### EXPORT RESULTS (SLOPE BY EDGE)
-edges_slope_fp = homepath + "/data/output/elevation/edges_slope.gpkg"
 if os.path.exists(edges_slope_fp):
     os.remove(edges_slope_fp)
 edges.to_file(edges_slope_fp, mode="w")
@@ -299,7 +240,6 @@ if display_slope:
         slope_field="ave_slope",
     )
 
-steep_segments_fp = homepath + "/data/output/elevation/steep_segments.gpkg"
 steep_segments = segs.loc[segs.slope > slope_threshold]
 if os.path.exists(steep_segments_fp):
     os.remove(steep_segments_fp)
@@ -312,7 +252,6 @@ res["segs_slope"] = list(segs["slope"])
 res["segs_slope_min"] = segs.slope.min()
 res["segs_slope_max"] = segs.slope.max()
 res["segs_slope_mean"] = segs.slope.mean()
-stats_path = homepath + "/results/stats/stats_slope.json"
 with open(stats_path, "w") as opened_file:
     json.dump(res, opened_file, indent=6)
 
@@ -340,18 +279,16 @@ if display_slope:
 group_layers(
     group_name="Slope",
     layer_names=[
+        "DEM terrain",
         "Edges average slope",
         "Segments slope",
         f"Segments with slope > {slope_threshold}%",
-        "DEM terrain",
     ],
     remove_group_if_exists=True,
 )
 
-
 print(f"Maximum slope is {segs.slope.max():.2f} %")
 print(f"Average slope is {segs.slope.mean():.2f} %")
-
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
