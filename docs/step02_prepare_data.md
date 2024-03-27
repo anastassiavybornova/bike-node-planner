@@ -13,10 +13,11 @@ You need to provide the following data sets, described in detail below:
 * (optional) evaluation data for study area: [point layers](/docs/step02_prepare_data.md#optional-points-of-interest-data-for-evaluation-point-geometries)
 * (optional) elevation data for study area: [a tif file](/docs/step02_prepare_data.md#optional-elevation-data-tif-file)
 
-Requirements:
+### Requirements
+
 * All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html). 
 * All data must be in the same **projected coordinate reference system**.
-* To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [previous step](/README.md#step-1-software-installations) for instructions on how to download the folder from GitHub.) 
+* To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [previous step](/README.md#step-1-software-installations) for instructions on how to download the folder from GitHub.)
 * All data sets described below need to be placed in the corresponding subfolders of `/bike-node-planner-main/data/input/`.
 * Once you run the BikeNodePlanner in QGIS, the first step will automatically make sure that the data sets you provided follow all the specifications (see [Step 04](/docs/step04_run_evaluation.md) for details).
 
@@ -24,28 +25,26 @@ Requirements:
 
 To provide the study area, place this 1 file in the `studyarea` subfolder:
 
-1. `studyarea.gpkg`: 
+1. `studyarea.gpkg`:
 
 a single **polygon or multipolygon** delineating the extent of the study area.  
 
 ## Network data
 
-To provide input network data, place these 2 files in the `/network/communication/` subfolder:
+To provide input network data, place these 2 files in the `/network/` subfolder:
 
-1. `nodes.gpkg`: a set of point geometries representing the bicycle nodes 
-2. `edges.gpkg`: a set of linestring geometries representing the network edges in the bicycle network
+1. `nodes.gpkg`: a set of *Point* geometries representing the bicycle nodes.
+2. `edges.gpkg`: a set of *LineString* geometries representing the network edges in the bicycle network.
 
-Requirements:
-* All nodes must have a unique node id and all edges must be uniquely indexed by their start and end node. 
-* The network must be simplified: each intersection must be represented by exactly one node, and each network segment must be represented by exactly one edge. **Note:** If your network data is more detailed (e.g. in a format used for routing on the road network or technical planning of signage at intersections), the BikeNodePlanner includes a pre-processing step that can convert the detailed network into the required simplified network; see the last section on this page for instructions, [Simplify network](/docs/step02_prepare_data.md#if-necessary-simplify-network). 
-* The network must be topologically correct, i.e. with snapping of edge and node geometries. 
-* No parallel edges are allowed, so if more than one edge runs between the same node pair, the edge must be split by adding an interstitial node on one of the parallel edges (even if the edges have different geometries). For example in the illustration below, there are two edges between nodes (1) and (2); hence, the interstitial node (5) needs to be placed on one of the edges.
+### Requirements
 
-<p align="center"><img alt="Illustration of interstitial node" src="/img/inter_node.png" width=25%></p>
+* All nodes must have a unique node id (*"node_id"*) and all edges must have a unique edge id (*"edge_id"*).
+* The edge data set must contain three **columns**, *"u","v","key"*, with "u" referencing the id of the edge start node, "v" referencing the id of the edge end node, and "key" containing an integar value from 0 to N to distinguish between edges running between the same start and end node pairs (similar to the data structure used by, for example, [OSMnx](https://osmnx.readthedocs.io/en/stable/user-reference.html#osmnx.utils_graph.graph_from_gdfs)).
+* The network must be topologically correct, i.e. with snapping of edge and node geometries.
 
 ## Optional: Land use data for evaluation (polygon geometries)
 
-This step is fully customizable. You can decide yourself which land use data to use here. The BikeNodePlanner will evaluate the network for each provided land use layer _separately_, analyzing which parts of the network run _through_ each of the land use layers. 
+This step is fully customizable. You can decide yourself which land use data to use here. The BikeNodePlanner will evaluate the network for each provided land use layer _separately_, analyzing which parts of the network run _through_ each of the land use layers.
 
 To provide land use data, place at least one file in the `/polygon/` subfolder:
 
@@ -92,10 +91,6 @@ The elevation data set must:
 * Be in a sufficiently high resolution to compute the slope of the network stretches: a resolution of 10 * 10 meters or higher is recommended.
 
 If no data is provided in the `/dem/` subfolder, the BikeNodePlanner will conduct no elevation analysis.
-
-## If necessary: Simplify network
-
-to do: provide here instructions on how to simplify network (cf. https://github.com/anastassiavybornova/knudepunkter/blob/main/docs/datarequirements.md)
 
 ***
 
