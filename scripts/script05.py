@@ -102,7 +102,7 @@ if not config_colors:
 ### READ IN NETWORK DATA
 
 study_area = gpd.read_file(homepath + "/data/input/studyarea/studyarea.gpkg")
-network_edges = gpd.read_file(homepath + "/data/input/network/edges.gpkg")
+network_edges = gpd.read_file(homepath + "/data/input/network/edges_studyarea.gpkg")
 
 ### READ IN STATS
 
@@ -216,4 +216,4 @@ for k, v in evaldict["point"].items():
     plt.close()
 
 print("Plots saved to /results/plots/")
-print("script06.py finished")
+print("script05.py finished")

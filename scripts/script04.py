@@ -26,11 +26,12 @@ config_display = yaml.load(
 display_network_statistics = config_display["display_network_statistics"]
 
 # INPUT/OUTPUT FILE PATHS
-nodes_fp = homepath + "/data/input/network/nodes.gpkg"
-edges_fp = homepath + "/data/input/network/edges.gpkg"
+filepath_nodes_input = homepath + "/data/input/network/nodes_studyarea.gpkg"
+filepath_edges_input = homepath + "/data/input/network/edges_studyarea.gpkg"
 
-edgefile = homepath + "/data/output/network/edges_beta.gpkg"
-nodefile = homepath + "/data/output/network/nodes_beta.gpkg"
+
+filepath_edge_output = homepath + "/data/output/network/edges.gpkg"
+filepath_node_output = homepath + "/data/output/network/nodes.gpkg"
 
 graph_file = homepath + "/data/output/network/network_graph.graphml"
 stats_path = (
@@ -38,8 +39,8 @@ stats_path = (
 )  # store output geopackages here
 
 # load data
-nodes = gpd.read_file(nodes_fp)
-edges = gpd.read_file(edges_fp)
+nodes = gpd.read_file(filepath_nodes_input)
+edges = gpd.read_file(filepath_edges_input)
 
 # Drop edges with missing start and end nodes
 edges.dropna(subset=["u", "v"], inplace=True)
@@ -100,14 +101,14 @@ pd_degrees = pd.DataFrame.from_dict(
 nodes_undir = nodes_undir.merge(pd_degrees, left_index=True, right_index=True)
 
 # Export
-if os.path.exists(edgefile):
-    os.remove(edgefile)
-if os.path.exists(nodefile):
-    os.remove(nodefile)
+if os.path.exists(filepath_edge_output):
+    os.remove(filepath_edge_output)
+if os.path.exists(filepath_node_output):
+    os.remove(filepath_node_output)
 
 ox.save_graphml(G_undirected, graph_file)
-edges_undir.to_file(edgefile, mode="w")
-nodes_undir.to_file(nodefile, mode="w")
+edges_undir.to_file(filepath_edge_output, mode="w")
+nodes_undir.to_file(filepath_node_output, mode="w")
 
 ### save component edges separately
 
@@ -187,8 +188,8 @@ if display_network_statistics:
     #     comp_layer_names,
     #     remove_group_if_exists=True,
     # )
-#     input_edges = QgsVectorLayer(edges_fp, "Input edges", "ogr")
-#     input_nodes = QgsVectorLayer(nodes_fp, "Input nodes", "ogr")
+#     input_edges = QgsVectorLayer(filepath_edges_input, "Input edges", "ogr")
+#     input_nodes = QgsVectorLayer(filepath_nodes_input, "Input nodes", "ogr")
 
 #     QgsProject.instance().addMapLayer(input_edges)
 #     QgsProject.instance().addMapLayer(input_nodes)
@@ -199,13 +200,13 @@ if display_network_statistics:
 
 
 # if display_network_layer:
-#     vlayer_edges = QgsVectorLayer(edgefile, "Edges (beta)", "ogr")
+#     vlayer_edges = QgsVectorLayer(filepath_edge_output, "Edges (beta)", "ogr")
 #     if not vlayer_edges.isValid():
 #         print("Layer failed to load!")
 #     else:
 #         QgsProject.instance().addMapLayer(vlayer_edges)
 
-#     vlayer_nodes = QgsVectorLayer(nodefile, "Nodes (beta)", "ogr")
+#     vlayer_nodes = QgsVectorLayer(filepath_node_output, "Nodes (beta)", "ogr")
 #     if not vlayer_nodes.isValid():
 #         print("Layer failed to load!")
 #     else:
@@ -238,22 +239,10 @@ if display_network_statistics:
 #         remove_group_if_exists=True,
 #     )
 
-# layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
-# if "Study area" in layer_names:
-#     # Change symbol for study layer
-#     draw_simple_polygon_layer(
-#         "Study area",
-#         color="250,181,127,0",
-#         outline_color="red",
-#         outline_width=0.7,
-#     )
 
-#     move_study_area_front()
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")
 
-# if "Basemap" in layer_names:
-#     move_basemap_back(basemap_name="Basemap")
-# if "Ortofoto" in layer_names:
-#     move_basemap_back(basemap_name="Ortofoto")
-
-print("script05.py finished")
+print("script04.py finished")

@@ -24,7 +24,7 @@ config_display = yaml.load(
 )
 
 # load edges
-edgepath = homepath + "/data/input/network/edges.gpkg"
+edgepath = homepath + "/data/input/network/edges_studyarea.gpkg"
 edges = gpd.read_file(edgepath)
 
 # load evaluation data
@@ -197,4 +197,9 @@ for geomtype, geomdict in evaldict.items():
         for n in layernames:
             add_layer_to_group(n, sub_group)
 
-print("script03.py finished")
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")
+
+print("script02.py finished")

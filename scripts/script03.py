@@ -40,11 +40,11 @@ slope_colors = [rgb2hex(c) for c in slope_colors]
 # make output folder
 os.makedirs(homepath + "/data/output/elevation/", exist_ok=True)
 
-# #### PATHS
+#### PATHS
 
-# # input
-# edges_fp = homepath + "/data/processed/workflow_steps/network_edges_no_parallel.gpkg"
-# dem_fp = homepath + f"/data/processed/workflow_steps/merged_dem_{sa_name}.tif"
+# input
+edges_fp = homepath + "/data/input/network/edges_studyarea.gpkg"
+dem_fp = homepath + "/data/input/dem/dem.tif"
 
 # # output
 # elevation_vals_segments_fp = (
@@ -70,14 +70,8 @@ print("Please be patient, this might take a while!")
 print(f"If the script fails to complete, please try again!")
 
 ##### IMPORT STUDY AREA EDGES AS GDF
-edges = gpd.read_file(homepath + "/data/input/network/edges.gpkg")
+edges = gpd.read_file(edges_fp)
 assert len(edges) == len(edges.edge_id.unique())
-
-# #### PREPARE THE DIGITAL ELEVATION MODEL
-
-# if os.path.exists(dem_fp) == False:
-#     exec(open(homepath + "/src/download_dem.py").read())
-#     exec(open(homepath + "/src/merge_dem.py").read())
 
 # #### REMOVE EXISTING LAYERS
 
@@ -97,27 +91,13 @@ assert len(edges) == len(edges.edge_id.unique())
 # )
 
 # ##### IMPORT STUDY AREA EDGES AS QGIS LAYER
-vlayer_edges = QgsVectorLayer(
-    homepath + "/data/input/network/edges.gpkg", "Network edges", "ogr"
-)
+vlayer_edges = QgsVectorLayer(edges_fp, "Network edges", "ogr")
 
 # ##### IMPORT DIGITAL ELEVATION MODEL AS QGIS LAYER
 remove_existing_layers(["DEM terrain"])
 
-dem_terrain = QgsRasterLayer(homepath + "/data/input/dem/dem.tif", "DEM terrain")
+dem_terrain = QgsRasterLayer(dem_fp, "DEM terrain")
 QgsProject.instance().addMapLayer(dem_terrain)
-
-# ##### PLOT HILLSHADE
-# if plot_intermediate and dataforsyning_token:
-#     dem_name = "dhm_terraen_skyggekort"
-#     wms_url = "https://api.dataforsyningen.dk/dhm_DAF?" + f"token={dataforsyning_token}"
-#     source = f"crs={proj_crs}&dpiMode=7&format=image/png&layers={dem_name}&styles&tilePixelRatio=0&url={wms_url}"
-
-#     dem_raster = QgsRasterLayer(source, dem_name, "wms")
-
-#     QgsProject.instance().addMapLayer(dem_raster)
-
-#     print("added dem raster")
 
 # ##### GET SLOPE FOR EDGE SEGMENTS
 
@@ -375,31 +355,7 @@ print(f"Average slope is {segs.slope.mean():.2f} %")
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
-# turn_off_layer_names = [
-#     "Elevation values segments",
-#     "Vertices",
-#     "Segments",
-#     "Network edges",
-# ]
-
-# turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
-
-# turn_off_layers(turn_off_layer_names)
-
-# if "Study area" in layer_names:
-#     # Change symbol for study layer
-#     draw_simple_polygon_layer(
-#         "Study area",
-#         color="250,181,127,0",
-#         outline_color="red",
-#         outline_width=0.7,
-#     )
-
-#     move_study_area_front()
-
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
-if "Ortofoto" in layer_names:
-    move_basemap_back(basemap_name="Ortofoto")
 
-print("script04.py finished")
+print("script03.py finished")
