@@ -8,7 +8,7 @@ Below, you find:
 * first, general instructions on how to run a Python script in QGIS;
 * then, for each script of the BikeNodePlanner, explanations of its output and how to interpret it.
 
-*** 
+***
 
 ## Running a Python script in QGIS
 
@@ -22,7 +22,7 @@ In QGIS,
 6. Click on `Open`
 7. Click on `Run`.
 8. While the script is running, you will see status messages in the console window.
-9. Once you see the message `Script XXX ended succcessfully`, save the project (`cmd+s`), and run the next script. 
+9. Once you see the message `Script XXX ended succcessfully`, save the project (`cmd+s`), and run the next script.
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=80%></p>
 
@@ -48,17 +48,11 @@ The BikeNodePlanner consists of several scripts, which have to be run in the spe
 
 ### `script01.py`: Plotting the study area
 
-script01 plots study area and a basemap from OpenStreetMap
+script01 plots study area and a basemap from OpenStreetMap, and extract the input network data to include include features intersecting the study area.
 
-### `script02.py`: 
+### `script02.py`:
 
-script02 makes and plots the network
-
-**TODO update description, refer & link to technical v communication stuff**
-
-### `script03.py`: 
-
-script03 makes and plots evaluation (point/polygon/linestring)
+script02 makes and plots evaluation (point/polygon/linestring)
 
 Explore the results of the evaluation by (de)selecting layers in the QGIS project. 
 
@@ -68,21 +62,21 @@ Or, select "POIS" within the "Evaluate network" layer to explore which points of
 
 **TODO update above description to fit the current setup; insert screenshots**
 
-### `script04.py`: 
+### `script03.py`:
 
-script04 makes and plots elevation (slope)
-
-**TODO insert explanation and screenshots**
-
-### `script05.py`: 
-
-script05 makes and plots network statistics & disconnected components
+script03 makes and plots elevation (slope)
 
 **TODO insert explanation and screenshots**
 
-### `script06.py`: 
+### `script04.py`:
 
-script06 generates summary statistics plots in `results/plots/*.png`
+script04 makes and plots network statistics & disconnected components
 
-After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder): 
+**TODO insert explanation and screenshots**
+
+### `script05.py`:
+
+script05 generates summary statistics plots in `results/plots/*.png`
+
+After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder):
 **TO DO INSERT EXAMPLE IMAGES**

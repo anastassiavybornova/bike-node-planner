@@ -1,277 +1,222 @@
 # import packages
-import src.graphedit as graphedit
-import geopandas as gpd
-import osmnx as ox
-import networkx as nx
-import pandas as pd
+import sys
 import os
-import yaml
-import networkx as nx
-from qgis.core import *
+
+os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
+import geopandas as gpd
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 import json
+import yaml
+import contextily as cx
 import re
-import seaborn as sns
-import random
-random.seed(42)
 import glob
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
+if homepath not in sys.path:
+    sys.path.append(homepath)  # add project path to PATH
 
-# Load configs
-config_display = yaml.load(
-    open(homepath + "/config-display.yml"), 
-    Loader=yaml.FullLoader
-    )
-display_network_statistics = config_display["display_network_statistics"]
+# PATHS
+filepath_studyarea = homepath + "/data/input/studyarea/studyarea.gpkg"
+filepath_edges = homepath + "/data/input/network/edges_studyarea.gpkg"
 
-# INPUT/OUTPUT FILE PATHS
-nodes_fp = homepath + "/data/input/network/communication/nodes.gpkg"
-edges_fp = homepath + "/data/input/network/communication/edges.gpkg"
-
-edgefile = homepath + "/data/output/network/edges_beta.gpkg"
-nodefile = homepath + "/data/output/network/nodes_beta.gpkg"
-
-graph_file = homepath + "/data/output/network/network_graph.graphml"
-stats_path = homepath + "/results/stats/stats_network.json"  # store output geopackages here
-
-# load data
-nodes = gpd.read_file(nodes_fp)
-edges = gpd.read_file(edges_fp)
-
-# process data to be used with osmnx
-edges = edges.set_index(["u", "v", "key"])
-edges["osmid"] = edges.id
-nodes["osmid"] = nodes.id
-nodes.set_index("osmid", inplace=True)
-nodes["x"] = nodes.geometry.x
-nodes["y"] = nodes.geometry.y
-
-G = ox.graph_from_gdfs(nodes, edges)
-
-# check that conversion is successfull
-ox_nodes, ox_edges = ox.graph_to_gdfs(G)
-assert len(ox_nodes) == len(nodes)
-assert len(ox_edges) == len(edges)
-del ox_nodes, ox_edges
-
-# convert to undirected
-assert nx.is_directed(G) == True
-G_undirected = ox.get_undirected(G)
-assert nx.is_directed(G_undirected) == False
-
-print("Degrees:", nx.degree_histogram(G_undirected))
-
-print(
-    f"The number of connected components is: {nx.number_connected_components(G_undirected)}"
-)
-
-# generate an undirected nodes and edges dataframe
-nodes_undir, edges_undir = ox.graph_to_gdfs(
-    G = G_undirected, 
-    nodes = True, 
-    edges = True)
-
-# Save component number to edges
-comps = [c for c in nx.connected_components(G_undirected)]
-comps = sorted(comps, key=len, reverse=True) # sort by length (LCC first)
-
-edges_undir["component"] = None
-
-for edge in G_undirected.edges:
-    G_undirected.edges[edge]["nx_edge_id"] = edge
-
-for i, comp in enumerate(comps):
-    G_sub = nx.subgraph(
-        G_undirected, 
-        nbunch=comp
-        )
-    G_sub_edges = [
-        G_sub.edges[e]["nx_edge_id"] for e in G_sub.edges
-    ]
-    edges_undir.loc[
-        G_sub_edges,
-        "component"
-    ] = i + 1 # (starting to count at 1)
-
-assert len(edges_undir.component.unique()) == len(comps)
-assert len(edges_undir.loc[edges_undir.component.isna()]) == 0
-
-# Save degrees to nodes
-pd_degrees = pd.DataFrame.from_dict(
-    dict(G_undirected.degree), 
-    orient="index", 
-    columns=["degree"]
-)
-
-nodes_undir = nodes_undir.merge(
-    pd_degrees, 
-    left_index=True, 
-    right_index=True
-)
-
-# Export
-if os.path.exists(edgefile):
-    os.remove(edgefile)
-if os.path.exists(nodefile):
-    os.remove(nodefile)
-
-ox.save_graphml(G_undirected, graph_file)
-edges_undir.to_file(edgefile, mode="w")
-nodes_undir.to_file(nodefile, mode="w")
-
-### save component edges separately
-
-# make directory
-os.makedirs(homepath + "/data/output/network/", exist_ok=True)
-comppath = homepath + "/data/output/network/components/"
-os.makedirs(
-    comppath, 
-    exist_ok=True
-    )
-    
-# remove preexisting files, if any
-preexisting_files = glob.glob(comppath + "*")
-for file in preexisting_files:
+# remove preexisting plots (if any)
+preexisting_plots = glob.glob(homepath + "/results/plots/*")
+for plot in preexisting_plots:
     try:
-        os.remove(file)
+        os.remove(plot)
     except:
         pass
 
-zfill_regex = "{:0" + str(len(str(len(comps)))) + "d}" # add leading 0s to filename if needed
-for c in edges_undir.component.unique():
-    compfile = comppath + "comp" + zfill_regex.format(c) + ".gpkg"
-    edges_undir.loc[edges_undir["component"]==c].to_file(
-        compfile,
-        index = False
+# read in custom functions
+exec(open(homepath + "/src/stat_func.py").read())
+
+# load evaluation data
+evaldict = {}
+
+for geomtype in ["point", "linestring", "polygon"]:
+    geompath_input = homepath + f"/data/input/{geomtype}/"
+    geompath_output = homepath + f"/data/output/{geomtype}/"
+    if os.path.exists(geompath_input):
+
+        geomlayers = os.listdir(geompath_input)
+        geomlayers = [g for g in geomlayers if not ("gpkg-wal" in g or "gpkg-shm" in g)]
+        evaldict[geomtype] = {}
+        # read in configs for this geometry type
+        config_geomtype = yaml.load(
+            open(homepath + f"/config-{geomtype}.yml"), Loader=yaml.FullLoader
         )
 
-### Summary statistics of network
-res = {}  # initialize stats results dictionary
-res["node_count"] = len(G_undirected.nodes)
-res["edge_count"] = len(G_undirected.edges)
-res["node_degrees"] = dict(nx.degree(G_undirected))
-with open(stats_path, "w") as opened_file:
-    json.dump(res, opened_file, indent=6)
-print(f"Network statistics saved to {stats_path}")
+        for geomlayer in geomlayers:
 
-# ### Visualization
-# remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
+            geomlayer_name = geomlayer.replace(".gpkg", "")
+            evaldict[geomtype][geomlayer_name] = {}
 
-if display_network_statistics:
+            if geomtype == "point":
+                files = os.listdir(geompath_output)
+                files = [f for f in files if not ("gpkg-wal" in f or "gpkg-shm" in f)]
+                geomlayer_name_out = [f for f in files if geomlayer_name in f][0]
+                bufferdistance = int(
+                    re.findall("_\d+", geomlayer_name_out)[0].replace("_", "")
+                )
+                evaldict[geomtype][geomlayer_name]["bufferdistance"] = bufferdistance
+                evaldict[geomtype][geomlayer_name]["gpkg_within"] = gpd.read_file(
+                    geompath_output + geomlayer_name + f"_within_{bufferdistance}.gpkg"
+                )
+                evaldict[geomtype][geomlayer_name]["gpkg_outside"] = gpd.read_file(
+                    geompath_output + geomlayer_name + f"_outside_{bufferdistance}.gpkg"
+                )
 
-    remove_existing_layers(["Component"])
+            # not implemented yet
+            if geomtype == "linestring":
+                pass
 
-    comp_files = os.listdir(comppath)
-    comp_numbers = [int(re.findall(r'\d+', file)[0]) for file in comp_files]
-    comp_layer_names = []
-    
-    # create random colors (one for every comp) from seaborn colorblind palette
-    layercolors = sns.color_palette("colorblind", len(comp_files))
-    comp_colors = {}
-    for k, v in zip(comp_numbers, layercolors):
-        comp_colors[k] = str([int(rgba*255) for rgba in v]).replace("[", "").replace("]", "")
+            if geomtype == "polygon":
+                files = os.listdir(geompath_output)
+                files = [f for f in files if not ("gpkg-wal" in f or "gpkg-shm" in f)]
+                geomlayer_name_out = [f for f in files if geomlayer_name in f][0]
+                evaldict[geomtype][geomlayer_name]["bufferdistance"] = int(
+                    re.findall("_\d+", geomlayer_name_out)[0].replace("_", "")
+                )
+                evaldict[geomtype][geomlayer_name]["gpkg"] = gpd.read_file(
+                    geompath_output + geomlayer_name_out
+                )
 
-    for comp_file, comp_number in zip(comp_files, comp_numbers):
 
-        comp_layer_name = f"Component {str(comp_number)}"
-        
-        comp_layer = QgsVectorLayer(
-            comppath + comp_file,
-            comp_layer_name,
-            "ogr"
-            )    
-        
-        QgsProject.instance().addMapLayer(comp_layer)
-        
-        draw_simple_line_layer(
-            comp_layer_name, 
-            color=comp_colors[comp_number], 
-            line_width=0.5, 
-            line_style="dash"
+# load colors configs (user defined, or if not: automated, or if not: generate now)
+config_colors = yaml.load(
+    open(homepath + "/config-colors-eval.yml"), Loader=yaml.FullLoader
+)
+if not config_colors:
+    config_colors = yaml.load(
+        open(homepath + "/config-colors-eval-auto.yml"), Loader=yaml.FullLoader
+    )
+if not config_colors:
+    # get colors (as rgb strings) from seaborn colorblind palette
+    layernames = sorted([item for v in evaldict.values() for item in v.keys()])
+    layercolors = sns.color_palette("colorblind", len(layernames))
+    config_colors = {}
+    for k, v in zip(layernames, layercolors):
+        config_colors[k] = (
+            str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
         )
 
-        comp_layer_names.append(comp_layer_name)
-    
-    group_layers(
-        group_name = "Connected components",
-        layer_names = comp_layer_names,
-        remove_group_if_exists=True,
+### READ IN NETWORK DATA
+study_area = gpd.read_file(filepath_studyarea)
+network_edges = gpd.read_file(filepath_edges)
+
+
+### READ IN STATS
+eval_stats = json.load(open(homepath + "/results/stats/stats_evaluation.json", "r"))
+
+fig, ax = plt.subplots(1, 1)
+
+# plot study area
+study_area.plot(ax=ax, color=rgb2hex("250,181,127"), alpha=0.5, zorder=1)
+# plot network
+network_edges.plot(ax=ax, color="black", linewidth=1)
+cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager, crs=study_area.crs)
+
+ax.set_title("Study area & network")
+
+ax.set_axis_off()
+
+fig.savefig(
+    homepath + "/results/plots/studyarea_network.png", dpi=300, bbox_inches="tight"
+)
+
+# for each polygon layer, plot the amounts of network within
+for k, v in evaldict["polygon"].items():
+
+    # k is the name of the layer
+    # v is a dict: v["gpkg"] contains the network _within_
+    #              v["bufferdistance"] contains the bufferdistance (in meters)
+    # plot in color config_colors[k]
+
+    # get stats on percent within
+    percent_within = np.round(
+        100
+        * eval_stats[k]["within"]
+        / (eval_stats[k]["outside"] + eval_stats[k]["within"]),
+        1,
     )
 
+    # get bufferdistance
+    bufferdistance = v["bufferdistance"]
 
-    # group_layers(
-    #     "Connected components",
-    #     comp_layer_names,
-    #     remove_group_if_exists=True,
-    # )
-#     input_edges = QgsVectorLayer(edges_fp, "Input edges", "ogr")
-#     input_nodes = QgsVectorLayer(nodes_fp, "Input nodes", "ogr")
+    # plot
+    fig, ax = plt.subplots(1, 1)
+    network_edges.plot(
+        ax=ax,
+        color="#D3D3D3",
+        linewidth=0.8,
+        linestyle="solid",
+        zorder=0,
+    )
+    v["gpkg"].plot(
+        ax=ax,
+        color=rgb2hex(config_colors[k]),
+        linewidth=1.5,
+        zorder=1,
+        label=f"{percent_within}%",
+    )
+    ax.set_title(f"{k.capitalize()} within {bufferdistance}m from network")
+    ax.set_axis_off()
+    ax.legend(loc="lower right")
 
-#     QgsProject.instance().addMapLayer(input_edges)
-#     QgsProject.instance().addMapLayer(input_nodes)
+    fig.savefig(homepath + f"/results/plots/{k}.png", dpi=300, bbox_inches="tight")
 
-#     draw_simple_point_layer("Input nodes", marker_size=2, color="black")
+    plt.close()
 
-#     zoom_to_layer("Input edges")
+# for each point layer, plot points reached / unreached separately (colors!)
+for k, v in evaldict["point"].items():
 
+    # k is the layername
+    # v is a dict: v["bufferdistance"], v["gpkg_within"], v["gpkg_without"]
 
-# if display_network_layer:
-#     vlayer_edges = QgsVectorLayer(edgefile, "Edges (beta)", "ogr")
-#     if not vlayer_edges.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_edges)
+    # get stats on percent within / outside
 
-#     vlayer_nodes = QgsVectorLayer(nodefile, "Nodes (beta)", "ogr")
-#     if not vlayer_nodes.isValid():
-#         print("Layer failed to load!")
-#     else:
-#         QgsProject.instance().addMapLayer(vlayer_nodes)
-#         draw_simple_point_layer("Nodes (beta)", marker_size=2)
+    percent_within = np.round(100 * eval_stats[k]["within"] / eval_stats[k]["total"], 1)
 
-#     draw_categorical_layer("Edges (beta)", "component", line_width=1)
-#     draw_categorical_layer("Nodes (beta)", "degree", marker_size=3)
+    percent_outside = np.round(100 - percent_within, 1)
 
-#     zoom_to_layer("Edges (beta)")
+    # get bufferdistance
+    bufferdistance = v["bufferdistance"]
 
-# if display_input_data == False and display_network_layer == True:
-#     group_layers(
-#         "Make Beta Network",
-#         ["Edges (beta)", "Nodes (beta)"],
-#         remove_group_if_exists=True,
-#     )
+    fig, ax = plt.subplots(1, 1)
+    network_edges.plot(
+        ax=ax,
+        color="#D3D3D3",
+        linewidth=0.8,
+        linestyle="solid",
+        zorder=0,
+    )
 
-# if display_input_data == True and display_network_layer == False:
-#     group_layers(
-#         "Make Beta Network",
-#         ["Input edges", "Input nodes"],
-#         remove_group_if_exists=True,
-#     )
+    v["gpkg_outside"].plot(
+        ax=ax,
+        color=rgb2hex(config_colors[k]),
+        zorder=1,
+        label=f"Outside reach ({percent_outside}%)",
+        markersize=2,
+        alpha=0.3,
+    )
 
-# if display_input_data == True and display_network_layer == True:
-#     group_layers(
-#         "Make Beta Network",
-#         ["Input edges", "Input nodes", "Edges (beta)", "Nodes (beta)"],
-#         remove_group_if_exists=True,
-#     )
+    v["gpkg_within"].plot(
+        ax=ax,
+        color=rgb2hex(config_colors[k]),
+        zorder=2,
+        label=f"Within reach ({percent_within}%)",
+        markersize=2,
+    )
+    ax.set_title(f"{k.capitalize()} within {bufferdistance}m from network")
+    ax.set_axis_off()
+    ax.legend(loc="lower right")
 
-# layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+    fig.savefig(homepath + f"/results/plots/{k}.png", dpi=300, bbox_inches="tight")
 
-# if "Study area" in layer_names:
-#     # Change symbol for study layer
-#     draw_simple_polygon_layer(
-#         "Study area",
-#         color="250,181,127,0",
-#         outline_color="red",
-#         outline_width=0.7,
-#     )
+    plt.close()
 
-#     move_study_area_front()
-
-# if "Basemap" in layer_names:
-#     move_basemap_back(basemap_name="Basemap")
-# if "Ortofoto" in layer_names:
-#     move_basemap_back(basemap_name="Ortofoto")
-
+print("Plots saved to /results/plots/")
 print("script05.py finished")
