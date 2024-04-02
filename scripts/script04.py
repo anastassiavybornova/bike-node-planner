@@ -196,4 +196,4 @@ turn_off_layers(turn_off_layer_names)
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
-print("script04.py finished")
+print("script04.py ended successfully.")

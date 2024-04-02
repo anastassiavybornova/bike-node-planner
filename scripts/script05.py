@@ -219,4 +219,4 @@ for k, v in evaldict["point"].items():
     plt.close()
 
 print("Plots saved to /results/plots/")
-print("script05.py finished")
+print("script05.py ended successfully.")
