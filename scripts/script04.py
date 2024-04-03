@@ -27,8 +27,8 @@ display_network_statistics = config_display["display_network_statistics"]
 
 # INPUT/OUTPUT FILE PATHS
 # input
-filepath_nodes_input = homepath + "/data/input/network/nodes_studyarea.gpkg"
-filepath_edges_input = homepath + "/data/input/network/edges_studyarea.gpkg"
+filepath_nodes_input = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
+filepath_edges_input = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
 
 # output
 filepath_edge_output = homepath + "/data/output/network/edges.gpkg"

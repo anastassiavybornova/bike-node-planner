@@ -20,7 +20,7 @@ if homepath not in sys.path:
 
 # PATHS
 filepath_studyarea = homepath + "/data/input/studyarea/studyarea.gpkg"
-filepath_edges = homepath + "/data/input/network/edges_studyarea.gpkg"
+filepath_edges = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
 
 # remove preexisting plots (if any)
 preexisting_plots = glob.glob(homepath + "/results/plots/*")

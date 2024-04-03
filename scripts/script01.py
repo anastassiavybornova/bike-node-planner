@@ -18,11 +18,11 @@ if homepath not in sys.path:
 # define location of study area polygon (union of user-provided municipality polygons)
 filepath_study = homepath + "/data/input/studyarea/studyarea.gpkg"
 # define location of input network data (edges and nodes)
-filepath_input_edges = homepath + "/data/input/network/edges.gpkg"
-filepath_input_nodes = homepath + "/data/input/network/nodes.gpkg"
+filepath_input_edges = homepath + "/data/input/network/processed/edges.gpkg"
+filepath_input_nodes = homepath + "/data/input/network/processed/nodes.gpkg"
 # define location of output network data (edges and nodes clipped to extent of study area)
-filepath_edges_studyarea = homepath + "/data/input/network/edges_studyarea.gpkg"
-filepath_nodes_studyarea = homepath + "/data/input/network/nodes_studyarea.gpkg"
+filepath_edges_studyarea = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
+filepath_nodes_studyarea = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
 
 # import functions
 exec(open(homepath + "/src/eval_func.py").read())
@@ -45,7 +45,14 @@ display_network = config_display["display_network"]
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 
 # Add basemap
-remove_existing_layers(["Basemap", "Study area", "Network edges", "Network nodes"])
+remove_existing_layers(
+    [
+        "Basemap", 
+        "Study area", 
+        "Network edges", 
+        "Network nodes"
+    ]
+)
 epsg = proj_crs.replace(":", "")
 url = f"type=xyz&url=https://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0&crs={epsg}"
 basemap = QgsRasterLayer(url, "Basemap", "wms")
