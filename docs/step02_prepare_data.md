@@ -8,7 +8,7 @@ For all Danish municipalities, the steps below (how to provide input data for th
 
 You need to provide the following data sets, described in detail below:
 * [Study area polygon](/docs/step02_prepare_data.md#study-area-polygon)
-* Network in study area: [nodes and edges](/docs/step02_prepare_data.md#network-data)
+* [Network data](/docs/step02_prepare_data.md#network-data) in study area (nodes and edges)
 * (Optional) Evaluation data for study area: [polygon layers](/docs/step02_prepare_data.md#optional-land-use-data-for-evaluation-polygon-geometries)
 * (Optional) Evaluation data for study area: [point layers](/docs/step02_prepare_data.md#optional-points-of-interest-data-for-evaluation-point-geometries)
 * (Optional) Elevation data for study area: [a tif file](/docs/step02_prepare_data.md#optional-elevation-data-tif-file)
@@ -27,9 +27,7 @@ You need to provide the following data sets, described in detail below:
 
 To provide the study area, place this 1 file in the `studyarea` subfolder:
 
-1. `studyarea.gpkg`:
-
-a single **polygon or multipolygon** delineating the extent of the study area.  
+1. `studyarea.gpkg`: a single **polygon or multipolygon** delineating the extent of the study area.  
 
 ***
 
@@ -66,6 +64,8 @@ To provide land use data, place at least one file in the `/polygon/` subfolder:
 
 > **Note:** Providing this data is optional. If no data is provided in the `/polygon/` subfolder, the BikeNodePlanner will conduct no polygon layer analysis.
 
+***
+
 ## Optional: Points of interest data for evaluation (point geometries)
 
 This step is fully customizable. You can decide yourself which point of interest data to use here. The BikeNodePlanner will evaluate the network for each provided point layer _separately_, analyzing which points are _within_ and which points are _outside_ reach of the network. 
@@ -83,6 +83,8 @@ To provide point of interest data, place at least one file in the `/point/` subf
 * For each point layer, you can define a customized buffer distance: how close to the network does a point need to be to be counted as "within reach"? (see [Step 03](/docs/step03_customize_settings.md))
 
 > **Note:** Providing this data is optional. If no data is provided in the `/point/` subfolder, the BikeNodePlanner will conduct no point layer analysis.
+
+***
 
 ## Optional: Elevation data (tif file)
 
