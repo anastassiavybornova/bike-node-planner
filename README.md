@@ -37,21 +37,25 @@ First, set up the BikeNodePlanner environment on your machine. Detailed instruct
 * [here for macOS/linux](./docs/step01_install_software_macos.md)
 * [here for Windows](./docs/step01_install_software_windows.md)
 
-## Step 2: Prepare your data
+## Step 2: Download the contents of this repository
 
-Second, prepare your input data for the BikeNodePlanner:
+Second, download the contents of this repository to your local machine. Click [here]() for instructions.
+
+## Step 3: Prepare your data
+
+Third, prepare your input data for the BikeNodePlanner:
 * the bicycle node network that you want to evaluate
 * the geospatial data for the evaluation
 
-Detailed instructions are [here](./docs/step02_prepare_data.md).
+Detailed instructions are [here](./docs/step03_prepare_data.md).
 
-## Step 3: Customize your user settings
+## Step 4: Customize your user settings
 
-Third, customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions are [here](./docs/step03_customize_settings.md).
+Fourth, customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions are [here](./docs/step04_customize_settings.md).
 
-## Step 4: Run the BikeNodePlanner evaluation in QGIS, and explore results!
+## Step 5: Run the BikeNodePlanner evaluation in QGIS, and explore results!
 
-Fourth, the fun begins! Now you can run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions are [here](./docs/step04_run_evaluation.md).
+Fifth, the fun begins! Now you can run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions are [here](./docs/step05_run_evaluation.md).
 
 ***
 
