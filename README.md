@@ -11,11 +11,11 @@ The tool takes as input:
 1. a preliminary network plan, and 
 2. one or several additional layers of relevant geospatial data within the study area to be used for evaluation;
 
-and provides the user with a network analysis (based on the network topology of the preliminary network plan) and a customizable evaluation of the network (based on the additional geospatial data layers). Both can be explored interactively in QGIS. The BikeNodePlanner highlight areas where the network might need to be adjusted, and helps inform further planning decisions.
+and provides the user with a network analysis (based on the network topology of the preliminary network plan) and a customizable evaluation of the network (based on the additional geospatial data layers). Both can be explored interactively in QGIS. The BikeNodePlanner highlights areas where the network might need to be adjusted, and helps inform further planning decisions.
 
-The BikeNodePlanner originates from a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) as part of the project [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter), whose goal it was to develop a country-wide bicycle node network for Denmark. 
+The BikeNodePlanner originates from a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) as part of the project [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter), where the goal was to develop a country-wide bicycle node network for Denmark. 
 
-The BikeNodePlanner is introduced in the forthcoming research paper "The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning", currently available as [arxiv preprint](link here).
+The BikeNodePlanner is introduced in the forthcoming research paper "The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning", currently available as preprint:
 
 > Vybornova A, Vierø A, Szell M (2024) The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning. arXiv: LINK
 
