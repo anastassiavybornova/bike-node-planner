@@ -39,7 +39,7 @@ First, set up the BikeNodePlanner environment on your machine. Detailed instruct
 
 ## Step 2: Download the contents of this repository
 
-Second, download the contents of this repository to your local machine. Click [here]() for instructions.
+Second, download the contents of this repository to your local machine. Click [here](./docs/step02_download_repository.md) for instructions.
 
 ## Step 3: Prepare your data
 
