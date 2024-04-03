@@ -18,7 +18,7 @@ In QGIS,
 2. Click on `Show Editor`
 3. Click on `Open Script`
 4. Navigate to the `scripts` subfolder (within the `bike-node-planner-main` folder) 
-5. Select the next script (by number: 01, then 02, ...)
+5. Select the next script (by number: 00, then 01, ...)
 6. Click on `Open`
 7. Click on `Run`.
 8. While the script is running, check the console window for status messages.
@@ -45,13 +45,27 @@ The BikeNodePlanner consists of several scripts, which have to be run in the spe
 
 ## `script00.py`: Sanity check of all input data
 
-**TODO** script00 checks for correctness of all data
+script00 checks for correctness of all data. When you run this script, warnings, error messages, and instructions on how to correct your input data will be printed out in Python console. If needed, correct your input data and run the script00 again. 
+
+Once you see the message `All input data is correct`, you can move on to the next script, script01.
+
+**TODO insert screenshot**
+
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script00.png" width=80%></p>
 
 ## `script01.py`: Visualization of the study area
 
 script01 plots the study area and a basemap from OpenStreetMap, and extracts the input network data to only include features that intersect with the study area.
 
+**TODO insert screenshot**
+
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script01.png" width=80%></p>
+
+Once you see the message `script01.py ended successfully`, you can move on to the next script.
+
 ## `script02.py`: Evaluation with point and polygon layers
+
+> Note: this script is optional. If you didn't provide any point or polygon layers for evaluation, you can skip this script.
 
 script02 uses the point and polygon layers provided in `/data/input/point/` and `/data/input/polygon/` to evaluate the network. 
 
@@ -61,23 +75,42 @@ You can explore the results of the evaluation by (de)selecting layers in the QGI
 
 To get more information on a particular feature on the map, use the ["Identify features"](https://docs.qgis.org/3.34/en/docs/user_manual/introduction/general_tools.html#identify) tool in QGIS.
 
-**TODO update above description to fit the current setup; insert screenshots**
+**TODO insert screenshot**
 
-## `script03.py`:
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script02.png" width=80%></p>
 
-script03 makes and plots elevation (slope)
+Once you see the message `script02.py ended successfully`, you can move on to the next script. 
 
-**TODO insert explanation and screenshots**
+## `script03.py`: Elevation (slope)
 
-## `script04.py`:
+> Note: this script is optional. If you didn't provide any elevation data, you can skip this script.
 
-script04 makes and plots network statistics & disconnected components
+**TODO insert explanation (explain "segments" and "edges" separately; possible 2 separate screenshots?)**
 
-**TODO insert explanation and screenshots**
+**TODO insert screenshot**
 
-## `script05.py`:
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script03.png" width=80%></p>
 
-script05 generates summary statistics plots in `results/plots/*.png`
+Once you see the message `script03.py ended successfully`, you can move on to the next script. 
 
-After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder):
+## `script04.py`: Network analysis
+
+**TODO insert explanation**
+
+**TODO insert screenshot**
+
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script04.png" width=80%></p>
+
+Once you see the message `script04.py ended successfully`, you can move on to the next script. 
+
+## `script05.py`: Summary statistics
+
+script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder).
+
 **TO DO INSERT EXAMPLE IMAGES**
+
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-studyarea_network.png" width=80%></p>
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-facility.png" width=80%></p>
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-nature.png" width=80%></p>
+
+**TODO insert explanation (json files in `/results/stats/` folder)**
