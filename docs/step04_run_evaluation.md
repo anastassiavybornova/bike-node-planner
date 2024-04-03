@@ -113,7 +113,7 @@ Once you see the message `script04.py ended successfully`, you can move on to th
 
 script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder).
 
-**TO DO INSERT EXAMPLE IMAGES**
+**TODO insert explanation of example images**
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-studyarea_network.png" width=60%></p>
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-facility.png" width=60%></p>
