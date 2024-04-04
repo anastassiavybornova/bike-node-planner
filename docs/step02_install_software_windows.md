@@ -50,9 +50,9 @@ To do so, simply
 "<qgispythonpath>" -m pip install contextily
 ```
 
-Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate `bike-node-planner-main` folder in your command line interface and run `./setuppython.sh <qgispythonpath>`.
-
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command Prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
+
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate `bike-node-planner-main` folder in your command line interface and run `./setuppython.sh <qgispythonpath>`.
 
 ***
 

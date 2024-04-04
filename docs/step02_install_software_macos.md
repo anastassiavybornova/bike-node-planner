@@ -34,9 +34,10 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4
 <qgispythonpath> -m pip install contextily
 ```
-Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate `bike-node-planner-main` folder in your command line interface and run `./setuppython.sh <qgispythonpath>`.
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
+
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate to `bike-node-planner-main` folder in your command line interface and run `./setuppython.sh <qgispythonpath>`.
 
 ***
 

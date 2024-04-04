@@ -31,15 +31,15 @@ Anastassia Vybornova<sup>1</sup>, Ane Rahbek Vierø<sup>1</sup>, Michael Szell<s
 
 To use the BikeNodePlanner, follow the detailed step-by-step instructions below. 
 
-## Step 1: Software installations
+## Step 1: Download the contents of this repository
 
-First, set up the BikeNodePlanner environment on your machine. Detailed instructions depend on your operating system:
-* [here for macOS/linux](./docs/step01_install_software_macos.md)
-* [here for Windows](./docs/step01_install_software_windows.md)
+First, download the contents of this repository to your local machine. Click [here](./docs/step01_download_repository.md) for instructions.
 
-## Step 2: Download the contents of this repository
+## Step 2: Software installations
 
-Second, download the contents of this repository to your local machine. Click [here](./docs/step02_download_repository.md) for instructions.
+Second, set up the BikeNodePlanner environment on your machine. Detailed instructions depend on your operating system:
+* [here for macOS/linux](./docs/step02_install_software_macos.md)
+* [here for Windows](./docs/step02_install_software_windows.md)
 
 ## Step 3: Prepare your data
 
