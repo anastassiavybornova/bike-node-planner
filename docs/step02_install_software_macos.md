@@ -33,6 +33,7 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 <qgispythonpath> -m pip install osmnx==1.6.0
 <qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4
 <qgispythonpath> -m pip install contextily
+<qgispythonpath> -m pip install --upgrade lxml
 ```
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>

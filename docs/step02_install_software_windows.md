@@ -48,6 +48,7 @@ To do so, simply
 "<qgispythonpath>" -m pip install osmnx==1.6.0
 "<qgispythonpath> -m pip install numpy --force-reinstall -v numpy==1.22.4"
 "<qgispythonpath>" -m pip install contextily
+"<qgispythonpath>" -m pip install --upgrade lxml
 ```
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command Prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
