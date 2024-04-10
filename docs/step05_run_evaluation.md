@@ -24,7 +24,7 @@ In QGIS,
 8. While the script is running, check the console window for status messages.
 9. Once you see the message `Script XXX ended succcessfully` in the console window, save the project (disquette icon or `cmd+s`), and run the next script.
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=80%></p>
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=95%></p>
 
 ## Troubleshooting
 
