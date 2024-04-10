@@ -164,9 +164,8 @@ cython_debug/
 
 *.gpkg-wal
 *.gpkg-shm
-*.qgz
 *-auto.yml
-
+*test*.qgz
 data/input/*
 data/output/*
 results/*

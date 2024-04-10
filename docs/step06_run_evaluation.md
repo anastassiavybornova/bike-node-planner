@@ -1,6 +1,18 @@
 # Step 4: Run the BikeNodePlanner evaluation in QGIS, and explore results
 
-After having installed the necessary software ([Step 01](../README.md#step-1-software-installations)), downloaded the repository contents ([Step 03](../README.md#step-2-download-the-contents-of-this-repository)), prepared your input data ([Step 03](../README.md#step-3-prepare-your-data)), and customized your user settings ([Step 04](../README.md#step-4-customize-your-user-settings)), you can now run the BikeNodePlanner analysis in QGIS. 
+After having 
+
+✔️ installed the necessary software ([Step 01](../README.md#step-1-software-installations)), 
+
+✔️ downloaded the repository contents ([Step 03](../README.md#step-2-download-the-contents-of-this-repository)), 
+
+✔️ prepared your input data ([Step 03](../README.md#step-3-prepare-your-data)), 
+
+✔️ customized your user settings ([Step 04](../README.md#step-4-customize-your-user-settings)), and
+
+✔️ opened the `workflow.qgz` file in QGIS ([Step 05](../README.md#step-5-open-workflowqgz-in-qgis)),
+
+you can now run the BikeNodePlanner analysis in QGIS. 
 
 There are several analysis steps. For each step, you need to run one Python script in QGIS. The Python scripts are located in `/bike-node-planner-main/scripts/`. Running each script produces some visual output in your QGIS project, and/or plots and statistics that will be saved to your local machine.
 
