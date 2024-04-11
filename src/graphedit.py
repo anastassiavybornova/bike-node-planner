@@ -51,7 +51,9 @@ def unzip_linestrings(org_gdf, edge_id_col):
     )
 
     new_gdf["new_edge_id"] = new_gdf.index  # Create random but unique edge id!
-    assert len(new_gdf) == len(new_gdf.new_edge_id.unique())
+    assert len(new_gdf) == len(
+        new_gdf.new_edge_id.unique()
+    ), "IDs of new linestrings are not unique!"
 
     new_gdf = new_gdf.merge(
         org_gdf.drop("geometry", axis=1), how="left", on=edge_id_col

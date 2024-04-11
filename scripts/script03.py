@@ -5,7 +5,8 @@ import json
 import geopandas as gpd
 from qgis.core import *
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -66,7 +67,7 @@ print(f"If the script fails to complete, please try again!")
 
 ##### IMPORT STUDY AREA EDGES AS GDF
 edges = gpd.read_file(edges_fp)
-assert len(edges) == len(edges.edge_id.unique())
+assert len(edges) == len(edges.edge_id.unique()), "Error: Edge ids are not unique"
 
 
 # ##### IMPORT STUDY AREA EDGES AS QGIS LAYER

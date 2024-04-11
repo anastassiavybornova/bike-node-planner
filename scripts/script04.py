@@ -12,9 +12,11 @@ import json
 import re
 import seaborn as sns
 import random
+
 random.seed(42)
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 import glob
 
 # define homepath variable (where is the qgis project saved?)
@@ -60,14 +62,18 @@ G = ox.graph_from_gdfs(nodes, edges)
 
 # check that conversion is successfull
 ox_nodes, ox_edges = ox.graph_to_gdfs(G)
-assert len(ox_nodes) == len(nodes)
-assert len(ox_edges) == len(edges)
+assert len(ox_nodes) == len(
+    nodes
+), "Number of graph nodes not equal to number of input nodes"
+assert len(ox_edges) == len(
+    edges
+), "Number of graph edges not equal to number of input edges"
 del ox_nodes, ox_edges
 
 # convert to undirected
-assert nx.is_directed(G) == True
+assert nx.is_directed(G) == True, "Graph is not directed"
 G_undirected = ox.get_undirected(G)
-assert nx.is_directed(G_undirected) == False
+assert nx.is_directed(G_undirected) == False, "Graph is directed"
 
 print("Degrees:", nx.degree_histogram(G_undirected))
 
@@ -92,8 +98,12 @@ for i, comp in enumerate(comps):
     G_sub_edges = [G_sub.edges[e]["nx_edge_id"] for e in G_sub.edges]
     edges_undir.loc[G_sub_edges, "component"] = i + 1  # (starting to count at 1)
 
-assert len(edges_undir.component.unique()) == len(comps)
-assert len(edges_undir.loc[edges_undir.component.isna()]) == 0
+assert len(edges_undir.component.unique()) == len(
+    comps
+), "Unexpected number of components"
+assert (
+    len(edges_undir.loc[edges_undir.component.isna()]) == 0
+), "Some edges have no component"
 
 # Save degrees to nodes
 pd_degrees = pd.DataFrame.from_dict(
