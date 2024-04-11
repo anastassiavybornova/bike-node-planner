@@ -7,6 +7,8 @@ import geopandas as gpd
 import seaborn as sns
 from ast import literal_eval
 from qgis.core import *
+import warnings
+warnings.filterwarnings('ignore')
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()

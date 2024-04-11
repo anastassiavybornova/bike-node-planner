@@ -4,6 +4,8 @@ import yaml
 import json
 import geopandas as gpd
 from qgis.core import *
+import warnings
+warnings.filterwarnings('ignore')
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()

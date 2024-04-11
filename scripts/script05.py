@@ -1,7 +1,8 @@
 # import packages
 import sys
 import os
-
+import warnings
+warnings.filterwarnings('ignore')
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 import pandas as pd

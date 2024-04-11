@@ -1,11 +1,12 @@
 # import python packages
 import sys
 import os
-
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import yaml
 import geopandas as gpd
 from qgis.core import *
+import warnings
+warnings.filterwarnings('ignore')
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()

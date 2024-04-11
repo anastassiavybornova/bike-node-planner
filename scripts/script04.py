@@ -12,8 +12,9 @@ import json
 import re
 import seaborn as sns
 import random
-
 random.seed(42)
+import warnings
+warnings.filterwarnings('ignore')
 import glob
 
 # define homepath variable (where is the qgis project saved?)
