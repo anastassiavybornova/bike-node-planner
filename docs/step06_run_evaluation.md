@@ -62,7 +62,7 @@ The BikeNodePlanner consists of several scripts, which have to be run in the spe
 
 script00 checks for correctness of all data. When you run this script, warnings, error messages, and instructions on how to correct your input data will be printed out in Python console. If needed, correct your input data and run the script00 again.
 
-Once you see the message `All input data is correct`, you can move on to the next script, script01.
+**Once you see the message `All input data is correct`, you can move on to the next script, script01.**
 
 **TODO insert screenshot**
 
@@ -76,7 +76,7 @@ script01 plots the study area and a basemap from OpenStreetMap, and extracts the
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script01.png" width=80%></p>
 
-Once you see the message `script01.py ended successfully`, you can move on to the next script.
+**Once you see the message `script01.py ended successfully`, you can move on to the next script.**
 
 ****
 
@@ -94,7 +94,7 @@ To get more information on a particular feature on the map, use the ["Identify f
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script02.png" width=80%></p>
 
-Once you see the message `script02.py ended successfully`, you can move on to the next script.
+**Once you see the message `script02.py ended successfully`, you can move on to the next script.**
 
 ***
 
@@ -137,7 +137,7 @@ The thresholds for the slope classes, as well as the segment length, can be modi
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script04.png" width=80%></p>
 
-Once you see the message `script04.py ended successfully`, you can move on to the next script.
+**Once you see the message `script04.py ended successfully`, you can move on to the next script.**
 
 ***
 
