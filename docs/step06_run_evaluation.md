@@ -117,15 +117,15 @@ The last class is also the threshold for the separate layer with very steep segm
 
 The thresholds for the slope classes, as well as the segment length, can be modified in `config-slope.yml`.
 
-Use segment slope for a detailed overview of where the steepest stretches are located:
+**Use segment slope for a detailed overview of where the steepest stretches are located:**
 
 <p align="center"><img alt="Network slope for each segment" src="/docs/screenshots/slope_segment_output.png" width=80%></p>
 
-Use edge slope for an overview of the average slope for each network edge:
+**Use edge slope for an overview of the average slope for each network edge:**
 
 <p align="center"><img alt="Average network slope for each edge" src="/docs/screenshots/slope_edge_output.png" width=80%></p>
 
-Once you see the message `script03.py ended successfully`, you can move on to the next script.
+**Once you see the message `script03.py ended successfully`, you can move on to the next script.**
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script03.png" width=80%></p>
 
