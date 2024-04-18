@@ -7,6 +7,7 @@ For all Danish municipalities, the steps below (how to provide input data for th
 ## How to format and provide data
 
 You need to provide the following data sets, described in detail below:
+
 * [Study area polygon](/docs/step02_prepare_data.md#study-area-polygon)
 * [Network data](/docs/step02_prepare_data.md#network-data) in study area (nodes and edges)
 * (Optional) Evaluation data for study area: [polygon layers](/docs/step02_prepare_data.md#optional-land-use-data-for-evaluation-polygon-geometries)
@@ -15,7 +16,7 @@ You need to provide the following data sets, described in detail below:
 
 ### General data requirements
 
-* All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html). 
+* All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html).
 * All data must be in the same **projected coordinate reference system**.
 * To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [previous step](/README.md#step-1-software-installations) for instructions on how to download the folder from GitHub.)
 * All data sets described below need to be placed in the corresponding subfolders of `/bike-node-planner-main/data/input/`.
@@ -68,7 +69,7 @@ To provide land use data, place at least one file in the `/polygon/` subfolder:
 
 ## Optional: Points of interest data for evaluation (point geometries)
 
-This step is fully customizable. You can decide yourself which point of interest data to use here. The BikeNodePlanner will evaluate the network for each provided point layer _separately_, analyzing which points are _within_ and which points are _outside_ reach of the network. 
+This step is fully customizable. You can decide yourself which point of interest data to use here. The BikeNodePlanner will evaluate the network for each provided point layer _separately_, analyzing which points are _within_ and which points are _outside_ reach of the network.
 
 To provide point of interest data, place at least one file in the `/point/` subfolder:
 
@@ -95,6 +96,7 @@ To provide elevation data for the area, place this 1 file in the `/elevation/` s
 ### Requirements 
 
 The elevation data set must:
+
 * Cover the entire study area.
 * Be in a `.tif` format, readable by QGIS and GeoPandas
 * Be in a sufficiently high resolution to compute the slope of the network stretches: a resolution of 10 * 10 meters or higher is recommended.

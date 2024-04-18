@@ -4,7 +4,7 @@
 
 <p align="center"><img alt="The Cycle Node Network Planner" src="/img/social-preview.png" width=100%></p>
 
-The BikeNodePlanner is an open-source, customizable, data-driven decision support tool for bicycle node network planning. The BikeNodePlanner runs in QGIS and Python. It can be used for any study area in the world. 
+The BikeNodePlanner is an open-source, customizable, data-driven decision support tool for bicycle node network planning. The BikeNodePlanner runs in QGIS and Python. It can be used for any study area in the world.
 
 The tool takes as input:
 
@@ -38,12 +38,14 @@ First, download the contents of this repository to your local machine. Click [he
 ## Step 2: Software installations
 
 Second, set up the BikeNodePlanner environment on your machine. Detailed instructions depend on your operating system:
+
 * [here for macOS/linux](./docs/step02_install_software_macos.md)
 * [here for Windows](./docs/step02_install_software_windows.md)
 
 ## Step 3: Prepare your data
 
 Third, prepare your input data for the BikeNodePlanner:
+
 * the bicycle node network that you want to evaluate
 * the geospatial data for the evaluation
 

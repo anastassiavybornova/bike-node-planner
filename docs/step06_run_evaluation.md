@@ -1,22 +1,23 @@
 # Step 4: Run the BikeNodePlanner evaluation in QGIS, and explore results
 
-After having 
+After having:
 
-✔️ installed the necessary software ([Step 01](../README.md#step-1-software-installations)), 
+✔️ installed the necessary software ([Step 01](../README.md#step-1-software-installations)),
 
-✔️ downloaded the repository contents ([Step 03](../README.md#step-2-download-the-contents-of-this-repository)), 
+✔️ downloaded the repository contents ([Step 03](../README.md#step-2-download-the-contents-of-this-repository)),
 
-✔️ prepared your input data ([Step 03](../README.md#step-3-prepare-your-data)), 
+✔️ prepared your input data ([Step 03](../README.md#step-3-prepare-your-data)),
 
 ✔️ customized your user settings ([Step 04](../README.md#step-4-customize-your-user-settings)), and
 
 ✔️ opened the `workflow.qgz` file in QGIS ([Step 05](../README.md#step-5-open-workflowqgz-in-qgis)),
 
-you can now run the BikeNodePlanner analysis in QGIS. 
+you can now run the BikeNodePlanner analysis in QGIS.
 
 There are several analysis steps. For each step, you need to run one Python script in QGIS. The Python scripts are located in `/bike-node-planner-main/scripts/`. Running each script produces some visual output in your QGIS project, and/or plots and statistics that will be saved to your local machine.
 
 Below, you find:
+
 * first, general instructions on how to run a Python script in QGIS;
 * then, for each script of the BikeNodePlanner, explanations of its output and how to interpret it.
 
@@ -59,9 +60,9 @@ The BikeNodePlanner consists of several scripts, which have to be run in the spe
 
 ## `script00.py`: Sanity check of all input data
 
-script00 checks for correctness of all data. When you run this script, warnings, error messages, and instructions on how to correct your input data will be printed out in Python console. If needed, correct your input data and run the script00 again. 
+script00 checks for correctness of all data. When you run this script, warnings, error messages, and instructions on how to correct your input data will be printed out in Python console. If needed, correct your input data and run the script00 again.
 
-Once you see the message `All input data is correct`, you can move on to the next script, script01.
+**Once you see the message `All input data is correct`, you can move on to the next script, script01.**
 
 **TODO insert screenshot**
 
@@ -75,7 +76,7 @@ script01 plots the study area and a basemap from OpenStreetMap, and extracts the
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script01.png" width=80%></p>
 
-Once you see the message `script01.py ended successfully`, you can move on to the next script.
+**Once you see the message `script01.py ended successfully`, you can move on to the next script.**
 
 ****
 
@@ -93,7 +94,7 @@ To get more information on a particular feature on the map, use the ["Identify f
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script02.png" width=80%></p>
 
-Once you see the message `script02.py ended successfully`, you can move on to the next script. 
+**Once you see the message `script02.py ended successfully`, you can move on to the next script.**
 
 ***
 
@@ -101,13 +102,32 @@ Once you see the message `script02.py ended successfully`, you can move on to th
 
 > Note: this script is optional. If you didn't provide any elevation data, you can skip this script.
 
-**TODO insert explanation (explain "segments" and "edges" separately; possible 2 separate screenshots?)**
+script03 uses the provided elevation data to compute the slope of the network.
 
-**TODO update screenshot**
+To compute the slope, each edge is split into segments of configurable length. The results are both presented for each segment, and as the average slope for each edge. Finally, segments with a slope above a configurable threshold are displayed as a separate layer.
+
+The default display of network slope classifies segments/edges into 4 different classes:
+
+* 0 - 3% slope (Manageable elevation)
+* 3 - 5% slope (Noticeable elevation)
+* 5 - 7% slope (Steep elevation)
+* More than 7% (Very steep elevation)
+
+The last class is also the threshold for the separate layer with very steep segments.
+
+The thresholds for the slope classes, as well as the segment length, can be modified in `config-slope.yml`.
+
+**Use segment slope for a detailed overview of where the steepest stretches are located:**
+
+<p align="center"><img alt="Network slope for each segment" src="/docs/screenshots/slope_segment_output.png" width=80%></p>
+
+**Use edge slope for an overview of the average slope for each network edge:**
+
+<p align="center"><img alt="Average network slope for each edge" src="/docs/screenshots/slope_edge_output.png" width=80%></p>
+
+**Once you see the message `script03.py ended successfully`, you can move on to the next script.**
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script03.png" width=80%></p>
-
-Once you see the message `script03.py ended successfully`, you can move on to the next script. 
 
 ***
 
@@ -117,7 +137,7 @@ Once you see the message `script03.py ended successfully`, you can move on to th
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script04.png" width=80%></p>
 
-Once you see the message `script04.py ended successfully`, you can move on to the next script. 
+**Once you see the message `script04.py ended successfully`, you can move on to the next script.**
 
 ***
 

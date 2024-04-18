@@ -6,12 +6,10 @@ import geopandas as gpd
 import pandas as pd
 from shapely import strtree
 
+
 def merge_municipalities(
-        municipality_codes, 
-        evaluation_layer, 
-        input_folder, 
-        output_folder        
-        ):
+    municipality_codes, evaluation_layer, input_folder, output_folder
+):
     """
     For a given evaluation layer, merges data of all given municipalities and saves output to file.
 
@@ -20,7 +18,7 @@ def merge_municipalities(
         evaluation_layer (str): name of evaluation layer, has to be one of: "agriculture", "bad", "culture", "facilities", "nature", "pois", "service"
         input_folder (str): path to folder where subfolders with municipality data are located
         output_folder (str): path to folder where merged gdf will be saved to
-    
+
     Returns:
         None
     """
@@ -30,7 +28,7 @@ def merge_municipalities(
         if os.path.exists(layerpath):
             gdfs.append(gpd.read_file(layerpath))
     if len(gdfs) > 1:
-        gdfs = pd.concat(gdfs, join = "inner", ignore_index = True)
+        gdfs = pd.concat(gdfs, join="inner", ignore_index=True)
         gdfs.to_file(output_folder + f"{evaluation_layer}.gpkg")
         print(f"{evaluation_layer.capitalize()} layer created")
     elif len(gdfs) == 1:
@@ -39,6 +37,7 @@ def merge_municipalities(
     else:
         print(f"No {evaluation_layer} data found for this study area")
     return None
+
 
 def evaluate_export_plot_point(
     input_fp,
@@ -97,14 +96,14 @@ def evaluate_export_plot_point(
     print(
         f"Out of {len(input_points)} {name.lower()} points, {len(points_withinreach)} {name.lower()} ({(len(points_withinreach) / len(input_points))*100:.2f}%) are within reach"
     )
-    
+
     # export
     points_withinreach.to_file(within_reach_output_fp)
 
     evaluated_points.loc[evaluated_points.withinreach == 0].to_file(
         outside_reach_output_fp
     )
-    
+
     # stats to dict
     res = {}
     res[name] = {}
@@ -160,6 +159,7 @@ def evaluate_export_plot_point(
 
     return input_layer_name, output_layer_name_within, output_layer_name_outside, res
 
+
 def evaluate_export_plot_poly(
     input_fp,
     output_fp,
@@ -207,7 +207,9 @@ def evaluate_export_plot_poly(
     input_poly = gpd.read_file(input_fp)
 
     # evaluate
-    evaluate_network, evaluate_area = evaluate_polygon_layer(input_poly, network_edges, dist)
+    evaluate_network, evaluate_area = evaluate_polygon_layer(
+        input_poly, network_edges, dist
+    )
 
     print(f"{name} areas evaluated")
     print(
@@ -222,9 +224,13 @@ def evaluate_export_plot_poly(
     res[name] = {}
     res[name]["type"] = "polygon_layer"
     res[name]["dist"] = dist
-    res[name]["total"] = network_edges.unary_union.length # area covered by layer
-    res[name]["within"] = evaluate_network.unary_union.length # length of edges intersecting
-    res[name]["outside"] = network_edges.unary_union.length - evaluate_network.unary_union.length # length of edges not intersecting 
+    res[name]["total"] = network_edges.unary_union.length  # area covered by layer
+    res[name][
+        "within"
+    ] = evaluate_network.unary_union.length  # length of edges intersecting
+    res[name]["outside"] = (
+        network_edges.unary_union.length - evaluate_network.unary_union.length
+    )  # length of edges not intersecting
     res[name]["area"] = evaluate_area
 
     input_layer_name = None
@@ -271,12 +277,12 @@ def evaluate_polygon_layer(poly, edges, polygon_buffer=100):
     both input gdfs must be in the same projected CRS.
     keep track of which, and how many, types (from poly layer)
     each of the edge segments intersects with (to track variation).
-    returns 
+    returns
         gdf of intersecting edge segments
         surface (sqm) of evaluation area
     """
 
-    assert poly.crs == edges.crs
+    assert poly.crs == edges.crs, "CRS of input layers do not match!"
 
     # explode edges
     edges = edges.explode(index_parts=False)
@@ -335,7 +341,7 @@ def evaluate_point_layer(points, edges, points_buffer):
     each of the edge segments intersects with (to track variation).
     """
 
-    assert points.crs == edges.crs
+    assert points.crs == edges.crs, "CRS of input layers do not match!"
 
     # explode points
     points = points.explode(index_parts=False)

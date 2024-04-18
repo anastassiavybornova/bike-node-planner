@@ -1,12 +1,14 @@
 # import python packages
 import sys
 import os
+
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import yaml
 import geopandas as gpd
 from qgis.core import *
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -22,8 +24,12 @@ filepath_study = homepath + "/data/input/studyarea/studyarea.gpkg"
 filepath_input_edges = homepath + "/data/input/network/processed/edges.gpkg"
 filepath_input_nodes = homepath + "/data/input/network/processed/nodes.gpkg"
 # define location of output network data (edges and nodes clipped to extent of study area)
-filepath_edges_studyarea = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
-filepath_nodes_studyarea = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
+filepath_edges_studyarea = (
+    homepath + "/data/input/network/processed/edges_studyarea.gpkg"
+)
+filepath_nodes_studyarea = (
+    homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
+)
 
 # import functions
 exec(open(homepath + "/src/eval_func.py").read())
@@ -46,14 +52,7 @@ display_network = config_display["display_network"]
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 
 # Add basemap
-remove_existing_layers(
-    [
-        "Basemap", 
-        "Study area", 
-        "Network edges", 
-        "Network nodes"
-    ]
-)
+remove_existing_layers(["Basemap", "Study area", "Network edges", "Network nodes"])
 epsg = proj_crs.replace(":", "")
 url = f"type=xyz&url=https://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0&crs={epsg}"
 basemap = QgsRasterLayer(url, "Basemap", "wms")
@@ -84,8 +83,12 @@ edges = gpd.read_file(filepath_input_edges)
 nodes = gpd.read_file(filepath_input_nodes)
 gdf_studyarea = gpd.read_file(filepath_study)
 
-assert edges.crs == gdf_studyarea.crs == proj_crs
-assert nodes.crs == gdf_studyarea.crs == proj_crs
+assert (
+    edges.crs == gdf_studyarea.crs == proj_crs
+), "Edges and study area do not have the same CRS"
+assert (
+    nodes.crs == gdf_studyarea.crs == proj_crs
+), "Nodes and study area do not have the same CRS"
 
 edges_studyarea = edges.sjoin(gdf_studyarea, predicate="intersects").copy()
 edges_studyarea.drop(columns=["index_right"], inplace=True)
@@ -101,13 +104,17 @@ nodes_studyarea = nodes_studyarea[nodes_studyarea.geometry.notna()].reset_index(
 
 # assert there is one (and only one) Point per node geometry row
 nodes_studyarea = nodes_studyarea.explode(index_parts=False).reset_index(drop=True)
-assert all(nodes_studyarea.geometry.type == "Point")
-assert all(nodes_studyarea.geometry.is_valid)
+assert all(
+    nodes_studyarea.geometry.type == "Point"
+), "Not all node geometries are Points"
+assert all(nodes_studyarea.geometry.is_valid), "Not all node geometries are valid"
 
 # assert there is one (and only one) LineString per edge geometry row
 edges_studyarea = edges_studyarea.explode(index_parts=False).reset_index(drop=True)
-assert all(edges_studyarea.geometry.type == "LineString")
-assert all(edges_studyarea.geometry.is_valid)
+assert all(
+    edges_studyarea.geometry.type == "LineString"
+), "Not all edge geometries are LineStrings"
+assert all(edges_studyarea.geometry.is_valid), "Not all edge geometries are valid"
 
 # Makes sure only to include nodes connected to an edge
 nodes_studyarea = nodes_studyarea.loc[
