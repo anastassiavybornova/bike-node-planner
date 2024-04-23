@@ -148,7 +148,9 @@ for c in edges_undir.component.unique():
 res = {}  # initialize stats results dictionary
 res["node_count"] = len(G_undirected.nodes)
 res["edge_count"] = len(G_undirected.edges)
+res["components"] = len(comps)
 res["node_degrees"] = dict(nx.degree(G_undirected))
+
 with open(stats_path, "w") as opened_file:
     json.dump(res, opened_file, indent=6)
 print(f"Network statistics saved to {stats_path}")
