@@ -1,10 +1,10 @@
-# Step 4: Run the BikeNodePlanner evaluation in QGIS, and explore results
+# Step 6: Run the BikeNodePlanner evaluation in QGIS, and explore results
 
 After having:
 
-✔️ installed the necessary software ([Step 01](../README.md#step-1-software-installations)),
+✔️ downloaded the repository contents ([Step 01](../README.md#step-1-download-the-contents-of-this-repository)),
 
-✔️ downloaded the repository contents ([Step 03](../README.md#step-2-download-the-contents-of-this-repository)),
+✔️ installed the necessary software ([Step 02](../README.md#step-2-software-installations)),
 
 ✔️ prepared your input data ([Step 03](../README.md#step-3-prepare-your-data)),
 
@@ -104,7 +104,7 @@ To get more information on a particular feature on the map, use the ["Identify f
 
 script03 uses the provided elevation data to compute the slope of the network.
 
-To compute the slope, each edge is split into segments of configurable length. The results are both presented for each segment, and as the average slope for each edge. Finally, segments with a slope above a configurable threshold are displayed as a separate layer.
+To compute the slope, each edge is split into segments of configurable length. The results are presented for each segment (segment layer), and as the average slope for each edge (edge layer). Finally, segments with a slope above a maximum threshold are displayed as a separate layer.
 
 The default display of network slope classifies segments/edges into 4 different classes:
 
@@ -113,9 +113,7 @@ The default display of network slope classifies segments/edges into 4 different 
 * 5 - 7% slope (Steep elevation)
 * More than 7% (Very steep elevation)
 
-The last class is also the threshold for the separate layer with very steep segments.
-
-The thresholds for the slope classes, as well as the segment length, can be modified in `config-slope.yml`.
+The segment lengths and thresholds for slope classes can be configured in `config-slope.yml` (see [Step 04](./step04_customize_settings.md)).
 
 **Use segment slope for a detailed overview of where the steepest stretches are located:**
 
@@ -133,7 +131,7 @@ The thresholds for the slope classes, as well as the segment length, can be modi
 
 ## `script04.py`: Network analysis
 
-**TODO insert explanation**
+script04 converts the input data into a network (graph) object. Then, network statistics are computed and visualized: the numerical results are saved to `results/stats/stats_network.json`, and the plots to `results/plots/stats_network.png`. Script04 also identifies disconnected component in the network. The output layer of script04 displayed in QGIS shows each disconnected component as separate layer with a different color: 
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script04.png" width=80%></p>
 
@@ -145,10 +143,11 @@ The thresholds for the slope classes, as well as the segment length, can be modi
 
 script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder).
 
-**TODO insert explanation of example images**
-
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-studyarea_network.png" width=60%></p>
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-facility.png" width=60%></p>
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-nature.png" width=60%></p>
 
-**TODO insert explanation (json files in `/results/stats/` folder)**
+Summary statistics can also be found in `.json` format in the `/results/stats/` folder:
+* `stats_evaluation.json`: summary statistics for each evaluation layer (for point layers: number of points within/outside of distance threshold; for polygon layers: length of network within/outside of polygon layer)
+* `stats_slope.json`: length and slope for each segment, plus minimum, maximum, and average threshold for entire network
+* `stats_network.json`: number of nodes and edges; number of disconnected components; degrees for all nodes

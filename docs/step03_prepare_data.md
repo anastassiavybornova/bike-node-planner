@@ -1,4 +1,4 @@
-# Step 02: Prepare your input data 
+# Step 03: Prepare your input data 
 
 ## 🇩🇰 If your study area is in Denmark 🇩🇰
 
@@ -8,19 +8,19 @@ For all Danish municipalities, the steps below (how to provide input data for th
 
 You need to provide the following data sets, described in detail below:
 
-* [Study area polygon](/docs/step02_prepare_data.md#study-area-polygon)
-* [Network data](/docs/step02_prepare_data.md#network-data) in study area (nodes and edges)
-* (Optional) Evaluation data for study area: [polygon layers](/docs/step02_prepare_data.md#optional-land-use-data-for-evaluation-polygon-geometries)
-* (Optional) Evaluation data for study area: [point layers](/docs/step02_prepare_data.md#optional-points-of-interest-data-for-evaluation-point-geometries)
-* (Optional) Elevation data for study area: [a tif file](/docs/step02_prepare_data.md#optional-elevation-data-tif-file)
+* [Study area polygon](/docs/step03_prepare_data.md#study-area-polygon)
+* [Network data](/docs/step.md#network-data) in study area (nodes and edges)
+* (Optional) Evaluation data for study area: [polygon layers](/docs/step03_prepare_data.md#optional-land-use-data-for-evaluation-polygon-geometries)
+* (Optional) Evaluation data for study area: [point layers](/docs/step03_prepare_data.md#optional-points-of-interest-data-for-evaluation-point-geometries)
+* (Optional) Elevation data for study area: [a tif file](/docs/step03_prepare_data.md#optional-elevation-data-tif-file)
 
 ### General data requirements
 
-* All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.28/en/docs/user_manual/managing_data_source/opening_data.html).
+* All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.34/en/docs/user_manual/managing_data_source/opening_data.html).
 * All data must be in the same **projected coordinate reference system**.
-* To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [previous step](/README.md#step-1-software-installations) for instructions on how to download the folder from GitHub.)
+* To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [Step 02](/README.md#step-2-software-installations) for instructions on how to download the folder from GitHub.)
 * All data sets described below need to be placed in the corresponding subfolders of `/bike-node-planner-main/data/input/`.
-* Once you run the BikeNodePlanner in QGIS, the first step will automatically make sure that the data sets you provided follow all the specifications (see [Step 04](/docs/step04_run_evaluation.md) for details).
+* Once you run the BikeNodePlanner in QGIS, the first step will automatically make sure that the data sets you provided follow all the specifications (see [Step 06](/docs/step06_run_evaluation.md) for details).
 
 ***
 
@@ -61,7 +61,7 @@ To provide land use data, place at least one file in the `/polygon/` subfolder:
 
 * Each file has to contain a set of polygons for the study area.
 * Note the the filenames are **customizable**: replace "polygonlayerX.gpkg" by a filename of your choice which describes the layer. For example, you may choose to provide one land use layer containing all nature in your study area (e.g., "nature.gpkg"); or you may choose to provide three layers containing different nature categories, to be analyzed separately (e.g., "forest.gpkg", "seaside.gpkg", "grassland.gpkg"). 
-* For each polygon layer, you can define a customized buffer distance: how close to the polygon does the network need to run to be counted as "within that polygon layer"? (see [Step 03](/docs/step03_customize_settings.md))
+* For each polygon layer, you can define a customized buffer distance: how close to the polygon does the network need to run to be counted as "within that polygon layer"? (see [Step 04](/docs/step04_customize_settings.md))
 
 > **Note:** Providing this data is optional. If no data is provided in the `/polygon/` subfolder, the BikeNodePlanner will conduct no polygon layer analysis.
 
@@ -81,7 +81,7 @@ To provide point of interest data, place at least one file in the `/point/` subf
 
 * Each file has to contain a set of points for the study area.
 * Note the the filenames are **customizable**: replace "pointlayerX.gpkg" by a filename of your choice which describes the layer. For example, you may choose to provide one land use layer containing all tourist attractions in your study area (e.g., "attractions.gpkg"); or you may choose to provide three layers containing different tourist attraction categories, to be analyzed separately (e.g., "museums.gpkg", "churches.gpkg", "monuments.gpkg"). 
-* For each point layer, you can define a customized buffer distance: how close to the network does a point need to be to be counted as "within reach"? (see [Step 03](/docs/step03_customize_settings.md))
+* For each point layer, you can define a customized buffer distance: how close to the network does a point need to be to be counted as "within reach"? (see [Step 04](/docs/step04_customize_settings.md))
 
 > **Note:** Providing this data is optional. If no data is provided in the `/point/` subfolder, the BikeNodePlanner will conduct no point layer analysis.
 
@@ -102,7 +102,3 @@ The elevation data set must:
 * Be in a sufficiently high resolution to compute the slope of the network stretches: a resolution of 10 * 10 meters or higher is recommended.
 
 > **Note:** Providing this data is optional. If no data is provided in the `/dem/` subfolder, the BikeNodePlanner will conduct no elevation analysis.
-
-***
-
-Illustrations and data specifications based on Septima, 2023 [LINK].

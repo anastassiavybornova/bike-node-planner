@@ -1,4 +1,4 @@
-# Step 3: Customize your user settings
+# Step 4: Customize your user settings
 
 Provide the following user settings by editing and saving the `.yml` files, found in the main folder `bike-node-planner-main`:
 
