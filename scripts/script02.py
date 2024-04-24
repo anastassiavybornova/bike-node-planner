@@ -32,7 +32,13 @@ edges = gpd.read_file(edgepath)
 # load evaluation data
 evaldict = {}
 
-for geomtype in ["point", "linestring", "polygon"]:
+geomtypes = [
+    "point",
+    # linestring, # tbi
+    "polygon"
+]
+
+for geomtype in geomtypes:
     geompath = homepath + f"/data/input/{geomtype}/"
     if os.path.exists(geompath):
         geomlayers = os.listdir(geompath)
@@ -60,7 +66,7 @@ eval_layers = [item for v in evaldict.values() for item in v]
 remove_existing_layers(eval_layers)
 
 # remove existing OUTPUT files, if any
-for geomtype in ["point", "linestring", "polygon"]:
+for geomtype in geomtypes:
     geompath = homepath + f"/data/output/{geomtype}/"
     if os.path.exists(geompath):
         preexisting_files = glob.glob(geompath + "*")
@@ -191,7 +197,7 @@ all_layers = input_layers + output_layers
 
 main_group = root.insertGroup(0, main_group_name)
 
-# evaldict[geomtype].keys() contains all the group layers (geomtype is one of "point", "linestring", "polygon")
+# evaldict[geomtype].keys() contains all the group layers (geomtype is one of "point", "polygon")
 for geomtype, geomdict in evaldict.items():
     for sublayer in geomdict.keys():
         layernames = [n for n in all_layers if sublayer in n or sublayer.lower() in n]
