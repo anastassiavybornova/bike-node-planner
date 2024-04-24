@@ -40,7 +40,7 @@ filepath_node_output = homepath + "/data/output/network/nodes.gpkg"
 graph_file = homepath + "/data/output/network/network_graph.graphml"
 stats_path = (
     homepath + "/results/stats/stats_network.json"
-)  # store output geopackages here
+)  # store output here
 
 # load data
 nodes = gpd.read_file(filepath_nodes_input)
@@ -75,7 +75,17 @@ assert nx.is_directed(G) == True, "Graph is not directed"
 G_undirected = ox.get_undirected(G)
 assert nx.is_directed(G_undirected) == False, "Graph is directed"
 
-print("Degrees:", nx.degree_histogram(G_undirected))
+degree_histogram = nx.degree_histogram(G_undirected)
+print("Degree histogram:", )
+print(f"Number of nodes without edges: {degree_histogram[0]}.") 
+print(f"Removing {degree_histogram[0]} nodes from the network.")
+
+nodes_to_remove = []
+for node in G_undirected.nodes():
+    if nx.degree(G_undirected, node) == 0:
+        nodes_to_remove.append(node)
+for node in nodes_to_remove:
+    G_undirected.remove_node(node)
 
 print(
     f"The number of connected components is: {nx.number_connected_components(G_undirected)}"
@@ -93,10 +103,26 @@ edges_undir["component"] = None
 for edge in G_undirected.edges:
     G_undirected.edges[edge]["nx_edge_id"] = edge
 
-for i, comp in enumerate(comps):
+comps_no_edges = []
+i = 1 # component count (starting to count at 1)
+for comp in comps:
+    
+    # for each component, make subgraph
     G_sub = nx.subgraph(G_undirected, nbunch=comp)
-    G_sub_edges = [G_sub.edges[e]["nx_edge_id"] for e in G_sub.edges]
-    edges_undir.loc[G_sub_edges, "component"] = i + 1  # (starting to count at 1)
+    
+    # if subgraph has at least 1 edge:
+    if len(G_sub.edges) > 0:
+        G_sub_edges = [G_sub.edges[e]["nx_edge_id"] for e in G_sub.edges]
+        edges_undir.loc[G_sub_edges, "component"] = i
+        i += 1
+        
+    # else (if subgraph has no edges):
+    else:
+        comps_no_edges.append(comp)
+
+# remove edgeless components from comp list
+for comp in comps_no_edges:
+    comps.remove(comp)
 
 assert len(edges_undir.component.unique()) == len(
     comps
@@ -142,8 +168,9 @@ zfill_regex = (
 )  # add leading 0s to filename if needed
 for c in edges_undir.component.unique():
     compfile = comppath + "comp" + zfill_regex.format(c) + ".gpkg"
-    edges_undir.loc[edges_undir["component"] == c].to_file(compfile, index=False)
-
+    compedges = edges_undir.loc[edges_undir["component"] == c].copy()
+    compedges.to_file(compfile, index=False)
+    
 ### Summary statistics of network
 res = {}  # initialize stats results dictionary
 res["node_count"] = len(G_undirected.nodes)
@@ -154,6 +181,7 @@ res["node_degrees"] = dict(nx.degree(G_undirected))
 with open(stats_path, "w") as opened_file:
     json.dump(res, opened_file, indent=6)
 print(f"Network statistics saved to {stats_path}")
+
 
 # ### Visualization
 # remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
@@ -169,10 +197,12 @@ if display_network_statistics:
     # create random colors (one for every comp) from seaborn colorblind palette
     layercolors = sns.color_palette("colorblind", len(comp_files))
     comp_colors = {}
+    comp_colors_hex = {}
     for k, v in zip(comp_numbers, layercolors):
         comp_colors[k] = (
             str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
         )
+        comp_colors_hex[k] = v
 
     for comp_file, comp_number in zip(comp_files, comp_numbers):
 
@@ -209,4 +239,29 @@ turn_off_layers(turn_off_layer_names)
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
+# make matplotlib plots of each component
+comppaths = [path for path in glob.glob("../data/output/network/components/*.gpkg")]
+comp_nrs = [int(re.findall(r"\d", path)[0]) for path in comppaths]
+
+for comppath, comp_nr in zip(comppaths, comp_nrs):
+    gdf = gpd.read_file(comppath)
+    fig, ax = plt.subplots(1,1)
+    gdf.plot(
+        ax=ax,
+        color = comp_colors_hex[comp_nr]
+    )
+    ax.set_axis_off()
+    ax.set_title(f"Component nr {comp_nr}")
+    cx.add_basemap(
+        ax=ax, 
+        source=cx.providers.CartoDB.Voyager, 
+        crs=gdf.crs)
+    fig.savefig(
+        homepath + f"/results/plots/component{comp_nr}.png", 
+        dpi=300, 
+        bbox_inches="tight"
+    )
+    plt.close()
+    
+print(f"Component plots saved to {homepath}/results/plots/")
 print("script04.py ended successfully.")
