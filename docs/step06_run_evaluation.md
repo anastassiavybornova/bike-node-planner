@@ -66,7 +66,7 @@ script00 checks for correctness of all data. When you run this script, warnings,
 
 **TODO insert screenshot**
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script00.png" width=80%></p>
+<p align="center"><img alt="Output of script 00" src="/docs/screenshots/script00.png" width=80%></p>
 
 ***
 
@@ -74,7 +74,7 @@ script00 checks for correctness of all data. When you run this script, warnings,
 
 script01 plots the study area and a basemap from OpenStreetMap, and extracts the input network data to only include features that intersect with the study area.
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script01.png" width=80%></p>
+<p align="center"><img alt="Output layer of script 01" src="/docs/screenshots/script01.png" width=80%></p>
 
 **Once you see the message `script01.py ended successfully`, you can move on to the next script.**
 
@@ -92,7 +92,7 @@ You can explore the results of the evaluation by (de)selecting layers in the QGI
 
 To get more information on a particular feature on the map, use the ["Identify features"](https://docs.qgis.org/3.34/en/docs/user_manual/introduction/general_tools.html#identify) tool in QGIS.
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script02.png" width=80%></p>
+<p align="center"><img alt="Output layer of script 02" src="/docs/screenshots/script02.png" width=80%></p>
 
 **Once you see the message `script02.py ended successfully`, you can move on to the next script.**
 
@@ -125,7 +125,7 @@ The segment lengths and thresholds for slope classes can be configured in `confi
 
 **Once you see the message `script03.py ended successfully`, you can move on to the next script.**
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script03.png" width=80%></p>
+<p align="center"><img alt="Output layer of script 03" src="/docs/screenshots/script03.png" width=80%></p>
 
 ***
 
@@ -133,7 +133,12 @@ The segment lengths and thresholds for slope classes can be configured in `confi
 
 script04 converts the input data into a network (graph) object. Then, network statistics are computed and visualized: the numerical results are saved to `results/stats/stats_network.json`, and the plots to `results/plots/stats_network.png`. Script04 also identifies disconnected component in the network. The output layer of script04 displayed in QGIS shows each disconnected component as separate layer with a different color: 
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/script04.png" width=80%></p>
+<p align="center"><img alt="Output layer of script 04" src="/docs/screenshots/script04.png" width=80%></p>
+
+A separate plot of each component is also saved to `results/plots/`:
+
+<p align="center"><img alt="Example plot of largest connected component" src="/docs/screenshots/component1.png" width=50%></p>
+
 
 **Once you see the message `script04.py ended successfully`, you can move on to the next script.**
 
@@ -143,9 +148,9 @@ script04 converts the input data into a network (graph) object. Then, network st
 
 script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder).
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-studyarea_network.png" width=60%></p>
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-facility.png" width=60%></p>
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/results-nature.png" width=60%></p>
+<p align="center"><img alt="Plot of study area with network" src="/docs/screenshots/results-studyarea_network.png" width=60%></p>
+<p align="center"><img alt="Plot of evaluation results for example layer 'facilities'" src="/docs/screenshots/results-facility.png" width=60%></p>
+<p align="center"><img alt="Plot of evaluation results for example layer 'nature'" src="/docs/screenshots/results-nature.png" width=60%></p>
 
 Summary statistics can also be found in `.json` format in the `/results/stats/` folder:
 * `stats_evaluation.json`: summary statistics for each evaluation layer (for point layers: number of points within/outside of distance threshold; for polygon layers: length of network within/outside of polygon layer)
