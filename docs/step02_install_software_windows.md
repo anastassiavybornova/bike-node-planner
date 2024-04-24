@@ -1,4 +1,4 @@
-# Step 1: Install software for Windows
+# Step 2: Install software for Windows
 
 Follow these step-by-step instructions to set up QGIS and Python for the BikeNodePlanner on your Windows machine.
 

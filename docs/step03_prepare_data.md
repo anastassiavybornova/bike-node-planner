@@ -9,7 +9,7 @@ For all Danish municipalities, the steps below (how to provide input data for th
 You need to provide the following data sets, described in detail below:
 
 * [Study area polygon](/docs/step03_prepare_data.md#study-area-polygon)
-* [Network data](/docs/step.md#network-data) in study area (nodes and edges)
+* [Network data](/docs/step03_prepare_data.md#network-data) in study area (nodes and edges)
 * (Optional) Evaluation data for study area: [polygon layers](/docs/step03_prepare_data.md#optional-land-use-data-for-evaluation-polygon-geometries)
 * (Optional) Evaluation data for study area: [point layers](/docs/step03_prepare_data.md#optional-points-of-interest-data-for-evaluation-point-geometries)
 * (Optional) Elevation data for study area: [a tif file](/docs/step03_prepare_data.md#optional-elevation-data-tif-file)
