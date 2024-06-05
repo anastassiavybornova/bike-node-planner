@@ -1,10 +1,10 @@
 ##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
 # display technical layer of edges (output of this step)?
-display_technicallayer = True  
+display_technicallayer = True
 
-# display the entire input data set (for all of DK)? 
-display_inputdata = False  
+# display the entire input data set (for all of DK)?
+display_inputdata = False
 
 ##### NO CHANGES BELOW THIS LINE
 
@@ -35,7 +35,7 @@ from qgis.core import *
 exec(open(homepath + "/src/plot_func.py").read())
 
 # load configs
-configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configfile = os.path.join(homepath, "config/config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
 

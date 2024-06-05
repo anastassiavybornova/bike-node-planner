@@ -1,7 +1,7 @@
 ##### CUSTOM SETTINGS FOR DISPLAY (type either False or True)
 
 # display the study area polygon?
-display_studyarea = True  
+display_studyarea = True
 
 ##### NO CHANGES BELOW THIS LINE
 
@@ -33,7 +33,7 @@ import json
 exec(open(homepath + "/src/eval_func.py").read())
 
 # load configs
-configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configfile = os.path.join(homepath, "config/config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
 dataforsyning_token = configs["dataforsyning_token"]

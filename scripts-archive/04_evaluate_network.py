@@ -27,7 +27,7 @@ from shapely import strtree
 import json
 
 # load configs and colors
-configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configfile = os.path.join(homepath, "config/config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
 colorfile = os.path.join(
