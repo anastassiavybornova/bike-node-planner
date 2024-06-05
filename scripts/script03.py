@@ -34,10 +34,7 @@ slope_threshold = slope_ranges[-1]
 config_color = yaml.load(
     open(homepath + "/config/config-colors-slope.yml"), Loader=yaml.FullLoader
 )
-if "slope" in config_color:
-    slope_colors = [v for v in config_color["slope"].values()]
-else:
-    slope_colors = ["255, 186, 186", "255, 82, 82", "255, 0, 0", "167, 0, 0"]
+slope_colors = config_color["slope"]
 slope_colors = [rgb2hex(c) for c in slope_colors]
 
 # make output folder
