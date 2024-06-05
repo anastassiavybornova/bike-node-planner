@@ -2,7 +2,7 @@
 
 ## 🇩🇰 If your study area is in Denmark 🇩🇰
 
-For all Danish municipalities, the steps below (how to provide input data for the BikeNodePlanner) have been **automatized**. Disregard all steps below; instead, find detailed instructions on how to automatically generate input data for your Danish study area [here](https://github.com/anastassiavybornova/bike-node-planner-data-denmark).
+For all Danish municipalities, the steps below (how to provide input data for the BikeNodePlanner) have been **automatized**. Disregard all steps below; instead, find detailed instructions on how to automatically generate input data for your Danish study area: [https://github.com/anastassiavybornova/bike-node-planner-data-denmark](https://github.com/anastassiavybornova/bike-node-planner-data-denmark).
 
 ## How to format and provide data
 

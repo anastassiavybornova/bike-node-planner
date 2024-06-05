@@ -18,8 +18,8 @@ There are several analysis steps. For each step, you need to run one Python scri
 
 Below, you find:
 
-* first, general instructions on how to run a Python script in QGIS;
-* then, for each script of the BikeNodePlanner, explanations of its output and how to interpret it.
+* general instructions on how to run a Python script in QGIS;
+* for each script of the BikeNodePlanner, explanations of its output and how to interpret it.
 
 ***
 
@@ -35,7 +35,7 @@ In QGIS,
 6. Click on `Open`
 7. Click on `Run`.
 8. While the script is running, check the console window for status messages.
-9. Once you see the message `Script XXX ended succcessfully` in the console window, save the project (disquette icon or `cmd+s`), and run the next script.
+9. Once you see the message `Script XXX ended successfully` in the console window, save the project (disquette icon or `cmd+s`), and run the next script.
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=95%></p>
 

@@ -4,7 +4,7 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 
 ***
 
-1. The BikeNodePlanner is developed to run with QGIS-LTR 3.28 Firenze, but might also work with later or earlier versions. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download the latest stable release of QGIS or to upgrade it to the 3.28 version, [click here](https://www.qgis.org/en/site/forusers/download.html). 
+1. The BikeNodePlanner is developed to run with QGIS-LTR 3.28 Firenze, but might also work with later or earlier versions. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download the latest stable release of QGIS or to upgrade it to the 3.28 version, see [https://www.qgis.org/en/site/forusers/download.html](https://www.qgis.org/en/site/forusers/download.html).
 
 <p align="center"><img alt="Check your QGIS version" src="/docs/screenshots/qgis-version.png" width=80%></p>
 
@@ -29,10 +29,10 @@ libssl-1_1-x64.dll
 To do so, simply:
 
 * open your file explorer
-* navigate to the path `C:\Program Files\QGIS 3.28\bin` 
+* navigate to the path `C:\Program Files\QGIS 3.28\bin`
 * locate the 2 files and copy them 
-* navigate to the path `C:\Program Files\QGIS 3.28\apps\Python39\` and 
-* paste the 2 files here. 
+* navigate to the path `C:\Program Files\QGIS 3.28\apps\Python39\` and
+* paste the 2 files here.
 
 **Note** that the exact file paths might look slightly different on your machine (e.g. a different QGIS version number, or a different Python version number).
 
