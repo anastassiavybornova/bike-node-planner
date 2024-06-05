@@ -23,7 +23,9 @@ Anastassia Vybornova<sup>1</sup>, Ane Rahbek Vierø<sup>1</sup>, Michael Szell<s
 
 1 NEtworks, Data and Society (NERDS), Computer Science Department, IT University of Copenhagen, anvy@itu.dk
 
-2, 3 Michael's further affiliations
+2 ISI Foundation, 10126, Turin, Italy
+
+3 Complexity Science Hub Vienna, 1080, Vienna, Austria
 
 ***
 
