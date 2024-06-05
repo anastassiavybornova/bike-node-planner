@@ -84,11 +84,11 @@ script01 plots the study area and a basemap from OpenStreetMap, and extracts the
 
 > Note: this script is optional. If you didn't provide any point or polygon layers for evaluation, you can skip this script.
 
-script02 uses the point and polygon layers provided in `/data/input/point/` and `/data/input/polygon/` to evaluate the network. 
+script02 uses the point and polygon layers provided in `/data/input/point/` and `/data/input/polygon/` to evaluate the network.
 
-For each point layer, the BikeNodePlanner checks whether the points are within or outside of reach, based on the maximum distance defined by the user in `config-point.yml`. For each polygon layer, the BikeNodePlanner finds the parts of the network that run _through_ the layer, including a buffer distance defined by the user in `config-polygon.yml`. 
+For each point layer, the BikeNodePlanner checks whether the points are within or outside of reach, based on the maximum distance defined by the user in `config-point.yml`. For each polygon layer, the BikeNodePlanner finds the parts of the network that run _through_ the layer, including a buffer distance defined by the user in `config-polygon.yml`.
 
-You can explore the results of the evaluation by (de)selecting layers in the QGIS project. For example, if you have provided a polygon layer `nature.gpkg`, you can now select "Nature/Network in nature areas" within the "Evaluate network" layer to explore which parts of the network run through the nature layer. Or, if you have provided a point layer `museums.gpkg`, you can now select "Museums" within the "Evaluate network" layer to explore which museums within vs. outside reach (dark vs. light color) of the network. 
+You can explore the results of the evaluation by (de)selecting layers in the QGIS project. For example, if you have provided a polygon layer `nature.gpkg`, you can now select "Nature/Network in nature areas" within the "Evaluate network" layer to explore which parts of the network run through the nature layer. Or, if you have provided a point layer `museums.gpkg`, you can now select "Museums" within the "Evaluate network" layer to explore which museums within vs. outside reach (dark vs. light color) of the network.
 
 To get more information on a particular feature on the map, use the ["Identify features"](https://docs.qgis.org/3.34/en/docs/user_manual/introduction/general_tools.html#identify) tool in QGIS.
 

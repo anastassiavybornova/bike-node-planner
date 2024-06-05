@@ -2,7 +2,8 @@
 import sys
 import os
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 os.environ["USE_PYGEOS"] = "0"  # pygeos/shapely2.0/osmnx conflict solving
 import geopandas as gpd
 import pandas as pd
@@ -47,7 +48,7 @@ for geomtype in ["point", "linestring", "polygon"]:
         evaldict[geomtype] = {}
         # read in configs for this geometry type
         config_geomtype = yaml.load(
-            open(homepath + f"/config-{geomtype}.yml"), Loader=yaml.FullLoader
+            open(homepath + f"/config/config-{geomtype}.yml"), Loader=yaml.FullLoader
         )
 
         for geomlayer in geomlayers:
@@ -88,11 +89,11 @@ for geomtype in ["point", "linestring", "polygon"]:
 
 # load colors configs (user defined, or if not: automated, or if not: generate now)
 config_colors = yaml.load(
-    open(homepath + "/config-colors-eval.yml"), Loader=yaml.FullLoader
+    open(homepath + "/config/config-colors-eval.yml"), Loader=yaml.FullLoader
 )
 if not config_colors:
     config_colors = yaml.load(
-        open(homepath + "/config-colors-eval-auto.yml"), Loader=yaml.FullLoader
+        open(homepath + "/config/config-colors-eval-auto.yml"), Loader=yaml.FullLoader
     )
 if not config_colors:
     # get colors (as rgb strings) from seaborn colorblind palette

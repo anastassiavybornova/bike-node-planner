@@ -24,7 +24,7 @@ homepath = QgsProject.instance().homePath()
 
 # Load configs
 config_display = yaml.load(
-    open(homepath + "/config-display.yml"), Loader=yaml.FullLoader
+    open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
 )
 display_network_statistics = config_display["display_network_statistics"]
 
@@ -38,9 +38,7 @@ filepath_edge_output = homepath + "/data/output/network/edges.gpkg"
 filepath_node_output = homepath + "/data/output/network/nodes.gpkg"
 
 graph_file = homepath + "/data/output/network/network_graph.graphml"
-stats_path = (
-    homepath + "/results/stats/stats_network.json"
-)  # store output here
+stats_path = homepath + "/results/stats/stats_network.json"  # store output here
 
 # load data
 nodes = gpd.read_file(filepath_nodes_input)
@@ -76,8 +74,10 @@ G_undirected = ox.get_undirected(G)
 assert nx.is_directed(G_undirected) == False, "Graph is directed"
 
 degree_histogram = nx.degree_histogram(G_undirected)
-print("Degree histogram:", )
-print(f"Number of nodes without edges: {degree_histogram[0]}.") 
+print(
+    "Degree histogram:",
+)
+print(f"Number of nodes without edges: {degree_histogram[0]}.")
 print(f"Removing {degree_histogram[0]} nodes from the network.")
 
 nodes_to_remove = []
@@ -104,18 +104,18 @@ for edge in G_undirected.edges:
     G_undirected.edges[edge]["nx_edge_id"] = edge
 
 comps_no_edges = []
-i = 1 # component count (starting to count at 1)
+i = 1  # component count (starting to count at 1)
 for comp in comps:
-    
+
     # for each component, make subgraph
     G_sub = nx.subgraph(G_undirected, nbunch=comp)
-    
+
     # if subgraph has at least 1 edge:
     if len(G_sub.edges) > 0:
         G_sub_edges = [G_sub.edges[e]["nx_edge_id"] for e in G_sub.edges]
         edges_undir.loc[G_sub_edges, "component"] = i
         i += 1
-        
+
     # else (if subgraph has no edges):
     else:
         comps_no_edges.append(comp)
@@ -170,7 +170,7 @@ for c in edges_undir.component.unique():
     compfile = comppath + "comp" + zfill_regex.format(c) + ".gpkg"
     compedges = edges_undir.loc[edges_undir["component"] == c].copy()
     compedges.to_file(compfile, index=False)
-    
+
 ### Summary statistics of network
 res = {}  # initialize stats results dictionary
 res["node_count"] = len(G_undirected.nodes)
@@ -245,23 +245,17 @@ comp_nrs = [int(re.findall(r"\d", path)[0]) for path in comppaths]
 
 for comppath, comp_nr in zip(comppaths, comp_nrs):
     gdf = gpd.read_file(comppath)
-    fig, ax = plt.subplots(1,1)
-    gdf.plot(
-        ax=ax,
-        color = comp_colors_hex[comp_nr]
-    )
+    fig, ax = plt.subplots(1, 1)
+    gdf.plot(ax=ax, color=comp_colors_hex[comp_nr])
     ax.set_axis_off()
     ax.set_title(f"Component nr {comp_nr}")
-    cx.add_basemap(
-        ax=ax, 
-        source=cx.providers.CartoDB.Voyager, 
-        crs=gdf.crs)
+    cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager, crs=gdf.crs)
     fig.savefig(
-        homepath + f"/results/plots/component{comp_nr}.png", 
-        dpi=300, 
-        bbox_inches="tight"
+        homepath + f"/results/plots/component{comp_nr}.png",
+        dpi=300,
+        bbox_inches="tight",
     )
     plt.close()
-    
+
 print(f"Component plots saved to {homepath}/results/plots/")
 print("script04.py ended successfully.")

@@ -8,7 +8,8 @@ import seaborn as sns
 from ast import literal_eval
 from qgis.core import *
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -22,7 +23,7 @@ exec(open(homepath + "/src/eval_func.py").read())
 
 # load configs
 config_display = yaml.load(
-    open(homepath + "/config-display.yml"), Loader=yaml.FullLoader
+    open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
 )
 
 # load edges
@@ -35,7 +36,7 @@ evaldict = {}
 geomtypes = [
     "point",
     # linestring, # tbi
-    "polygon"
+    "polygon",
 ]
 
 for geomtype in geomtypes:
@@ -46,7 +47,7 @@ for geomtype in geomtypes:
         evaldict[geomtype] = {}
         # read in configs for this geometry type
         config_geomtype = yaml.load(
-            open(homepath + f"/config-{geomtype}.yml"), Loader=yaml.FullLoader
+            open(homepath + f"/config/config-{geomtype}.yml"), Loader=yaml.FullLoader
         )
         for geomlayer in geomlayers:
             geomlayer_name = geomlayer.replace(".gpkg", "")
@@ -93,7 +94,7 @@ output_layers = []
 
 # load colors for plotting of evaluation layers, if available; if not, create own palette
 config_colors = yaml.load(
-    open(homepath + "/config-colors-eval.yml"), Loader=yaml.FullLoader
+    open(homepath + "/config/config-colors-eval.yml"), Loader=yaml.FullLoader
 )
 
 if not config_colors:
@@ -106,7 +107,7 @@ if not config_colors:
             str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
         )
     # and save as separate yml
-    with open(homepath + "/config-colors-eval-auto.yml", "w") as opened_file:
+    with open(homepath + "/config/config-colors-eval-auto.yml", "w") as opened_file:
         yaml.dump(config_colors, opened_file, indent=6)
 
 # initialize stats results dictionary
