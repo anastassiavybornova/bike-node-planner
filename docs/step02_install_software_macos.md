@@ -14,7 +14,7 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 
 2. Find out the path to the Python installation for the QGIS app on your local machine. That is, find the full path to the `python3.X` application file located in your QGIS installation folder. Typically, this will be similar to
 
-```
+```bash
 /Applications/QGIS-LTR.app/Contents/MacOS/bin/python3.9
 ```
 
@@ -26,7 +26,7 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 
 4. Use the path from step 3 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` by the path from step 3, and hit enter.) Note that you have to be connected to the internet for the installs to work.
 
-```
+```bash
 <qgispythonpath> -m pip install --upgrade shapely  
 <qgispythonpath> -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
 <qgispythonpath> -m pip install momepy
@@ -38,8 +38,9 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Terminal on MacOS)" src="/docs/screenshots/cli-install-macos.png" width=80%></p>
 
-Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate to `bike-node-planner-main` folder in your command line interface and run 
-```
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate to main `bike-node-planner` folder in your command line interface and run:
+
+```bash
 ./setuppython.sh <qgispythonpath>
 ```
 
