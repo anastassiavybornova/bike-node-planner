@@ -1,2 +1,5 @@
 import warnings
-warnings.filterwarnings('ignore')
+
+warnings.filterwarnings("ignore")
+
+print("script00.py ended successfully.")
