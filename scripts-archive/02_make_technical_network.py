@@ -35,7 +35,7 @@ from qgis.core import *
 exec(open(homepath + "/src/plot_func.py").read())
 
 # load configs
-configfile = os.path.join(homepath, "config/config.yml")  # filepath of config file
+configfile = os.path.join(homepath, "/config/config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]  # projected CRS
 

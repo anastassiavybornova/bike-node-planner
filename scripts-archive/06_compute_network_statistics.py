@@ -26,7 +26,7 @@ from qgis.core import *
 import json
 
 # load configs
-configfile = os.path.join(homepath, "config/config.yml")  # filepath of config file
+configfile = os.path.join(homepath, "/config/config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 

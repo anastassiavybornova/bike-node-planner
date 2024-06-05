@@ -23,7 +23,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/stat_func.py").read())
 
 # load configs and colors
-configfile = os.path.join(homepath, "config/config.yml")  # filepath of config file
+configfile = os.path.join(homepath, "/config/config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 dataforsyning_token = configs["dataforsyning_token"]
