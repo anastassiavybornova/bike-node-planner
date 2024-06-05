@@ -1,6 +1,6 @@
 # Step 4: Customize your user settings
 
-Provide the following user settings by editing and saving the `.yml` files, found in the main folder `bike-node-planner-main`:
+Provide the following user settings by editing and saving the `.yml` files, found in the main folder `bike-node-planner`:
 
 * in `config.yml`: a projected CRS for your study area
 * in `config-point.yml`: distance thresholds (in meters) for each point layer in `/data/input/point/`

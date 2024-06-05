@@ -18,8 +18,8 @@ You need to provide the following data sets, described in detail below:
 
 * All files must be in the **GeoPackage file format**, readable by [GeoPandas](https://geopandas.org/en/stable/docs/user_guide/io.html) and by [QGIS](https://docs.qgis.org/3.34/en/docs/user_manual/managing_data_source/opening_data.html).
 * All data must be in the same **projected coordinate reference system**.
-* To provide the necessary input data, navigate to the `/bike-node-planner-main/` folder on your local machine. (See [Step 02](/README.md#step-2-software-installations) for instructions on how to download the folder from GitHub.)
-* All data sets described below need to be placed in the corresponding subfolders of `/bike-node-planner-main/data/input/`.
+* To provide the necessary input data, navigate to the `/bike-node-planner/` folder on your local machine. (See [Step 02](/README.md#step-2-software-installations) for instructions on how to download the folder from GitHub.)
+* All data sets described below need to be placed in the corresponding subfolders of `/bike-node-planner/data/input/`.
 * Once you run the BikeNodePlanner in QGIS, the first step will automatically make sure that the data sets you provided follow all the specifications (see [Step 06](/docs/step06_run_evaluation.md) for details).
 
 ***

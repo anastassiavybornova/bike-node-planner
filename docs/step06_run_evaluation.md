@@ -14,7 +14,7 @@ After having:
 
 you can now run the BikeNodePlanner analysis in QGIS.
 
-There are several analysis steps. For each step, you need to run one Python script in QGIS. The Python scripts are located in `/bike-node-planner-main/scripts/`. Running each script produces some visual output in your QGIS project, and/or plots and statistics that will be saved to your local machine.
+There are several analysis steps. For each step, you need to run one Python script in QGIS. The Python scripts are located in `/bike-node-planner/scripts/`. Running each script produces some visual output in your QGIS project, and/or plots and statistics that will be saved to your local machine.
 
 Below, you find:
 
@@ -30,7 +30,7 @@ In QGIS,
 1. Open the Python Console 
 2. Click on `Show Editor`
 3. Click on `Open Script`
-4. Navigate to the `scripts` subfolder (within the `bike-node-planner-main` folder) 
+4. Navigate to the `scripts` subfolder (within the `bike-node-planner` folder)
 5. Select the next script (by number: 00, then 01, ...)
 6. Click on `Open`
 7. Click on `Run`.
@@ -45,10 +45,10 @@ In QGIS,
 * At any stop in the workflow, you can save the QGIS project, close it, and then come back to it later.
 * Note that for some of the scripts, a stable internet connection is required.
 * If the `script03.py` (slope computation) script fails to run - please try again! (it sometimes requires several attempts)
-* if a script fails to complete and throws an error message: 
+* if a script fails to complete and throws an error message:
     * save, close, and reopen the QGIS project
     * try to run the script again
-    * if the problem persists: create a new QGIS project in the `bike-node-planner-main` folder and restart the workflow there from script 00
+    * if the problem persists: create a new QGIS project in the `bike-node-planner` folder and restart the workflow there from script 00
 
 ***
 
@@ -146,7 +146,7 @@ A separate plot of each component is also saved to `results/plots/`:
 
 ## `script05.py`: Summary statistics
 
-script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder).
+script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner` folder).
 
 <p align="center"><img alt="Plot of study area with network" src="/docs/screenshots/results-studyarea_network.png" width=60%></p>
 <p align="center"><img alt="Plot of evaluation results for example layer 'facilities'" src="/docs/screenshots/results-facility.png" width=60%></p>

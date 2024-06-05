@@ -12,12 +12,13 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 
 2. Find out the path to the Python installation for the QGIS app on your local machine. That is, find the full path to the `python3X` application file located in your QGIS installation folder. Typically, this will be similar to
 
-```
+```bash
 C:\Program Files\QGIS 3.28\apps\Python39\python
 ```
 
 To avoid issues with permissions for the custom setup of Python packages in your QGIS installation on Windows, you will need to copy-paste the following two files,
-```
+
+```bash
 libcrypto-1_1-x64.dll
 libssl-1_1-x64.dll
 ```
@@ -25,7 +26,8 @@ libssl-1_1-x64.dll
 * **from** the `\bin\` subfolder of your QGIS installation
 * **to** the `\apps\Python39\` subfolder of your QGIS installation. 
 
-To do so, simply 
+To do so, simply:
+
 * open your file explorer
 * navigate to the path `C:\Program Files\QGIS 3.28\bin` 
 * locate the 2 files and copy them 
@@ -41,7 +43,8 @@ To do so, simply
 **
 
 4. Use the path from step 3 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 3, and hit enter.) Note that you have to be connected to the internet for the installs to work.
-```
+
+```bash
 "<qgispythonpath>" -m pip install --upgrade shapely
 "<qgispythonpath>" -m pip install --upgrade geopandas --force-reinstall -v geopandas==0.14.0
 "<qgispythonpath>" -m pip install momepy
@@ -53,8 +56,9 @@ To do so, simply
 
 <p align="center"><img alt="Setting up PyQGIS from the command line (Command Prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
 
-Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate `bike-node-planner-main` folder in your command line interface and run 
-```
+Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate to the main `bike-node-planner` folder in your command line interface and run:
+
+```bash
 ./setuppython.sh <qgispythonpath>
 ```
 
