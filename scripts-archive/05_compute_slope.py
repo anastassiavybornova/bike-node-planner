@@ -23,7 +23,7 @@ exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/stat_func.py").read())
 
 # load configs and colors
-configfile = os.path.join(homepath, "config.yml")  # filepath of config file
+configfile = os.path.join(homepath, "/config/config.yml")  # filepath of config file
 configs = yaml.load(open(configfile), Loader=yaml.FullLoader)
 proj_crs = configs["proj_crs"]
 dataforsyning_token = configs["dataforsyning_token"]
@@ -34,11 +34,11 @@ slope_threshold = configs["slope_ranges"][-1]
 colorfile = os.path.join(homepath, "colors.yml")  # filepath of config file
 colors = yaml.load(open(colorfile), Loader=yaml.FullLoader)
 slope_colors = [
-    colors["slope_0"], 
-    colors["slope_a"], 
-    colors["slope_b"], 
-    colors["slope_c"]
-    ]
+    colors["slope_0"],
+    colors["slope_a"],
+    colors["slope_b"],
+    colors["slope_c"],
+]
 slope_colors = [rgb2hex(c) for c in slope_colors]
 
 #### PATHS
@@ -274,11 +274,11 @@ if plot_results:
     QgsProject.instance().addMapLayer(vlayer_slope)
 
     draw_slope_layer(
-        layer_name="Segments slope", 
+        layer_name="Segments slope",
         slope_ranges=configs["slope_ranges"],
         slope_colors=slope_colors,
-        slope_field="slope"
-        )
+        slope_field="slope",
+    )
 
 ### GET MIN MAX AVE SLOPE FOR EDGES (BASED ON EDGE SEGMENTS) ######
 
@@ -314,11 +314,11 @@ if plot_results:
     QgsProject.instance().addMapLayer(vlayer_edge_slope)
 
     draw_slope_layer(
-        layer_name="Edges average slope", 
+        layer_name="Edges average slope",
         slope_ranges=configs["slope_ranges"],
         slope_colors=slope_colors,
-        slope_field="ave_slope"
-        )
+        slope_field="ave_slope",
+    )
 
 steep_segments = segs.loc[segs.slope > slope_threshold]
 if os.path.exists(steep_segments_fp):

@@ -14,12 +14,12 @@ After having:
 
 you can now run the BikeNodePlanner analysis in QGIS.
 
-There are several analysis steps. For each step, you need to run one Python script in QGIS. The Python scripts are located in `/bike-node-planner-main/scripts/`. Running each script produces some visual output in your QGIS project, and/or plots and statistics that will be saved to your local machine.
+There are several analysis steps. For each step, you need to run one Python script in QGIS. The Python scripts are located in `/bike-node-planner/scripts/`. Running each script produces some visual output in your QGIS project, and/or plots and statistics that will be saved to your local machine.
 
 Below, you find:
 
-* first, general instructions on how to run a Python script in QGIS;
-* then, for each script of the BikeNodePlanner, explanations of its output and how to interpret it.
+* general instructions on how to run a Python script in QGIS;
+* for each script of the BikeNodePlanner, explanations of its output and how to interpret it.
 
 ***
 
@@ -30,12 +30,12 @@ In QGIS,
 1. Open the Python Console 
 2. Click on `Show Editor`
 3. Click on `Open Script`
-4. Navigate to the `scripts` subfolder (within the `bike-node-planner-main` folder) 
+4. Navigate to the `scripts` subfolder (within the `bike-node-planner` folder)
 5. Select the next script (by number: 00, then 01, ...)
 6. Click on `Open`
 7. Click on `Run`.
 8. While the script is running, check the console window for status messages.
-9. Once you see the message `Script XXX ended succcessfully` in the console window, save the project (disquette icon or `cmd+s`), and run the next script.
+9. Once you see the message `Script XXX ended successfully` in the console window, save the project (disquette icon or `cmd+s`), and run the next script.
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="/docs/screenshots/qgis-run.png" width=95%></p>
 
@@ -45,10 +45,10 @@ In QGIS,
 * At any stop in the workflow, you can save the QGIS project, close it, and then come back to it later.
 * Note that for some of the scripts, a stable internet connection is required.
 * If the `script03.py` (slope computation) script fails to run - please try again! (it sometimes requires several attempts)
-* if a script fails to complete and throws an error message: 
+* if a script fails to complete and throws an error message:
     * save, close, and reopen the QGIS project
     * try to run the script again
-    * if the problem persists: create a new QGIS project in the `bike-node-planner-main` folder and restart the workflow there from script 00
+    * if the problem persists: create a new QGIS project in the `bike-node-planner` folder and restart the workflow there from script 00
 
 ***
 
@@ -84,11 +84,11 @@ script01 plots the study area and a basemap from OpenStreetMap, and extracts the
 
 > Note: this script is optional. If you didn't provide any point or polygon layers for evaluation, you can skip this script.
 
-script02 uses the point and polygon layers provided in `/data/input/point/` and `/data/input/polygon/` to evaluate the network. 
+script02 uses the point and polygon layers provided in `/data/input/point/` and `/data/input/polygon/` to evaluate the network.
 
-For each point layer, the BikeNodePlanner checks whether the points are within or outside of reach, based on the maximum distance defined by the user in `config-point.yml`. For each polygon layer, the BikeNodePlanner finds the parts of the network that run _through_ the layer, including a buffer distance defined by the user in `config-polygon.yml`. 
+For each point layer, the BikeNodePlanner checks whether the points are within or outside of reach, based on the maximum distance defined by the user in `config-point.yml`. For each polygon layer, the BikeNodePlanner finds the parts of the network that run _through_ the layer, including a buffer distance defined by the user in `config-polygon.yml`.
 
-You can explore the results of the evaluation by (de)selecting layers in the QGIS project. For example, if you have provided a polygon layer `nature.gpkg`, you can now select "Nature/Network in nature areas" within the "Evaluate network" layer to explore which parts of the network run through the nature layer. Or, if you have provided a point layer `museums.gpkg`, you can now select "Museums" within the "Evaluate network" layer to explore which museums within vs. outside reach (dark vs. light color) of the network. 
+You can explore the results of the evaluation by (de)selecting layers in the QGIS project. For example, if you have provided a polygon layer `nature.gpkg`, you can now select "Nature/Network in nature areas" within the "Evaluate network" layer to explore which parts of the network run through the nature layer. Or, if you have provided a point layer `museums.gpkg`, you can now select "Museums" within the "Evaluate network" layer to explore which museums within vs. outside reach (dark vs. light color) of the network.
 
 To get more information on a particular feature on the map, use the ["Identify features"](https://docs.qgis.org/3.34/en/docs/user_manual/introduction/general_tools.html#identify) tool in QGIS.
 
@@ -146,7 +146,7 @@ A separate plot of each component is also saved to `results/plots/`:
 
 ## `script05.py`: Summary statistics
 
-script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner-main` folder).
+script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner` folder).
 
 <p align="center"><img alt="Plot of study area with network" src="/docs/screenshots/results-studyarea_network.png" width=60%></p>
 <p align="center"><img alt="Plot of evaluation results for example layer 'facilities'" src="/docs/screenshots/results-facility.png" width=60%></p>

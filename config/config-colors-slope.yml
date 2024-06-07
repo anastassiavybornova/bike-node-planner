@@ -5,8 +5,15 @@
 # and X, Y, Z are RGB values (see e.g. https://rgbcolorpicker.com)
 
 # SLOPE
+# slope:
+#   "slope_0" : "255, 186, 186" #  "#ffbaba"
+#   "slope_a" : "255, 82, 82" # #ff5252 
+#   "slope_b":  "255, 0, 0" # #ff0000 
+#   "slope_c" : "167, 0, 0" # #a70000 
+
+
 slope:
-  "slope_0" : "255, 186, 186" #  "#ffbaba"
-  "slope_a" : "255, 82, 82" # #ff5252 
-  "slope_b":  "255, 0, 0" # #ff0000 
-  "slope_c" : "167, 0, 0" # #a70000 
+- "255, 186, 186" #  "#ffbaba"
+- "255, 82, 82" # #ff5252 
+- "255, 0, 0" # #ff0000 
+- "167, 0, 0" # #a70000 

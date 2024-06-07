@@ -20,22 +20,21 @@ exec(open(homepath + "/src/stat_func.py").read())
 
 # load configs
 config_display = yaml.load(
-    open(homepath + "/config-display.yml"), Loader=yaml.FullLoader
+    open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
 )
 display_slope = config_display["display_slope"]
 
-config_slope = yaml.load(open(homepath + "/config-slope.yml"), Loader=yaml.FullLoader)
+config_slope = yaml.load(
+    open(homepath + "/config/config/config-slope.yml"), Loader=yaml.FullLoader
+)
 segment_length = config_slope["segment_length"]
 slope_ranges = config_slope["slope_ranges"]
 slope_threshold = slope_ranges[-1]
 
 config_color = yaml.load(
-    open(homepath + "/config-colors-slope.yml"), Loader=yaml.FullLoader
+    open(homepath + "/config/config-colors-slope.yml"), Loader=yaml.FullLoader
 )
-if "slope" in config_color:
-    slope_colors = [v for v in config_color["slope"].values()]
-else:
-    slope_colors = ["255, 186, 186", "255, 82, 82", "255, 0, 0", "167, 0, 0"]
+slope_colors = config_color["slope"]
 slope_colors = [rgb2hex(c) for c in slope_colors]
 
 # make output folder

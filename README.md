@@ -23,37 +23,39 @@ Anastassia Vybornova<sup>1</sup>, Ane Rahbek Vierø<sup>1</sup>, Michael Szell<s
 
 1 NEtworks, Data and Society (NERDS), Computer Science Department, IT University of Copenhagen, anvy@itu.dk
 
-2, 3 Michael's further affiliations
+2 ISI Foundation, 10126, Turin, Italy
+
+3 Complexity Science Hub Vienna, 1080, Vienna, Austria
 
 ***
 
 # Instructions
 
-To use the BikeNodePlanner, follow the detailed step-by-step instructions below. 
+To use the BikeNodePlanner, follow the detailed step-by-step instructions below.
 
 ## Step 1: Download the contents of this repository
 
-First, download the contents of this repository to your local machine. Click [here](./docs/step01_download_repository.md) for instructions.
+Download the contents of this repository to your local machine. Click [./docs/step01_download_repository.md](./docs/step01_download_repository.md) for instructions.
 
 ## Step 2: Software installations
 
-Second, set up the BikeNodePlanner environment on your machine. Detailed instructions depend on your operating system:
+Set up the BikeNodePlanner environment on your machine. Detailed instructions depend on your operating system:
 
-* [here for macOS/linux](./docs/step02_install_software_macos.md)
-* [here for Windows](./docs/step02_install_software_windows.md)
+* [macOS/linux: step02_install_software_macos](./docs/step02_install_software_macos.md)
+* [Windows: step02_install_software_windows](./docs/step02_install_software_windows.md)
 
 ## Step 3: Prepare your data
 
-Third, prepare your input data for the BikeNodePlanner:
+Prepare your input data for the BikeNodePlanner:
 
 * the bicycle node network that you want to evaluate
 * the geospatial data for the evaluation
 
-Detailed instructions are [here](./docs/step03_prepare_data.md).
+Detailed instructions: [./docs/step03_prepare_data.md](./docs/step03_prepare_data.md).
 
 ## Step 4: Customize your user settings
 
-Fourth, customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions are [here](./docs/step04_customize_settings.md).
+Fourth, customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions: [./docs/step04_customize_settings.md](./docs/step04_customize_settings.md).
 
 ## Step 5: Open `workflow.qgz` in QGIS
 
@@ -61,7 +63,7 @@ Open the QGIS project `workflow.qgz`, located in the main folder of this reposit
 
 ## Step 6: Run the BikeNodePlanner evaluation in QGIS, and explore results!
 
-Now, the fun begins! Run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions are [here](./docs/step06_run_evaluation.md).
+Now, the fun begins! Run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions: [./docs/step06_run_evaluation.md](./docs/step06_run_evaluation.md).
 
 ***
 
