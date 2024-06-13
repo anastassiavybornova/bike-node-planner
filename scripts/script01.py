@@ -36,15 +36,11 @@ exec(open(homepath + "/src/eval_func.py").read())
 exec(open(homepath + "/src/plot_func.py").read())
 
 # load configs (global)
-configfile = os.path.join(homepath, "/config/config.yml")  # filepath of config file
-config = yaml.load(open(configfile), Loader=yaml.FullLoader)
+config = yaml.load(open(homepath + "/config/config.yml"), Loader=yaml.FullLoader)
 proj_crs = config["proj_crs"]  # projected CRS
 
 # load configs (display)
-configdisplayfile = os.path.join(
-    homepath, "/config/config-display.yml"
-)  # filepath of config-display file
-config_display = yaml.load(open(configdisplayfile), Loader=yaml.FullLoader)
+config_display = yaml.load(open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader)
 display_studyarea = config_display["display_study_area"]
 display_network = config_display["display_network"]
 

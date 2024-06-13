@@ -25,7 +25,7 @@ config_display = yaml.load(
 display_slope = config_display["display_slope"]
 
 config_slope = yaml.load(
-    open(homepath + "/config/config/config-slope.yml"), Loader=yaml.FullLoader
+    open(homepath + "/config/config-slope.yml"), Loader=yaml.FullLoader
 )
 segment_length = config_slope["segment_length"]
 slope_ranges = config_slope["slope_ranges"]
