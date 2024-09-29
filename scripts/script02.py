@@ -134,16 +134,11 @@ if evaldict["point"]:
             network_edges=edges,
             dist=mydist,
             name=k,
-            type_col="types",
-            input_color_rgb=config_colors[k],
             output_color_reached=config_colors[k],
             output_color_not_reached=rgb_shaded,
-            display_input=config_display["display_evaluation_input"],
             display_output=config_display["display_evaluation_output"],
-            input_size=3,
             output_size_reached=3,
             output_size_not_reached=3,
-            input_alpha="255",
             output_alpha="255",
         )
 
