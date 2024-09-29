@@ -120,7 +120,6 @@ if evaldict["point"]:
         rgb_shaded = rgb_shade(config_colors[k])
         mydist = v["bufferdistance"]
         (
-            input_name_current,
             output_name_within_current,
             output_name_outside_current,
             res_current,
@@ -148,7 +147,6 @@ if evaldict["point"]:
             output_alpha="255",
         )
 
-        input_layers.append(input_name_current)
         output_layers.append(output_name_within_current)
         output_layers.append(output_name_outside_current)
         res = res | res_current
