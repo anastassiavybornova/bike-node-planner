@@ -119,6 +119,8 @@ assert all(edges_studyarea.geometry.is_valid), "Not all edge geometries are vali
 # ]
 
 # save nodes and edges for study area
+if not "edge_id" in edges_studyarea.columns:
+    edges_studyarea["edge_id"] = edges_studyarea.index
 edges_studyarea.to_file(filepath_edges_studyarea, index=False)
 # nodes_studyarea.to_file(filepath_nodes_studyarea, index=False)
 
