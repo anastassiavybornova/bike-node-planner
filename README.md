@@ -35,7 +35,7 @@ To use the BikeNodePlanner, follow the detailed step-by-step instructions below.
 
 ## Step 1: Download the contents of this repository
 
-Download the contents of this repository to your local machine. Click [./docs/step01_download_repository.md](./docs/step01_download_repository.md) for instructions.
+[Download](https://github.com/anastassiavybornova/bike-node-planner-data-denmark/archive/refs/heads/main.zip) or `git clone` the contents of this repository to your local machine.
 
 ## Step 2: Software installations
 
