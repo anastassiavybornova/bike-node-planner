@@ -18,18 +18,11 @@ if homepath not in sys.path:
     sys.path.append(homepath)
 
 # FILEPATHS
-# define location of study area polygon (union of user-provided municipality polygons)
 filepath_study = homepath + "/data/input/studyarea/studyarea.gpkg"
-# define location of input network data (edges and nodes)
 filepath_input_edges = homepath + "/data/input/network/processed/edges.gpkg"
-filepath_input_nodes = homepath + "/data/input/network/processed/nodes.gpkg"
-# define location of output network data (edges and nodes clipped to extent of study area)
-filepath_edges_studyarea = (
-    homepath + "/data/input/network/processed/edges_studyarea.gpkg"
-)
-filepath_nodes_studyarea = (
-    homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
-)
+filepath_input_edges_studyarea = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
+# filepath_input_nodes = homepath + "/data/input/network/processed/nodes.gpkg"
+# filepath_input_nodes_studyarea = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
 
 # import functions
 exec(open(homepath + "/src/eval_func.py").read())
@@ -48,7 +41,14 @@ display_network = config_display["display_network"]
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 
 # Add basemap
-remove_existing_layers(["Basemap", "Study area", "Network edges", "Network nodes"])
+remove_existing_layers(
+    [
+        "Basemap",
+        "Study area",
+        "Network edges",
+        # "Network nodes"
+    ]
+)
 epsg = proj_crs.replace(":", "")
 url = f"type=xyz&url=https://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0&crs={epsg}"
 basemap = QgsRasterLayer(url, "Basemap", "wms")
@@ -76,34 +76,34 @@ if display_studyarea == True:
 
 # Make sure that network extent is not larger than study area
 edges = gpd.read_file(filepath_input_edges)
-nodes = gpd.read_file(filepath_input_nodes)
+# nodes = gpd.read_file(filepath_input_nodes)
 gdf_studyarea = gpd.read_file(filepath_study)
 
 assert (
     edges.crs == gdf_studyarea.crs == proj_crs
 ), "Edges and study area do not have the same CRS"
-assert (
-    nodes.crs == gdf_studyarea.crs == proj_crs
-), "Nodes and study area do not have the same CRS"
+# assert (
+#     nodes.crs == gdf_studyarea.crs == proj_crs
+# ), "Nodes and study area do not have the same CRS"
 
 edges_studyarea = edges.sjoin(gdf_studyarea, predicate="intersects").copy()
 edges_studyarea.drop(columns=["index_right"], inplace=True)
-nodes_studyarea = nodes.clip(edges_studyarea.buffer(500).unary_union)
+# nodes_studyarea = nodes.clip(edges_studyarea.buffer(500).unary_union)
 
 # remove empty geometries
 edges_studyarea = edges_studyarea[edges_studyarea.geometry.notna()].reset_index(
     drop=True
 )
-nodes_studyarea = nodes_studyarea[nodes_studyarea.geometry.notna()].reset_index(
-    drop=True
-)
+# nodes_studyarea = nodes_studyarea[nodes_studyarea.geometry.notna()].reset_index(
+#     drop=True
+# )
 
-# assert there is one (and only one) Point per node geometry row
-nodes_studyarea = nodes_studyarea.explode(index_parts=False).reset_index(drop=True)
-assert all(
-    nodes_studyarea.geometry.type == "Point"
-), "Not all node geometries are Points"
-assert all(nodes_studyarea.geometry.is_valid), "Not all node geometries are valid"
+# # assert there is one (and only one) Point per node geometry row
+# nodes_studyarea = nodes_studyarea.explode(index_parts=False).reset_index(drop=True)
+# assert all(
+#     nodes_studyarea.geometry.type == "Point"
+# ), "Not all node geometries are Points"
+# assert all(nodes_studyarea.geometry.is_valid), "Not all node geometries are valid"
 
 # assert there is one (and only one) LineString per edge geometry row
 edges_studyarea = edges_studyarea.explode(index_parts=False).reset_index(drop=True)
@@ -112,17 +112,17 @@ assert all(
 ), "Not all edge geometries are LineStrings"
 assert all(edges_studyarea.geometry.is_valid), "Not all edge geometries are valid"
 
-# Makes sure only to include nodes connected to an edge
-nodes_studyarea = nodes_studyarea.loc[
-    nodes_studyarea["node_id"].isin(edges_studyarea["u"])
-    | nodes_studyarea["node_id"].isin(edges_studyarea["v"])
-]
+# # Makes sure only to include nodes connected to an edge
+# nodes_studyarea = nodes_studyarea.loc[
+#     nodes_studyarea["node_id"].isin(edges_studyarea["u"])
+#     | nodes_studyarea["node_id"].isin(edges_studyarea["v"])
+# ]
 
 # save nodes and edges for study area
 edges_studyarea.to_file(filepath_edges_studyarea, index=False)
-nodes_studyarea.to_file(filepath_nodes_studyarea, index=False)
+# nodes_studyarea.to_file(filepath_nodes_studyarea, index=False)
 
-print("Nodes and edges for study area saved!")
+print("Edges for study area saved!")
 
 if display_network == True:
     edge_layer = QgsVectorLayer(filepath_edges_studyarea, "Network edges", "ogr")
@@ -136,18 +136,18 @@ if display_network == True:
             line_width=0.7,
             line_style="solid",
         )
-    node_layer = QgsVectorLayer(filepath_nodes_studyarea, "Network nodes", "ogr")
-    if not node_layer.isValid():
-        print("Node layer failed to load!")
-    else:
-        QgsProject.instance().addMapLayer(node_layer)
-        draw_simple_point_layer(
-            "Network nodes",
-            color="0,0,0,255",
-            outline_color="black",
-            outline_width=0.5,
-            marker_size=3,
-        )
+    # node_layer = QgsVectorLayer(filepath_nodes_studyarea, "Network nodes", "ogr")
+    # if not node_layer.isValid():
+    #     print("Node layer failed to load!")
+    # else:
+    #     QgsProject.instance().addMapLayer(node_layer)
+    #     draw_simple_point_layer(
+    #         "Network nodes",
+    #         color="0,0,0,255",
+    #         outline_color="black",
+    #         outline_width=0.5,
+    #         marker_size=3,
+    #     )
 
 # create subfolders for output and results
 os.makedirs(homepath + "/data/output/", exist_ok=True)
