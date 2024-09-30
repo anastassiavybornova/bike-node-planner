@@ -38,7 +38,11 @@ exec(open(homepath + "/src/stat_func.py").read())
 # load evaluation data
 evaldict = {}
 
-for geomtype in ["point", "linestring", "polygon"]:
+for geomtype in [
+    "point", 
+    # "linestring", 
+    "polygon"
+    ]:
     geompath_input = homepath + f"/data/input/{geomtype}/"
     geompath_output = homepath + f"/data/output/{geomtype}/"
     if os.path.exists(geompath_input):
