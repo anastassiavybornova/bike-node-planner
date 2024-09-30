@@ -14,6 +14,9 @@ import seaborn as sns
 import momepy
 from qgis.core import *
 
+# define homepath variable (where is the qgis project saved?)
+homepath = QgsProject.instance().homePath()
+
 # Load configs
 config_display = yaml.load(
     open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
@@ -22,10 +25,16 @@ display_network_statistics = config_display["display_network_statistics"]
 
 # INPUT/OUTPUT FILE PATHS
 
-os.makedirs(
+for fp in [
     homepath + "/data/output/network/",
-    exist_ok=True
-)
+    homepath + "/data/results/",
+    homepath + "/data/results/stats/"
+]:
+    os.makedirs(
+        fp,
+        exist_ok=True
+    )
+
 # input
 # filepath_nodes_input = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
 filepath_edges_input = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
@@ -45,7 +54,7 @@ edges_in = gpd.read_file(filepath_edges_input)
 G = momepy.gdf_to_nx(
     gdf_network = edges_in, 
     multigraph=False, 
-    integer_labels=True,
+#    integer_labels=True, # only in momepy 0.8+
     directed=False,    
 )
 
@@ -92,9 +101,10 @@ if os.path.exists(filepath_edge_output):
     os.remove(filepath_edge_output)
 if os.path.exists(filepath_node_output):
     os.remove(filepath_node_output)
-
+    
 edges.to_file(filepath_edge_output, mode="w")
 nodes.to_file(filepath_node_output, mode="w")
+
 with open(graph_file, 'wb') as f:
     pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
 # # to read back in:
@@ -106,12 +116,11 @@ res = {}  # initialize stats results dictionary
 res["node_count"] = len(G.nodes)
 res["edge_count"] = len(G.edges)
 res["components"] = len(comps)
-res["node_degrees"] = dict(nx.degree(G))
+# res["node_degrees"] = dict(nx.degree(G))
 
 with open(stats_path, "w") as opened_file:
     json.dump(res, opened_file, indent=6)
 print(f"Network statistics saved to {stats_path}")
-
 
 # # ### Visualization
 # # remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
