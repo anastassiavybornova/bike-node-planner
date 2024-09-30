@@ -3,6 +3,8 @@ from random import randrange
 random.seed(42)
 # from qgis.core import QgsVectorLayer
 from qgis.core import *
+from qgis.utils import iface
+
 from ast import literal_eval
 
 def rgb_shade(rgb_string, shade = 0.6):

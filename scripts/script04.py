@@ -1,4 +1,5 @@
 import os
+import shutil
 import yaml
 import pickle
 import json
@@ -11,8 +12,12 @@ import networkx as nx
 import pandas as pd
 import networkx as nx
 import seaborn as sns
+import contextily as cx
 import momepy
+import matplotlib.pyplot as plt
 from qgis.core import *
+from qgis.utils import * 
+from src.plot_func import *
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -27,8 +32,10 @@ display_network_statistics = config_display["display_network_statistics"]
 
 for fp in [
     homepath + "/data/output/network/",
+    homepath + "/data/output/network/components/",
     homepath + "/data/results/",
-    homepath + "/data/results/stats/"
+    homepath + "/data/results/stats/",
+    
 ]:
     os.makedirs(
         fp,
@@ -111,6 +118,19 @@ with open(graph_file, 'wb') as f:
 # with open(graph_file, 'rb') as f:
 #     G = pickle.load(f)
 
+### save comp edges as SEPARATE files (for plotting)
+comppath = homepath + "/data/output/network/components/"
+# first remove pre-existing files if any
+if os.path.exists(comppath):
+    shutil.rmtree(fp)
+    os.makedirs(comppath, exist_ok=True)
+
+comps_index = []
+for comp, group in edges.groupby("component"):
+    comps_index.append(int(comp))
+    group.copy().reset_index(drop=True).to_file(comppath + f"{int(comp)}.gpkg")
+print(comps_index)
+
 ### Summary statistics of network
 res = {}  # initialize stats results dictionary
 res["node_count"] = len(G.nodes)
@@ -122,79 +142,77 @@ with open(stats_path, "w") as opened_file:
     json.dump(res, opened_file, indent=6)
 print(f"Network statistics saved to {stats_path}")
 
-# # ### Visualization
-# # remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
+### Visualization
+remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
 
-# if display_network_statistics:
+if display_network_statistics:
 
-#     remove_existing_layers(["Component"])
+    remove_existing_layers(["Component"])
 
-#     comp_files = os.listdir(comppath)
-#     comp_numbers = [int(re.findall(r"\d+", file)[0]) for file in comp_files]
-#     comp_layer_names = []
+    comp_layer_names = []
 
-#     # create random colors (one for every comp) from seaborn colorblind palette
-#     layercolors = sns.color_palette("colorblind", len(comp_files))
-#     comp_colors = {}
-#     comp_colors_hex = {}
-#     for k, v in zip(comp_numbers, layercolors):
-#         comp_colors[k] = (
-#             str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
-#         )
-#         comp_colors_hex[k] = v
+    # create random colors (one for every comp) from seaborn colorblind palette
+    layercolors = sns.color_palette("colorblind", len(comps_index))
+    comp_colors = {}
+    comp_colors_hex = {}
+    for k, v in zip(comps_index, layercolors):
+        comp_colors[k] = (
+            str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
+        )
+        comp_colors_hex[k] = v
 
-#     for comp_file, comp_number in zip(comp_files, comp_numbers):
+    for comp in comps_index:
 
-#         comp_layer_name = f"Component {str(comp_number)}"
+        comp_layer_name = f"Component {str(comp)}"
+        comp_layer = QgsVectorLayer(comppath + f"{comp}.gpkg", comp_layer_name, "ogr")
 
-#         comp_layer = QgsVectorLayer(comppath + comp_file, comp_layer_name, "ogr")
+        QgsProject.instance().addMapLayer(comp_layer)
 
-#         QgsProject.instance().addMapLayer(comp_layer)
+        draw_simple_line_layer(
+            comp_layer_name,
+            color=comp_colors[comp],
+            line_width=1,
+            line_style="dash",
+        )
 
-#         draw_simple_line_layer(
-#             comp_layer_name,
-#             color=comp_colors[comp_number],
-#             line_width=1,
-#             line_style="dash",
-#         )
+        comp_layer_names.append(comp_layer_name)
 
-#         comp_layer_names.append(comp_layer_name)
-
-#     group_layers(
-#         group_name="Connected components",
-#         layer_names=comp_layer_names,
-#         remove_group_if_exists=True,
-#     )
+    group_layers(
+        group_name="Connected components",
+        layer_names=comp_layer_names,
+        remove_group_if_exists=True,
+    )
 
 
-# layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
-# turn_off_layer_names = ["Network edges", "Network nodes"]
+turn_off_layer_names = [
+    "Network edges",
+    # "Network nodes"
+]
 
-# turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
+turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
 
-# turn_off_layers(turn_off_layer_names)
+turn_off_layers(turn_off_layer_names)
 
-# if "Basemap" in layer_names:
-#     move_basemap_back(basemap_name="Basemap")
+if "Basemap" in layer_names:
+    move_basemap_back(basemap_name="Basemap")
 
-# # make matplotlib plots of each component
-# comppaths = [path for path in glob.glob("../data/output/network/components/*.gpkg")]
-# comp_nrs = [int(re.findall(r"\d", path)[0]) for path in comppaths]
+# make matplotlib plots of each component
 
-# for comppath, comp_nr in zip(comppaths, comp_nrs):
-#     gdf = gpd.read_file(comppath)
-#     fig, ax = plt.subplots(1, 1)
-#     gdf.plot(ax=ax, color=comp_colors_hex[comp_nr])
-#     ax.set_axis_off()
-#     ax.set_title(f"Component nr {comp_nr}")
-#     cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager, crs=gdf.crs)
-#     fig.savefig(
-#         homepath + f"/results/plots/component{comp_nr}.png",
-#         dpi=300,
-#         bbox_inches="tight",
-#     )
-#     plt.close()
+for comp in comps_index:
+    gdf = gpd.read_file(comppath + f"{comp}.gpkg")
+    fig, ax = plt.subplots(1, 1)
+    gdf.plot(ax=ax, color=comp_colors_hex[comp])
+    ax.set_axis_off()
+    ax.set_title(f"Component nr {comp}")
+    cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager, crs=gdf.crs)
+    fig.savefig(
+        homepath + f"/results/plots/component{comp}.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
+    plt.close()
 
-# print(f"Component plots saved to {homepath}/results/plots/")
-# print("script04.py ended successfully.")
+print(f"Component plots saved to {homepath}/results/plots/")
+print("script04.py ended successfully.")
