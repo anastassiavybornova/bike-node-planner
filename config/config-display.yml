@@ -1,6 +1,7 @@
 # display settings for QGIS layers
 display_study_area: True
 display_network: True
+display_technical: True
 display_evaluation_input: True
 display_evaluation_output: True
 display_slope: True
