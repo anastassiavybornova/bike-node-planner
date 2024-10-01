@@ -27,7 +27,7 @@ config_display = yaml.load(
 )
 
 # load edges
-edgepath = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
+edgepath = homepath + "/data/input/network/processed/edges.gpkg"
 edges = gpd.read_file(edgepath)
 
 # load evaluation data

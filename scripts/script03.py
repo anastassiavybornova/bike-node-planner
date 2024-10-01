@@ -43,7 +43,7 @@ os.makedirs(homepath + "/data/output/elevation/", exist_ok=True)
 #### PATHS
 
 # input
-edges_fp = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
+edges_fp = homepath + "/data/input/network/processed/edges.gpkg"
 dem_fp = homepath + "/data/input/dem/dem.tif"
 
 # output

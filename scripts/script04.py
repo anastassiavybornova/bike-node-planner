@@ -44,7 +44,7 @@ for fp in [
 
 # input
 # filepath_nodes_input = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
-filepath_edges_input = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
+filepath_edges_input = homepath + "/data/input/network/processed/edges.gpkg"
 
 # output
 filepath_edge_output = homepath + "/data/output/network/edges.gpkg"
@@ -129,7 +129,6 @@ comps_index = []
 for comp, group in edges.groupby("component"):
     comps_index.append(int(comp))
     group.copy().reset_index(drop=True).to_file(comppath + f"{int(comp)}.gpkg")
-print(comps_index)
 
 ### Summary statistics of network
 res = {}  # initialize stats results dictionary
