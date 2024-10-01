@@ -1,4 +1,6 @@
-# Step 2: Install software for Windows
+# UNDER CONSTRUCTION
+
+<!-- Step 2: Install software for Windows
 
 Follow these step-by-step instructions to set up QGIS and Python for the BikeNodePlanner on your Windows machine.
 
@@ -64,4 +66,4 @@ Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/
 
 ***
 
-5. If you had QGIS open, restart QGIS now for the changes to take effect.
+5. If you had QGIS open, restart QGIS now for the changes to take effect. -->
