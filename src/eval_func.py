@@ -46,17 +46,12 @@ def evaluate_export_plot_point(
     network_edges,
     dist,
     name,
-    type_col,
-    input_color_rgb="255, 0, 0",
     output_color_reached="255, 0, 0",
     output_color_not_reached="255, 0, 0",
-    input_size=3,
     output_size_reached=3,
     output_size_not_reached=3,
-    input_alpha="255",
     output_alpha="255",
     display_output=True,
-    display_input=True,
 ):
     """
     Find points reachable from network edges, export reachable and unreachable points and plot results
@@ -68,16 +63,10 @@ def evaluate_export_plot_point(
         network_edges (gdf): network edges as GeoDataFrame
         dist (numeric): max distance for points to be reachable (in meters)
         name (str): label/name for points layer (used for layer naming and print statements)
-        type_col (str): name of column with sub-category for points
-        input_color_rgb (str): String with 3 rgb values for input color
-        input_size (numerical): marker size when plotting input points
         output_size_reached (numerical): marker size when plotting reachable points
         output_size_not_reached (numerical): marker size when plotting non-reachable points
-        input_alpha (numerical): value between 0 and 255 setting the transparency of input points
         output_alpha (numerical): value between 0 and 255 setting the transparency of reachable and non-reachable points
         display_output (bool): If True, plots reachable and non reachable points
-        display_input (bool): If True, plots input points
-
     Returns:
         input_layer_name (str), output_layer_name_within (str), output_layer_name_outside (str):
         Returns names of plotted layers with input, non-reachable points and reachable points
@@ -113,24 +102,8 @@ def evaluate_export_plot_point(
     res[name]["within"] = len(points_withinreach)
     res[name]["outside"] = len(evaluated_points.loc[evaluated_points.withinreach == 0])
 
-    input_layer_name = None
     output_layer_name_within = None
     output_layer_name_outside = None
-
-    # plot
-    if display_input:
-        input_layer_name = name
-
-        vlayer_input = QgsVectorLayer(input_fp, input_layer_name, "ogr")
-
-        QgsProject.instance().addMapLayer(vlayer_input)
-
-        draw_simple_point_layer(
-            input_layer_name,
-            color=input_color_rgb + "," + input_alpha,
-            marker_size=input_size,
-            outline_width=0,
-        )
 
     if display_output:
         output_layer_name_outside = f"{name} outside reach"
@@ -157,7 +130,7 @@ def evaluate_export_plot_point(
             outline_width=0,
         )
 
-    return input_layer_name, output_layer_name_within, output_layer_name_outside, res
+    return output_layer_name_within, output_layer_name_outside, res
 
 
 def evaluate_export_plot_poly(

@@ -1,23 +1,23 @@
-# import packages
-
-import geopandas as gpd
-import osmnx as ox
-import networkx as nx
-import pandas as pd
 import os
+import shutil
 import yaml
-import networkx as nx
-from qgis.core import *
+import pickle
 import json
-import re
-import seaborn as sns
 import random
-
 random.seed(42)
 import warnings
-
 warnings.filterwarnings("ignore")
-import glob
+import geopandas as gpd
+import networkx as nx
+import pandas as pd
+import networkx as nx
+import seaborn as sns
+import contextily as cx
+import momepy
+import matplotlib.pyplot as plt
+from qgis.core import *
+from qgis.utils import * 
+from src.plot_func import *
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -29,192 +29,148 @@ config_display = yaml.load(
 display_network_statistics = config_display["display_network_statistics"]
 
 # INPUT/OUTPUT FILE PATHS
+
+for fp in [
+    homepath + "/data/output/network/",
+    homepath + "/data/output/network/components/",
+    homepath + "/data/results/",
+    homepath + "/data/results/stats/",
+    
+]:
+    os.makedirs(
+        fp,
+        exist_ok=True
+    )
+
 # input
-filepath_nodes_input = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
+# filepath_nodes_input = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
 filepath_edges_input = homepath + "/data/input/network/processed/edges_studyarea.gpkg"
 
 # output
 filepath_edge_output = homepath + "/data/output/network/edges.gpkg"
 filepath_node_output = homepath + "/data/output/network/nodes.gpkg"
 
-graph_file = homepath + "/data/output/network/network_graph.graphml"
+graph_file = homepath + "/data/output/network/network_graph.pickle"
 stats_path = homepath + "/results/stats/stats_network.json"  # store output here
 
 # load data
-nodes = gpd.read_file(filepath_nodes_input)
-edges = gpd.read_file(filepath_edges_input)
+# nodes = gpd.read_file(filepath_nodes_input)
+edges_in = gpd.read_file(filepath_edges_input)
 
-# Drop edges with missing start and end nodes
-edges.dropna(subset=["u", "v"], inplace=True)
-edges["key"].fillna(0, inplace=True)
-
-# process data to be used with osmnx
-edges = edges.set_index(["u", "v", "key"])
-edges["osmid"] = edges.edge_id
-nodes["osmid"] = nodes.node_id
-nodes.set_index("osmid", inplace=True)
-nodes["x"] = nodes.geometry.x
-nodes["y"] = nodes.geometry.y
-
-G = ox.graph_from_gdfs(nodes, edges)
-
-# check that conversion is successfull
-ox_nodes, ox_edges = ox.graph_to_gdfs(G)
-assert len(ox_nodes) == len(
-    nodes
-), "Number of graph nodes not equal to number of input nodes"
-assert len(ox_edges) == len(
-    edges
-), "Number of graph edges not equal to number of input edges"
-del ox_nodes, ox_edges
-
-# convert to undirected
-assert nx.is_directed(G) == True, "Graph is not directed"
-G_undirected = ox.get_undirected(G)
-assert nx.is_directed(G_undirected) == False, "Graph is directed"
-
-degree_histogram = nx.degree_histogram(G_undirected)
-print(
-    "Degree histogram:",
+# convert to networkx object with momepy
+G = momepy.gdf_to_nx(
+    gdf_network = edges_in, 
+    multigraph=False, 
+#    integer_labels=True, # only in momepy 0.8+
+    directed=False,    
 )
+
+# remove degree 0 nodes
+degree_histogram = nx.degree_histogram(G)
+print(f"Degree histogram: {degree_histogram}")
 print(f"Number of nodes without edges: {degree_histogram[0]}.")
 print(f"Removing {degree_histogram[0]} nodes from the network.")
+nodes_to_remove = [node for node in G.nodes if nx.degree(G, node)==0]
+G.remove_nodes_from(nodes_to_remove)
+degree_histogram = nx.degree_histogram(G)
+print(f"Degree histogram (updated): {degree_histogram}")
 
-nodes_to_remove = []
-for node in G_undirected.nodes():
-    if nx.degree(G_undirected, node) == 0:
-        nodes_to_remove.append(node)
-for node in nodes_to_remove:
-    G_undirected.remove_node(node)
-
-print(
-    f"The number of connected components is: {nx.number_connected_components(G_undirected)}"
+# using momepy to get nodes and edges gdf with corresponding labels and geometry objects
+nodes, edges = momepy.nx_to_gdf(
+    net = G,
+    points = True,
+    lines = True
 )
 
-# generate an undirected nodes and edges dataframe
-nodes_undir, edges_undir = ox.graph_to_gdfs(G=G_undirected, nodes=True, edges=True)
+### Add degree labels to nodes
+degrees = pd.DataFrame.from_dict(dict(G.degree), orient="index", columns=["degree"])
+nodes = nodes.merge(degrees, left_index=True, right_index=True)
 
-# Save component number to edges
-comps = [c for c in nx.connected_components(G_undirected)]
+### Connected components (& add component labels to edges gdf)
+print(f"The number of connected components is: {nx.number_connected_components(G)}")
+comps = [c for c in nx.connected_components(G)]
 comps = sorted(comps, key=len, reverse=True)  # sort by length (LCC first)
-
-edges_undir["component"] = None
-
-for edge in G_undirected.edges:
-    G_undirected.edges[edge]["nx_edge_id"] = edge
-
-comps_no_edges = []
 i = 1  # component count (starting to count at 1)
 for comp in comps:
 
     # for each component, make subgraph
-    G_sub = nx.subgraph(G_undirected, nbunch=comp)
+    G_sub = nx.subgraph(G, nbunch=comp)
 
     # if subgraph has at least 1 edge:
-    if len(G_sub.edges) > 0:
-        G_sub_edges = [G_sub.edges[e]["nx_edge_id"] for e in G_sub.edges]
-        edges_undir.loc[G_sub_edges, "component"] = i
-        i += 1
+    assert len(G_sub.edges) > 0, "Component has no edges"
 
-    # else (if subgraph has no edges):
-    else:
-        comps_no_edges.append(comp)
+    G_sub_edges = [G_sub.edges[e]["edge_id"] for e in G_sub.edges]
+    edges.loc[edges.edge_id.isin(G_sub_edges), "component"] = int(i)
+    i += 1
 
-# remove edgeless components from comp list
-for comp in comps_no_edges:
-    comps.remove(comp)
-
-assert len(edges_undir.component.unique()) == len(
-    comps
-), "Unexpected number of components"
-assert (
-    len(edges_undir.loc[edges_undir.component.isna()]) == 0
-), "Some edges have no component"
-
-# Save degrees to nodes
-pd_degrees = pd.DataFrame.from_dict(
-    dict(G_undirected.degree), orient="index", columns=["degree"]
-)
-
-nodes_undir = nodes_undir.merge(pd_degrees, left_index=True, right_index=True)
-
-# Export
+# Export edges, nodes, and graph
 if os.path.exists(filepath_edge_output):
     os.remove(filepath_edge_output)
 if os.path.exists(filepath_node_output):
     os.remove(filepath_node_output)
+    
+edges.to_file(filepath_edge_output, mode="w")
+nodes.to_file(filepath_node_output, mode="w")
 
-ox.save_graphml(G_undirected, graph_file)
-edges_undir.to_file(filepath_edge_output, mode="w")
-nodes_undir.to_file(filepath_node_output, mode="w")
+with open(graph_file, 'wb') as f:
+    pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
+# # to read back in:
+# with open(graph_file, 'rb') as f:
+#     G = pickle.load(f)
 
-### save component edges separately
-
-# make directory
-os.makedirs(homepath + "/data/output/network/", exist_ok=True)
+### save comp edges as SEPARATE files (for plotting)
 comppath = homepath + "/data/output/network/components/"
-os.makedirs(comppath, exist_ok=True)
+# first remove pre-existing files if any
+if os.path.exists(comppath):
+    shutil.rmtree(fp)
+    os.makedirs(comppath, exist_ok=True)
 
-# remove preexisting files, if any
-preexisting_files = glob.glob(comppath + "*")
-for file in preexisting_files:
-    try:
-        os.remove(file)
-    except:
-        pass
-
-zfill_regex = (
-    "{:0" + str(len(str(len(comps)))) + "d}"
-)  # add leading 0s to filename if needed
-for c in edges_undir.component.unique():
-    compfile = comppath + "comp" + zfill_regex.format(c) + ".gpkg"
-    compedges = edges_undir.loc[edges_undir["component"] == c].copy()
-    compedges.to_file(compfile, index=False)
+comps_index = []
+for comp, group in edges.groupby("component"):
+    comps_index.append(int(comp))
+    group.copy().reset_index(drop=True).to_file(comppath + f"{int(comp)}.gpkg")
+print(comps_index)
 
 ### Summary statistics of network
 res = {}  # initialize stats results dictionary
-res["node_count"] = len(G_undirected.nodes)
-res["edge_count"] = len(G_undirected.edges)
+res["node_count"] = len(G.nodes)
+res["edge_count"] = len(G.edges)
 res["components"] = len(comps)
-res["node_degrees"] = dict(nx.degree(G_undirected))
+# res["node_degrees"] = dict(nx.degree(G))
 
 with open(stats_path, "w") as opened_file:
     json.dump(res, opened_file, indent=6)
 print(f"Network statistics saved to {stats_path}")
 
-
-# ### Visualization
-# remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
+### Visualization
+remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
 
 if display_network_statistics:
 
     remove_existing_layers(["Component"])
 
-    comp_files = os.listdir(comppath)
-    comp_numbers = [int(re.findall(r"\d+", file)[0]) for file in comp_files]
     comp_layer_names = []
 
     # create random colors (one for every comp) from seaborn colorblind palette
-    layercolors = sns.color_palette("colorblind", len(comp_files))
+    layercolors = sns.color_palette("colorblind", len(comps_index))
     comp_colors = {}
     comp_colors_hex = {}
-    for k, v in zip(comp_numbers, layercolors):
+    for k, v in zip(comps_index, layercolors):
         comp_colors[k] = (
             str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
         )
         comp_colors_hex[k] = v
 
-    for comp_file, comp_number in zip(comp_files, comp_numbers):
+    for comp in comps_index:
 
-        comp_layer_name = f"Component {str(comp_number)}"
-
-        comp_layer = QgsVectorLayer(comppath + comp_file, comp_layer_name, "ogr")
+        comp_layer_name = f"Component {str(comp)}"
+        comp_layer = QgsVectorLayer(comppath + f"{comp}.gpkg", comp_layer_name, "ogr")
 
         QgsProject.instance().addMapLayer(comp_layer)
 
         draw_simple_line_layer(
             comp_layer_name,
-            color=comp_colors[comp_number],
+            color=comp_colors[comp],
             line_width=1,
             line_style="dash",
         )
@@ -230,7 +186,10 @@ if display_network_statistics:
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
-turn_off_layer_names = ["Network edges", "Network nodes"]
+turn_off_layer_names = [
+    "Network edges",
+    # "Network nodes"
+]
 
 turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
 
@@ -240,18 +199,16 @@ if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
 
 # make matplotlib plots of each component
-comppaths = [path for path in glob.glob("../data/output/network/components/*.gpkg")]
-comp_nrs = [int(re.findall(r"\d", path)[0]) for path in comppaths]
 
-for comppath, comp_nr in zip(comppaths, comp_nrs):
-    gdf = gpd.read_file(comppath)
+for comp in comps_index:
+    gdf = gpd.read_file(comppath + f"{comp}.gpkg")
     fig, ax = plt.subplots(1, 1)
-    gdf.plot(ax=ax, color=comp_colors_hex[comp_nr])
+    gdf.plot(ax=ax, color=comp_colors_hex[comp])
     ax.set_axis_off()
-    ax.set_title(f"Component nr {comp_nr}")
+    ax.set_title(f"Component nr {comp}")
     cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager, crs=gdf.crs)
     fig.savefig(
-        homepath + f"/results/plots/component{comp_nr}.png",
+        homepath + f"/results/plots/component{comp}.png",
         dpi=300,
         bbox_inches="tight",
     )

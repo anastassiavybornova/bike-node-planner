@@ -120,7 +120,6 @@ if evaldict["point"]:
         rgb_shaded = rgb_shade(config_colors[k])
         mydist = v["bufferdistance"]
         (
-            input_name_current,
             output_name_within_current,
             output_name_outside_current,
             res_current,
@@ -135,20 +134,14 @@ if evaldict["point"]:
             network_edges=edges,
             dist=mydist,
             name=k,
-            type_col="types",
-            input_color_rgb=config_colors[k],
             output_color_reached=config_colors[k],
             output_color_not_reached=rgb_shaded,
-            display_input=config_display["display_evaluation_input"],
             display_output=config_display["display_evaluation_output"],
-            input_size=3,
             output_size_reached=3,
             output_size_not_reached=3,
-            input_alpha="255",
             output_alpha="255",
         )
 
-        input_layers.append(input_name_current)
         output_layers.append(output_name_within_current)
         output_layers.append(output_name_outside_current)
         res = res | res_current

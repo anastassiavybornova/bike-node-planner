@@ -161,6 +161,7 @@ if os.path.exists(dem_fp):
 
     ele = gpd.read_file(elevation_vals_segments_fp)
     segs = gpd.read_file(segments_fp)
+    segs["length"] = segs.length
     elevation_col = "elevation_1"
     grouped = ele.groupby("segment_id")
     segs["slope"] = None
