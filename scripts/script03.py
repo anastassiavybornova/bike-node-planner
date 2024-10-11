@@ -303,6 +303,9 @@ if os.path.exists(dem_fp):
 
     move_group(group_name)
 
+    # Turn off DEM layer
+    turn_off_layers(["DEM terrain"])
+
     print("script03.py ended successfully.")
 else:
     print("No DEM input file found, skipping slope evaluation.")
