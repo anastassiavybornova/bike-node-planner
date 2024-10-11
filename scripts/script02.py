@@ -81,7 +81,7 @@ for geomtype in geomtypes:
 root = QgsProject.instance().layerTreeRoot()
 
 # make main group for layers
-main_group_name = "Evaluation"
+main_group_name = "2 Evaluation"
 
 # Check if group already exists
 for group in [child for child in root.children() if child.nodeType() == 0]:

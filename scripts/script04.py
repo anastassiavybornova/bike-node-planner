@@ -4,8 +4,10 @@ import yaml
 import pickle
 import json
 import random
+
 random.seed(42)
 import warnings
+
 warnings.filterwarnings("ignore")
 import geopandas as gpd
 import networkx as nx
@@ -16,7 +18,7 @@ import contextily as cx
 import momepy
 import matplotlib.pyplot as plt
 from qgis.core import *
-from qgis.utils import * 
+from qgis.utils import *
 from src.plot_func import *
 
 # define homepath variable (where is the qgis project saved?)
@@ -35,12 +37,8 @@ for fp in [
     homepath + "/data/output/network/components/",
     homepath + "/data/results/",
     homepath + "/data/results/stats/",
-    
 ]:
-    os.makedirs(
-        fp,
-        exist_ok=True
-    )
+    os.makedirs(fp, exist_ok=True)
 
 # input
 # filepath_nodes_input = homepath + "/data/input/network/processed/nodes_studyarea.gpkg"
@@ -59,10 +57,10 @@ edges_in = gpd.read_file(filepath_edges_input)
 
 # convert to networkx object with momepy
 G = momepy.gdf_to_nx(
-    gdf_network = edges_in, 
-    multigraph=False, 
-#    integer_labels=True, # only in momepy 0.8+
-    directed=False,    
+    gdf_network=edges_in,
+    multigraph=False,
+    #    integer_labels=True, # only in momepy 0.8+
+    directed=False,
 )
 
 # remove degree 0 nodes
@@ -70,17 +68,13 @@ degree_histogram = nx.degree_histogram(G)
 print(f"Degree histogram: {degree_histogram}")
 print(f"Number of nodes without edges: {degree_histogram[0]}.")
 print(f"Removing {degree_histogram[0]} nodes from the network.")
-nodes_to_remove = [node for node in G.nodes if nx.degree(G, node)==0]
+nodes_to_remove = [node for node in G.nodes if nx.degree(G, node) == 0]
 G.remove_nodes_from(nodes_to_remove)
 degree_histogram = nx.degree_histogram(G)
 print(f"Degree histogram (updated): {degree_histogram}")
 
 # using momepy to get nodes and edges gdf with corresponding labels and geometry objects
-nodes, edges = momepy.nx_to_gdf(
-    net = G,
-    points = True,
-    lines = True
-)
+nodes, edges = momepy.nx_to_gdf(net=G, points=True, lines=True)
 
 ### Add degree labels to nodes
 degrees = pd.DataFrame.from_dict(dict(G.degree), orient="index", columns=["degree"])
@@ -108,11 +102,11 @@ if os.path.exists(filepath_edge_output):
     os.remove(filepath_edge_output)
 if os.path.exists(filepath_node_output):
     os.remove(filepath_node_output)
-    
+
 edges.to_file(filepath_edge_output, mode="w")
 nodes.to_file(filepath_node_output, mode="w")
 
-with open(graph_file, 'wb') as f:
+with open(graph_file, "wb") as f:
     pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
 # # to read back in:
 # with open(graph_file, 'rb') as f:
@@ -177,7 +171,7 @@ if display_network_statistics:
         comp_layer_names.append(comp_layer_name)
 
     group_layers(
-        group_name="Connected components",
+        group_name="4 Connected components",
         layer_names=comp_layer_names,
         remove_group_if_exists=True,
     )

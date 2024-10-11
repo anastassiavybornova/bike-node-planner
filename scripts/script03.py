@@ -282,7 +282,7 @@ if os.path.exists(dem_fp):
         )
 
     group_layers(
-        group_name="Slope",
+        group_name="3 Slope",
         layer_names=[
             "DEM terrain",
             "Edges average slope",
