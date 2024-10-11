@@ -170,8 +170,9 @@ if display_network_statistics:
 
         comp_layer_names.append(comp_layer_name)
 
+    group_name = "4 Connected components"
     group_layers(
-        group_name="4 Connected components",
+        group_name=group_name,
         layer_names=comp_layer_names,
         remove_group_if_exists=True,
     )
@@ -190,6 +191,8 @@ turn_off_layers(turn_off_layer_names)
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+
+move_group(group_name)
 
 # make matplotlib plots of each component
 

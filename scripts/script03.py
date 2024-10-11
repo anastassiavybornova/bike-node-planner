@@ -281,8 +281,9 @@ if os.path.exists(dem_fp):
             line_style="solid",
         )
 
+    group_name = "3 Slope"
     group_layers(
-        group_name="3 Slope",
+        group_name=group_name,
         layer_names=[
             "DEM terrain",
             "Edges average slope",
@@ -299,6 +300,8 @@ if os.path.exists(dem_fp):
 
     if "Basemap" in layer_names:
         move_basemap_back(basemap_name="Basemap")
+
+    move_group(group_name)
 
     print("script03.py ended successfully.")
 else:

@@ -199,6 +199,8 @@ for geomtype, geomdict in evaldict.items():
         for n in layernames:
             add_layer_to_group(n, sub_group)
 
+move_group(main_group_name)
+
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
 if "Basemap" in layer_names:

@@ -168,6 +168,8 @@ if display_technical:
         group_name
     ).setItemVisibilityChecked(False)
 
+    move_group(group_name, position=-1)
+
 
 # create subfolders for output and results
 os.makedirs(homepath + "/data/output/", exist_ok=True)
@@ -177,6 +179,7 @@ for subfolder in ["plots", "stats", "pdf"]:
     os.makedirs(homepath + f"/results/{subfolder}", exist_ok=True)
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")

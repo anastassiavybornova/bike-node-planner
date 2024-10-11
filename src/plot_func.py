@@ -35,6 +35,15 @@ def move_study_area_front(layer_name="Study area"):
     root.removeLayer(layer)
 
 
+def move_group(group_name, position=0):
+    root = QgsProject.instance().layerTreeRoot()
+
+    group = root.findGroup(group_name)
+    group_clone = group.clone()
+    root.insertChildNode(position, group_clone)
+    root.removeChildNode(group)
+
+
 def move_basemap_back(basemap_name="Basemap"):
     # get basemap layer
     layer = QgsProject.instance().mapLayersByName(basemap_name)[0]
@@ -107,12 +116,13 @@ def group_layers(group_name, layer_names, remove_group_if_exists=True):
         layer = QgsProject.instance().mapLayersByName(layer_name)[0]
 
         tree_layer = root.findLayer(layer.id())
-        cloned_layer = tree_layer.clone()
-        parent = tree_layer.parent()
+        if tree_layer:
+            cloned_layer = tree_layer.clone()
+            parent = tree_layer.parent()
 
-        layer_group.insertChildNode(0, cloned_layer)
+            layer_group.insertChildNode(0, cloned_layer)
 
-        parent.removeChildNode(tree_layer)
+            parent.removeChildNode(tree_layer)
 
 
 def color_ramp_items(colormap, nclass):
