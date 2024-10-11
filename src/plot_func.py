@@ -1,5 +1,6 @@
 import random
 from random import randrange
+
 random.seed(42)
 # from qgis.core import QgsVectorLayer
 from qgis.core import *
@@ -7,11 +8,13 @@ from qgis.utils import iface
 
 from ast import literal_eval
 
-def rgb_shade(rgb_string, shade = 0.6):
+
+def rgb_shade(rgb_string, shade=0.6):
     # return rgb string shaded (darkened) by a factor of *shade*
-    rbg_shaded = [int(shade*v) for v in literal_eval(rgb_string)]
+    rbg_shaded = [int(shade * v) for v in literal_eval(rgb_string)]
     rgb_shaded_string = str(rbg_shaded).replace("[", "").replace("]", "")
     return rgb_shaded_string
+
 
 def move_study_area_front(layer_name="Study area"):
     # get basemap layer
@@ -30,6 +33,7 @@ def move_study_area_front(layer_name="Study area"):
 
     # remove original
     root.removeLayer(layer)
+
 
 def move_basemap_back(basemap_name="Basemap"):
     # get basemap layer
@@ -57,6 +61,7 @@ def turn_off_layers(layer_names):
         QgsProject.instance().layerTreeRoot().findLayer(
             layer.id()
         ).setItemVisibilityChecked(False)
+
 
 def add_layer_to_group(layer_name, group, position=-1):
     """
@@ -109,6 +114,7 @@ def group_layers(group_name, layer_names, remove_group_if_exists=True):
 
         parent.removeChildNode(tree_layer)
 
+
 def color_ramp_items(colormap, nclass):
     """
     Returns nclass colors from color map
@@ -120,6 +126,7 @@ def color_ramp_items(colormap, nclass):
 
     return colors
 
+
 def change_alpha(q_color, alpha):
     color_string_list = str(q_color).split()
 
@@ -130,6 +137,7 @@ def change_alpha(q_color, alpha):
     rgb_string = " ".join(rgb_values)
 
     return rgb_string
+
 
 def draw_linear_graduated_layer(
     layer_name,
@@ -473,13 +481,17 @@ def draw_recent_simple_line_layer(color="purple", width=0.7, line_style="solid")
     iface.activeLayer().triggerRepaint()
     iface.layerTreeView().refreshLayerSymbology(iface.activeLayer().id())
 
+
 def remove_existing_layers(nameparts):
     nameparts = [n.replace(" ", "_") for n in nameparts]
-    existing_layers = [layer.id() for layer in QgsProject.instance().mapLayers().values()]
+    existing_layers = [
+        layer.id() for layer in QgsProject.instance().mapLayers().values()
+    ]
     layers_to_remove = [l for l in existing_layers if any([e in l for e in nameparts])]
     for r in layers_to_remove:
         QgsProject.instance().removeMapLayer(r)
     return None
+
 
 def draw_slope_layer(
     layer_name,
@@ -505,21 +517,21 @@ def draw_slope_layer(
     layer = QgsProject.instance().mapLayersByName(layer_name)[0]
 
     ranges = []
- 
-    slope_ranges += [100] # add max value (upper limit)
+
+    slope_ranges += [100]  # add max value (upper limit)
     # make pairs of upper-lower limits for ranges
     slope_pairs = [list(pair) for pair in zip(slope_ranges, slope_ranges[1:])]
 
     slope_names = [
-        f"{slope_pairs[0][0]}-{slope_pairs[0][1]}% (manageable elevation)", 
-        f"{slope_pairs[1][0]}-{slope_pairs[1][1]}% (noticeable elevation)", 
-        f"{slope_pairs[2][0]}-{slope_pairs[2][1]}% (steep elevation)", 
-        f">{slope_pairs[3][0]}% (very steep elevation)"
-        ]
-   
+        f"{slope_pairs[0][0]}-{slope_pairs[0][1]}% (manageable elevation)",
+        f"{slope_pairs[1][0]}-{slope_pairs[1][1]}% (noticeable elevation)",
+        f"{slope_pairs[2][0]}-{slope_pairs[2][1]}% (steep elevation)",
+        f">{slope_pairs[3][0]}% (very steep elevation)",
+    ]
+
     # to make sure upper and lower limit are not identical for disparate ranges:
-    for i in range(len(slope_pairs)-1):
-        slope_pairs[i][1] -= 10**-6 
+    for i in range(len(slope_pairs) - 1):
+        slope_pairs[i][1] -= 10**-6
     slope_defs = [z for z in zip(slope_names, slope_pairs, slope_colors)]
 
     for label, (lower, upper), color in slope_defs:
