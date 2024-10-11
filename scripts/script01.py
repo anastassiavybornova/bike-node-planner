@@ -33,7 +33,9 @@ config = yaml.load(open(homepath + "/config/config.yml"), Loader=yaml.FullLoader
 proj_crs = config["proj_crs"]  # projected CRS
 
 # load configs (display)
-config_display = yaml.load(open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader)
+config_display = yaml.load(
+    open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
+)
 display_studyarea = config_display["display_study_area"]
 display_network = config_display["display_network"]
 display_technical = config_display["display_technical"]
@@ -49,7 +51,7 @@ remove_existing_layers(
         "Network edges",
         "Network nodes",
         "Network edges (raw data)",
-        "Network nodes (raw data)"
+        "Network nodes (raw data)",
     ]
 )
 epsg = proj_crs.replace(":", "")
@@ -129,9 +131,9 @@ if display_technical:
         QgsProject.instance().addMapLayer(edges_raw_layer)
         draw_simple_line_layer(
             "Network edges (raw data)",
-            color="0,0,0,180",
-            line_width=0.5,
-            line_style="dashed",
+            color="169, 169, 169,255",
+            line_width=1,
+            line_style="dash",
         )
 
     # raw nodes
@@ -142,11 +144,29 @@ if display_technical:
         QgsProject.instance().addMapLayer(nodes_raw_layer)
         draw_simple_point_layer(
             "Network nodes (raw data)",
-            color="0,0,0,255",
-            outline_color="black",
-            outline_width=0.5,
-            marker_size=3,
+            color="169, 169, 169,255",
+            outline_color="0, 0, 0,255",
+            outline_width=0.2,
+            marker_size=2,
         )
+
+    root = QgsProject.instance().layerTreeRoot()
+
+    # Add to layer group
+    # Turn off layer group by default
+    group_name = "1 Raw data"
+    group_layers(
+        group_name=group_name,
+        layer_names=[
+            "Network edges (raw data)",
+            "Network nodes (raw data)",
+        ],
+        remove_group_if_exists=True,
+    )
+
+    QgsProject.instance().layerTreeRoot().findGroup(
+        group_name
+    ).setItemVisibilityChecked(False)
 
 
 # create subfolders for output and results
