@@ -81,7 +81,7 @@ for geomtype in geomtypes:
 root = QgsProject.instance().layerTreeRoot()
 
 # make main group for layers
-main_group_name = "Evaluation"
+main_group_name = "2 Evaluation"
 
 # Check if group already exists
 for group in [child for child in root.children() if child.nodeType() == 0]:
@@ -198,6 +198,8 @@ for geomtype, geomdict in evaldict.items():
         sub_group = main_group.addGroup(sublayer)
         for n in layernames:
             add_layer_to_group(n, sub_group)
+
+move_group(main_group_name)
 
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
