@@ -28,8 +28,7 @@ homepath = QgsProject.instance().homePath()
 config = yaml.load(
     open(homepath + "/config/config-topological-analysis.yml"), Loader=yaml.FullLoader
 )
-[ideal_length_lower, ideal_length_upper] = config["ideal_length_range"]
-max_length = config["max_length"]
+[loop_length_min, loop_length_max] = config["loop_length_range"]
 
 # load custom functions
 exec(open(homepath + "/src/plot_func.py").read())
@@ -72,52 +71,63 @@ nodes, edges = momepy.nx_to_gdf(net=G, points=True, lines=True)
 # ### Visualization
 remove_existing_layers(
     [
-        "too short edges",
-        "ideal range edges",
-        "above ideal edges",
-        "too long edges",
+        "too short loops",
+        "ideal range loops",
+        "too long loops"
     ]
 )
 
-### Classify edge lengths (in km)
+### Classify loop lengths
 
-edges["length_km"] = edges.length / 1000
-edges["length_class"] = edges.length_km.apply(
-    lambda x: classify_edgelength(
+# as in https://martinfleischmann.net/fixing-missing-geometries-in-a-polygonized-network/
+linestrings = edges.geometry.copy() # our geopandas.GeoSeries of linestrings representing street network
+collection = shapely.GeometryCollection(linestrings.array)  # combine to a single object
+noded = shapely.node(collection)  # add missing nodes
+polygonized = shapely.polygonize(noded.geoms)  # polygonize based on an array of nodded parts
+polygons = gpd.GeoSeries(polygonized.geoms)  # create a GeoSeries from parts
+
+# create geodataframe of loops, where we will save evaluation column
+loops = gpd.GeoDataFrame(
+    geometry = polygons,
+    crs = edges.crs
+)
+loops["length_km"] = loops.length / 1000
+
+loops["length_class"] = loops.length_km.apply(
+    lambda x: classify_looplength(
         length_km = x,
-        ideal_length_lower = ideal_length_lower,
-        ideal_length_upper = ideal_length_upper,
-        max_length = max_length
+        loop_length_min = loop_length_min,
+        loop_length_max = loop_length_max
     )
 )
 
-edges.to_file(
-    topo_folder + f"edges_length_classification.gpkg", 
+loops.to_file(
+    topo_folder + f"loops_length_classification.gpkg", 
     index = False
 )
 
-for classification in edges.length_class.unique():
-    fp = topo_folder + f"edges_{classification}.gpkg"
-    edges[edges["length_class"]==classification].to_file(
+for classification in loops.length_class.unique():
+    fp = topo_folder + f"loops_{classification}.gpkg"
+    loops[loops["length_class"]==classification].to_file(
         fp,
         index = False
     )
-
+    
 layer_names = []
-for classification in edges.length_class.unique():
-    layer_name = classification.replace("_", " ") + " edges"
+for classification in loops.length_class.unique():
+    layer_name = classification.replace("_", " ") + " loops"
     layer_names.append(layer_name)
-    fp = topo_folder + f"edges_{classification}.gpkg"
+    fp = topo_folder + f"loops_{classification}.gpkg"
     layer = QgsVectorLayer(fp, layer_name, "ogr")
     QgsProject.instance().addMapLayer(layer)
-    draw_simple_line_layer(
+    draw_simple_polygon_layer(
         layer_name,
-        color=edge_classification_colors[classification],
-        line_width=1,
-        line_style="solid", # TODO
+        color=loop_classification_colors[classification],
+        outline_color="0,0,0,0",
+        outline_width=0
     )
 
-group_name = "5 Edge lengths"
+group_name = "6 Loop lengths"
 group_layers(
     group_name=group_name,
     layer_names=layer_names,
@@ -125,4 +135,6 @@ group_layers(
 )
 move_group(group_name)
 
-print("script05.py ended successfully.")
+print("script06.py ended successfully.")
+
+# TODO: summary (matplotlib) plots as part of current script05 /to be script 6/

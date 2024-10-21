@@ -339,3 +339,41 @@ def evaluate_point_layer(points, edges, points_buffer):
     # (again, accounting for variation)
 
     return points
+
+### TOPOLOGICAL EVALUATION
+
+def classify_edgelength(length_km, ideal_length_lower, ideal_length_upper, max_length):
+    '''
+    length_km: length in km
+    ideal_length_lower, ideal_length upper: lower and upper threshold for length's ideal range
+    max_length: maximum tolerable length
+    '''
+    assert (ideal_length_lower < ideal_length_upper) and (ideal_length_upper < max_length), "Please provide valid length ranges"
+
+    if length_km < ideal_length_lower:
+        classification = "too_short"
+    elif length_km < ideal_length_upper:
+        classification = "ideal_range"
+    elif length_km < max_length:
+        classification = "above_ideal"
+    else:
+        classification = "too_long"
+    
+    return classification
+
+def classify_looplength(length_km, loop_length_min, loop_length_max):
+    '''
+    length_km: length in km
+    ideal_length_lower, ideal_length upper: lower and upper threshold for length's ideal range
+    max_length: maximum tolerable length
+    '''
+    assert (loop_length_min < loop_length_max), "Please provide valid length ranges"
+
+    if length_km < loop_length_min:
+        classification = "too_short"
+    elif length_km < loop_length_max:
+        classification = "ideal_range"
+    else:
+        classification = "too_long"
+    
+    return classification

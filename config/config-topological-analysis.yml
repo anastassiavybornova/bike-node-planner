@@ -1,0 +1,8 @@
+### CONFIGURATION FOR TOPOLOGICAL NETWORK ANALYSIS
+
+# edge lengths
+ideal_length_range: [1,5] # [x,y]: ideal range for edge length (in km). edges below x km will be considered as "too short" (in plotting)
+max_length: 10 # maximum threshold for edge length (in km). edges above this threshold will be considered as "too long" (in plotting)
+
+# face loop perimeter length
+loop_length_range: [8,20] # [x,y] ideal range for loop length (in km). loops below x km will be considered as "too short", loops above y km as "too long".
