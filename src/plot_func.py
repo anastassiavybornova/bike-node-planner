@@ -1,6 +1,9 @@
+import yaml
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+import geopandas as gpd
 import random
 from random import randrange
-
 random.seed(42)
 # from qgis.core import QgsVectorLayer
 from qgis.core import *
@@ -8,6 +11,21 @@ from qgis.utils import iface
 
 from ast import literal_eval
 
+edge_classification_colors = {
+    "too_short": "#000000",
+    "ideal_range": "#00CB00",
+    "above_ideal": "#FFB900",
+    "too_long": "#E10000"
+}
+
+loop_classification_colors = {
+    "too_short": "0,0,0,128",
+    "ideal_range": "0,203,0,128",
+    "too_long": "225,0,0,128"
+}
+
+def rgb2hex(rgb_string):
+    return '#%02x%02x%02x' % tuple([int(n) for n in rgb_string.split(",")])[0:3]
 
 def rgb_shade(rgb_string, shade=0.6):
     # return rgb string shaded (darkened) by a factor of *shade*
@@ -561,3 +579,94 @@ def draw_slope_layer(
     layer.setRenderer(renderer)
     layer.triggerRepaint()
     iface.layerTreeView().refreshLayerSymbology(layer.id())
+
+def plot_edge_lengths(homepath, edge_classification_colors):
+
+    topo_folder = homepath + "/data/output/network/topology/"
+
+    config = yaml.load(
+        open(homepath + "/config/config-topological-analysis.yml"), Loader=yaml.FullLoader
+    )
+    [ideal_length_lower, ideal_length_upper] = config["ideal_length_range"]
+    max_length = config["max_length"]
+
+    edge_classification_labels = {
+        "too_short": f"(<{ideal_length_lower}km)",
+        "ideal_range": f"({ideal_length_lower}-{ideal_length_upper}km)",
+        "above_ideal": f"({ideal_length_upper}-{max_length}km)",
+        "too_long": f"(>{max_length}km)"
+    }
+
+    gdf = gpd.read_file(topo_folder + "edges_length_classification.gpkg")
+
+    fig, ax = plt.subplots(1,1, figsize = (10,10))
+
+    for classification in gdf.length_class.unique():
+        gdf[gdf.length_class==classification].plot(
+            ax=ax,
+            color = edge_classification_colors[classification],
+            label = classification.replace("_", " ") + " " + edge_classification_labels[classification]
+        )
+    ax.legend()
+    ax.set_title("Edge length evaluation")
+    ax.set_axis_off()
+    fig.savefig(
+        homepath + f"/results/plots/edgelengths.png",
+        dpi=300,
+        bbox_inches="tight"
+    )
+    plt.close()
+
+    return None
+
+def plot_loop_lengths(homepath, loop_classification_colors):
+
+    topo_folder = homepath + "/data/output/network/topology/"
+
+    config = yaml.load(
+        open(homepath + "/config/config-topological-analysis.yml"), Loader=yaml.FullLoader
+    )
+
+    [loop_length_min, loop_length_max] = config["loop_length_range"]
+
+    loop_classification_labels = {
+        "too_short": f"(<{loop_length_min}km)",
+        "ideal_range": f"({loop_length_min}-{loop_length_max}km)",
+        "too_long": f"(>{loop_length_max}km)"
+    }
+
+    gdf = gpd.read_file(topo_folder + "loops_length_classification.gpkg")
+
+    gdf["color_plot"] = gdf.length_class.apply(lambda x: rgb2hex(loop_classification_colors[x]))
+
+    fig, ax = plt.subplots(1,1, figsize = (10,10))
+    
+    gdf.plot(
+        ax=ax,
+        color=gdf.color_plot,
+        alpha=0.5
+    )
+    gdf.plot(
+        ax=ax,
+        facecolor = "none",
+        edgecolor = "black",
+        linestyle = "dashed"
+    )
+    ax.set_title("Loop length evaluation")
+    ax.set_axis_off()
+    # add custom legend
+    custom_lines = [
+        Line2D([0],[0],color=rgb2hex(k),lw=4,alpha=0.5) for k in loop_classification_colors.values()
+    ]
+    ax.legend(
+        custom_lines, 
+        loop_classification_labels.values()
+    )
+    fig.savefig(
+        homepath + f"/results/plots/looplengths.png",
+        dpi=300,
+        bbox_inches="tight"
+    )
+    plt.close()
+
+    return None
