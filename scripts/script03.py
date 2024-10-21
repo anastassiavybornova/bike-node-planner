@@ -5,7 +5,6 @@ import json
 import geopandas as gpd
 from qgis.core import *
 import warnings
-
 warnings.filterwarnings("ignore")
 
 # define homepath variable (where is the qgis project saved?)
@@ -16,7 +15,6 @@ if homepath not in sys.path:
 
 # load custom functions
 exec(open(homepath + "/src/plot_func.py").read())
-exec(open(homepath + "/src/stat_func.py").read())
 
 # load configs
 config_display = yaml.load(

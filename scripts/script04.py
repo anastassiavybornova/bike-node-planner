@@ -19,7 +19,6 @@ import momepy
 import matplotlib.pyplot as plt
 from qgis.core import *
 from qgis.utils import *
-from src.plot_func import *
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
@@ -29,6 +28,9 @@ config_display = yaml.load(
     open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
 )
 display_network_statistics = config_display["display_network_statistics"]
+
+# load custom functions
+exec(open(homepath + "/src/plot_func.py").read())
 
 # INPUT/OUTPUT FILE PATHS
 
