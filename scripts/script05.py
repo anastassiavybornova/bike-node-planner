@@ -33,6 +33,7 @@ max_length = config["max_length"]
 
 # load custom functions
 exec(open(homepath + "/src/plot_func.py").read())
+exec(open(homepath + "/src/eval_func.py").read())
 
 # INPUT/OUTPUT FILE PATHS
 
