@@ -8,6 +8,7 @@ import seaborn as sns
 from ast import literal_eval
 from qgis.core import *
 import warnings
+
 warnings.filterwarnings("ignore")
 
 # define homepath variable (where is the qgis project saved?)
@@ -144,6 +145,17 @@ if evaldict["point"]:
         output_layers.append(output_name_within_current)
         output_layers.append(output_name_outside_current)
         res = res | res_current
+
+# Add heatmaps of reached points
+point_layers = [
+    layer.name()
+    for layer in QgsProject.instance().mapLayers().values()
+    if "within reach" in layer.name().lower()
+]
+for pl in point_layers:
+    render_heatmap(pl)
+    output_layers.append(pl + "_heatmap")
+
 
 # evaluate linestring layers
 # TODO
