@@ -10,4 +10,4 @@ segment_length: 100
 # edges with a slope within the interval [a, b] --> "Noticeable elevation"
 # edges with a slope within the interval [b, c] --> "Steep elevation"
 # edges with a slope above c --> "Very steep elevation"
-slope_ranges: [0, 3, 5, 7] 
+slope_ranges: [0, 2, 4, 6] 
