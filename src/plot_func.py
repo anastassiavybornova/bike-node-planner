@@ -668,9 +668,11 @@ def plot_loop_lengths(homepath, loop_classification_colors):
     return None
 
 
-def render_heatmap(layer_name, radius=10, weight_field=None, color_ramp="Spectral"):
+def render_heatmap(
+    layer, layer_name, radius=10, weight_field=None, color_ramp="Spectral"
+):
 
-    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+    # layer = QgsProject.instance().mapLayersByName(layer_name)[0]
 
     clone = layer.clone()
     clone.setName(layer_name + "_heatmap")

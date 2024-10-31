@@ -146,19 +146,18 @@ if evaldict["point"]:
         output_layers.append(output_name_outside_current)
         res = res | res_current
 
-# Add heatmaps of reached points
-# TODO: Read org point layers
-# Do not display point layers
-# Use names that still will work for layer grouping
-point_layers = [
-    layer.name()
-    for layer in QgsProject.instance().mapLayers().values()
-    if "within reach" in layer.name().lower()
-]
-for pl in point_layers:
-    render_heatmap(pl)
-    output_layers.append(pl + "_heatmap")
+point_layers = []
+labels = []
 
+for k, v in evaldict["point"].items():
+    input_fp = v["filepath"]
+    point_layer = QgsVectorLayer(input_fp, k, "ogr")
+    point_layers.append(point_layer)
+    labels.append(k)
+
+for pl, label in zip(point_layers, labels):
+    render_heatmap(pl, label)
+    output_layers.append(label + "_heatmap")
 
 # evaluate linestring layers
 # TODO
