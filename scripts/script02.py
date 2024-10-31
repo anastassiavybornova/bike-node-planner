@@ -147,6 +147,9 @@ if evaldict["point"]:
         res = res | res_current
 
 # Add heatmaps of reached points
+# TODO: Read org point layers
+# Do not display point layers
+# Use names that still will work for layer grouping
 point_layers = [
     layer.name()
     for layer in QgsProject.instance().mapLayers().values()
