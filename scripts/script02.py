@@ -8,6 +8,7 @@ import seaborn as sns
 from ast import literal_eval
 from qgis.core import *
 import warnings
+
 warnings.filterwarnings("ignore")
 
 # define homepath variable (where is the qgis project saved?)
@@ -144,6 +145,19 @@ if evaldict["point"]:
         output_layers.append(output_name_within_current)
         output_layers.append(output_name_outside_current)
         res = res | res_current
+
+point_layers = []
+labels = []
+
+for k, v in evaldict["point"].items():
+    input_fp = v["filepath"]
+    point_layer = QgsVectorLayer(input_fp, k, "ogr")
+    point_layers.append(point_layer)
+    labels.append(k)
+
+for pl, label in zip(point_layers, labels):
+    render_heatmap(pl, label)
+    output_layers.append(label + "_heatmap")
 
 # evaluate linestring layers
 # TODO
