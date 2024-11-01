@@ -167,6 +167,7 @@ cython_debug/
 *-auto.yml
 *test*.qgz
 data/input/*
+!data/input/README-data-input.md
 data/output/*
 results/*
 *.docx
