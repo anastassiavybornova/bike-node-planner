@@ -7,9 +7,8 @@ homepath = QgsProject.instance().homePath()
 # load custom functions
 exec(open(homepath + "/src/plot_func.py").read())
 
-# Choose output format
-export_png = True
-export_pdf = False
+# Choose whether to export the layouts
+export = True
 
 # Based on based on https://www.geodose.com/2022/02/pyqgis-tutorial-automating-my_map-layout.html
 # and https://gis.stackexchange.com/questions/427905/create-my_map-layout-focused-on-selected-feature-using-pyqgis
@@ -100,10 +99,9 @@ for layout_name, layout_layer_names in layout_dict.items():
     output_path = homepath + "/results/plots/"
     exporter = QgsLayoutExporter(layout)
 
-    if export_pdf:
-        pdf_path = output_path + f"{layout_name}_qgis.pdf"
-        exporter.exportToPdf(pdf_path, QgsLayoutExporter.PdfExportSettings())
-
-    if export_png:
+    if export:
         img_path = output_path + f"{layout_name}_qgis.png"
-        exporter.exportToImage(img_path, QgsLayoutExporter.ImageExportSettings())
+        image_export_settings = QgsLayoutExporter.ImageExportSettings()
+        image_export_settings.cropToContents = True
+        image_export_settings.dpi = 300
+        exporter.exportToImage(img_path, image_export_settings)
