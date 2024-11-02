@@ -47,7 +47,7 @@ all_layers_bbox = [
 ]
 bbox = find_largest_bbox(all_layers_bbox)
 
-bbox.grow(1000)  # add some padding to the bbox
+bbox.grow(1500)  # add some padding to the bbox
 
 bbox_ratio = bbox.height() / bbox.width()
 
