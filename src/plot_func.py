@@ -93,6 +93,15 @@ def turn_off_layers(layer_names):
         ).setItemVisibilityChecked(False)
 
 
+def turn_on_layers(layer_names):
+    for l in layer_names:
+        layer = QgsProject.instance().mapLayersByName(l)[0]
+
+        QgsProject.instance().layerTreeRoot().findLayer(
+            layer.id()
+        ).setItemVisibilityChecked(True)
+
+
 def add_layer_to_group(layer_name, group, position=-1):
     """
     Add layer to existing layer group
@@ -689,3 +698,23 @@ def render_heatmap(
     renderer.setColorRamp(col_ramp)
 
     clone.triggerRepaint()
+
+
+def remove_layout(layout_name):
+    project = QgsProject.instance()
+    manager = project.layoutManager()
+    layouts_list = manager.printLayouts()
+
+    for layout in layouts_list:
+        if layout.name() == layout_name:
+            manager.removeLayout(layout)
+
+
+def find_largest_bbox(layers):
+    bbox = None
+    for layer in layers:
+        if bbox is None:
+            bbox = layer.extent()
+        else:
+            bbox.combineExtentWith(layer.extent())
+    return bbox
