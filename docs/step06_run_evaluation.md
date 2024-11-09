@@ -139,14 +139,21 @@ A separate plot of each component is also saved to `results/plots/`:
 
 <p align="center"><img alt="Example plot of largest connected component" src="/docs/screenshots/component1.png" width=50%></p>
 
-
 **Once you see the message `script04.py ended successfully`, you can move on to the next script.**
 
 ***
 
-## `script05.py`: Summary statistics
+## `script05.py`: Network edge lengths
 
-script05 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner` folder).
+***
+
+## `script06.py`: Network loop lengths
+
+***
+
+## `script07.py`: Summary statistics
+
+script07 generates summary statistics plots in `results/plots/*.png`. After running this script, you will find a plot of summary statistics in the subfolder `results/plots/` (in your `bike-node-planner` folder).
 
 <p align="center"><img alt="Plot of study area with network" src="/docs/screenshots/results-studyarea_network.png" width=60%></p>
 <p align="center"><img alt="Plot of evaluation results for example layer 'facilities'" src="/docs/screenshots/results-facility.png" width=60%></p>
