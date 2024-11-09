@@ -156,3 +156,7 @@ Summary statistics can also be found in `.json` format in the `/results/stats/` 
 * `stats_evaluation.json`: summary statistics for each evaluation layer (for point layers: number of points within/outside of distance threshold; for polygon layers: length of network within/outside of polygon layer)
 * `stats_slope.json`: length and slope for each segment, plus minimum, maximum, and average threshold for entire network
 * `stats_network.json`: number of nodes and edges; number of disconnected components; degrees for all nodes
+
+## `script08.py`: Export map layouts
+
+script08 exports map layouts to `results/plots/*_qgis.png`. After running the script, the folder will contain a number of maps with the results of the network evaluation. To customize the number of exported maps and which layers to include in each map, update `layout_dict` in script08. Each dictionary item creates a new map export. The dictionary key specifies the map name, while the lists in the dictionary values refers to names of the layers included in each map.
