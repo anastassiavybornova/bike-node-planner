@@ -1,3 +1,5 @@
+# ****** EDGE LENGTH CLASSIFICATION ******
+
 import os
 import shutil
 import yaml
@@ -85,24 +87,18 @@ remove_existing_layers(
 edges["length_km"] = edges.length / 1000
 edges["length_class"] = edges.length_km.apply(
     lambda x: classify_edgelength(
-        length_km = x,
-        ideal_length_lower = ideal_length_lower,
-        ideal_length_upper = ideal_length_upper,
-        max_length = max_length
+        length_km=x,
+        ideal_length_lower=ideal_length_lower,
+        ideal_length_upper=ideal_length_upper,
+        max_length=max_length,
     )
 )
 
-edges.to_file(
-    topo_folder + f"edges_length_classification.gpkg", 
-    index = False
-)
+edges.to_file(topo_folder + f"edges_length_classification.gpkg", index=False)
 
 for classification in edges.length_class.unique():
     fp = topo_folder + f"edges_{classification}.gpkg"
-    edges[edges["length_class"]==classification].to_file(
-        fp,
-        index = False
-    )
+    edges[edges["length_class"] == classification].to_file(fp, index=False)
 
 layer_names = []
 for classification in edges.length_class.unique():
@@ -115,7 +111,7 @@ for classification in edges.length_class.unique():
         layer_name,
         color=edge_classification_colors[classification],
         line_width=1,
-        line_style="solid", # TODO
+        line_style="solid",  # TODO
     )
 
 group_name = "5 Edge lengths"

@@ -1,3 +1,5 @@
+# **** ELEVATION ANALYSIS *****
+
 import os
 import sys
 import yaml
@@ -5,6 +7,7 @@ import json
 import geopandas as gpd
 from qgis.core import *
 import warnings
+
 warnings.filterwarnings("ignore")
 
 # define homepath variable (where is the qgis project saved?)

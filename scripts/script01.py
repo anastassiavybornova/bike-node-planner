@@ -1,3 +1,5 @@
+# ***** STUDY AREA AND NETWORK VISUALIZATION *****
+
 # import python packages
 import sys
 import os
