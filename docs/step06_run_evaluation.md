@@ -35,7 +35,8 @@ In QGIS,
 6. Click on `Open`
 7. Click on `Run`.
 8. While the script is running, check the console window for status messages.
-9. Once you see the message `Script XXX ended successfully` in the console window, save the project (disquette icon or `cmd+s`), and run the next script.
+9. Once you see the message `Script XXX ended successfully` in the console window, save the project (disquette icon or `cmd+s`). You can now explore the outputs of the script; use the `Layer overview` to navigate between different layers.
+10. To get more information on a particular feature on the map, use the ["Identify features"](https://docs.qgis.org/3.34/en/docs/user_manual/introduction/general_tools.html#identify) tool in QGIS.
 
 <p align="center"><img alt="Running the scripts in the QGIS Python console" src="../docs/screenshots/qgis-run.png" width=95%></p>
 
@@ -90,9 +91,7 @@ For each **polygon layer**, the BikeNodePlanner finds the parts of the network t
 
 You can explore the results of the evaluation by (de)selecting layers in the QGIS project. For example, if you have provided a polygon layer `nature.gpkg`, you can now select "Nature/Network in nature areas" within the "Evaluate network" layer to explore which parts of the network run through the nature layer. Or, if you have provided a point layer `museums.gpkg`, you can now select "Museums" within the "Evaluate network" layer to explore which museums within vs. outside reach (dark vs. light color) of the network.
 
-To get more information on a particular feature on the map, use the ["Identify features"](https://docs.qgis.org/3.34/en/docs/user_manual/introduction/general_tools.html#identify) tool in QGIS.
-
-<!-- <p align="center"><img alt="Output layer of script 02" src="../docs/screenshots/script02.png" width=80%></p> -->
+<p align="center"><img alt="Output layer of script 02" src="../docs/screenshots/script02.png" width=80%></p>
 
 **Once you see the message `script02.py ended successfully`, you can move on to the next script.**
 
