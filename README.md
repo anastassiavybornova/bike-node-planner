@@ -15,7 +15,9 @@ and provides the user with a network analysis (based on the network topology of 
 
 The BikeNodePlanner originates from a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) as part of the project [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter), where the goal was to develop a country-wide bicycle node network for Denmark. 
 
-The BikeNodePlanner is introduced in the forthcoming research paper "The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning", currently available as preprint:
+The BikeNodePlanner is introduced in the forthcoming research paper "The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning".
+
+<!-- , currently available as preprint:
 
 > Vybornova A, Vierø A, Szell M (2024) The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning. arXiv: LINK
 
@@ -25,7 +27,7 @@ Anastassia Vybornova<sup>1</sup>, Ane Rahbek Vierø<sup>1</sup>, Michael Szell<s
 
 2 ISI Foundation, 10126, Turin, Italy
 
-3 Complexity Science Hub Vienna, 1080, Vienna, Austria
+3 Complexity Science Hub Vienna, 1080, Vienna, Austria -->
 
 ***
 
@@ -41,8 +43,8 @@ To use the BikeNodePlanner, follow the detailed step-by-step instructions below.
 
 Set up the BikeNodePlanner environment on your machine. Detailed instructions depend on your operating system:
 
-* [macOS/linux: step02_install_software_macos](./docs/step02_install_software_macos.md)
-* [Windows: step02_install_software_windows](./docs/step02_install_software_windows.md)
+* macOS/linux: [docs/step02_install_software_macos](./docs/step02_install_software_macos.md)
+* Windows: [docs/step02_install_software_windows](./docs/step02_install_software_windows.md)
 
 ## Step 3: Prepare your data
 
@@ -51,22 +53,22 @@ Prepare your input data for the BikeNodePlanner:
 * the bicycle node network that you want to evaluate
 * the geospatial data for the evaluation
 
-Detailed instructions: [./docs/step03_prepare_data.md](./docs/step03_prepare_data.md).
+Detailed instructions: [docs/step03_prepare_data.md](./docs/step03_prepare_data.md).
 
 ## Step 4: Customize your user settings
 
-Fourth, customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions: [./docs/step04_customize_settings.md](./docs/step04_customize_settings.md).
+Customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions: [docs/step04_customize_settings.md](./docs/step04_customize_settings.md).
 
-## Step 5: Open `workflow.qgz` in QGIS
+## Step 5: Create an empty project in QGIS
 
-Open the QGIS project `workflow.qgz`, located in the main folder of this repository (which you downloaded at Step 1). Initially, `workflow.qgz` is an empty file; you will populate it with your data and results in Step 6 below.
+Open QGIS and create an empty project, then save it in the main folder of this repository (which you downloaded at Step 1), i.e., in the `bike-node-planner` folder.
 
 ## Step 6: Run the BikeNodePlanner evaluation in QGIS, and explore results!
 
-Now, the fun begins! Run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions: [./docs/step06_run_evaluation.md](./docs/step06_run_evaluation.md).
+Now, the fun begins! Run the BikeNodePlanner evaluation in QGIS, and explore the results. Detailed instructions: [docs/step06_run_evaluation.md](./docs/step06_run_evaluation.md).
 
 ***
 
 # Getting in touch
 
-Questions, comments, feedback? You can [reach out to us by email](mailto:anvy@itu.dk)!
+Questions, comments, feedback? You can reach out to us by email: [anvy@itu.dk](mailto:anvy@itu.dk)
