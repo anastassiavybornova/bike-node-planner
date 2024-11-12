@@ -171,3 +171,4 @@ data/input/*
 data/output/*
 results/*
 *.docx
+config/config-linestring.yml
