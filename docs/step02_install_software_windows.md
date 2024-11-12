@@ -1,6 +1,4 @@
-# UNDER CONSTRUCTION
-
-<!-- Step 2: Install software for Windows
+# Step 2: Install software for Windows
 
 Follow these step-by-step instructions to set up QGIS and Python for the BikeNodePlanner on your Windows machine.
 
@@ -42,7 +40,7 @@ To do so, simply:
 
 3. Open your command line interface (Command Prompt on Windows)
 
-**
+***
 
 4. Use the path from step 3 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 3, and hit enter.) Note that you have to be connected to the internet for the installs to work.
 
@@ -56,7 +54,7 @@ To do so, simply:
 "<qgispythonpath>" -m pip install --upgrade lxml
 ```
 
-<p align="center"><img alt="Setting up PyQGIS from the command line (Command Prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p>
+<!-- <p align="center"><img alt="Setting up PyQGIS from the command line (Command Prompt on Windows)" src="/docs/screenshots/cli-install-windows.png" width=80%></p> -->
 
 Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/run-bash-script/), navigate to the main `bike-node-planner` folder in your command line interface and run:
 
@@ -66,4 +64,4 @@ Alternatively, if you know [how to run a bash script](https://linuxhandbook.com/
 
 ***
 
-5. If you had QGIS open, restart QGIS now for the changes to take effect. -->
+5. If you had QGIS open, restart QGIS now for the changes to take effect.
