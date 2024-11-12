@@ -55,11 +55,11 @@ Detailed instructions: [./docs/step03_prepare_data.md](./docs/step03_prepare_dat
 
 ## Step 4: Customize your user settings
 
-Fourth, customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions: [./docs/step04_customize_settings.md](./docs/step04_customize_settings.md).
+Customize the BikeNodePlanner analysis by providing your preferred user settings. Detailed instructions: [./docs/step04_customize_settings.md](./docs/step04_customize_settings.md).
 
-## Step 5: Open `workflow.qgz` in QGIS
+## Step 5: Create an empty project in QGIS
 
-Open the QGIS project `workflow.qgz`, located in the main folder of this repository (which you downloaded at Step 1). Initially, `workflow.qgz` is an empty file; you will populate it with your data and results in Step 6 below.
+Open QGIS and create an empty project, then save it in the main folder of this repository (which you downloaded at Step 1), i.e., in the `bike-node-planner` folder.
 
 ## Step 6: Run the BikeNodePlanner evaluation in QGIS, and explore results!
 
@@ -69,4 +69,4 @@ Now, the fun begins! Run the BikeNodePlanner evaluation in QGIS, and explore the
 
 # Getting in touch
 
-Questions, comments, feedback? You can [reach out to us by email](mailto:anvy@itu.dk)!
+Questions, comments, feedback? You can reach out to us by email: [anvy@itu.dk](mailto:anvy@itu.dk)
