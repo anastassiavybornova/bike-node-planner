@@ -10,7 +10,7 @@ Once you have automatically generated the input data following the instructions 
 
 ***
 
-# If your study area is not in Denmark
+# 🌏 If your study area is not in Denmark 🌏
 
 Follow the steps below to provide your data manually.
 
