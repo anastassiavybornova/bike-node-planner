@@ -15,7 +15,9 @@ and provides the user with a network analysis (based on the network topology of 
 
 The BikeNodePlanner originates from a collaboration between [Dansk Kyst- og Naturturisme](https://www.kystognaturturisme.dk) (DKNT) and the [IT University of Copenhagen](https://nerds.itu.dk) as part of the project [Bedre vilkår for cykelturismen in Denmark](https://www.kystognaturturisme.dk/cykelknudepunkter), where the goal was to develop a country-wide bicycle node network for Denmark. 
 
-The BikeNodePlanner is introduced in the forthcoming research paper "The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning", currently available as preprint:
+The BikeNodePlanner is introduced in the forthcoming research paper "The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning".
+
+<!-- , currently available as preprint:
 
 > Vybornova A, Vierø A, Szell M (2024) The BikeNodePlanner: a data-driven decision support tool for bicycle node network planning. arXiv: LINK
 
@@ -25,7 +27,7 @@ Anastassia Vybornova<sup>1</sup>, Ane Rahbek Vierø<sup>1</sup>, Michael Szell<s
 
 2 ISI Foundation, 10126, Turin, Italy
 
-3 Complexity Science Hub Vienna, 1080, Vienna, Austria
+3 Complexity Science Hub Vienna, 1080, Vienna, Austria -->
 
 ***
 
