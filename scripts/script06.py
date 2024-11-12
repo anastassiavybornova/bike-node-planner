@@ -1,3 +1,5 @@
+# ***** LOOP LENGHTS *****
+
 import os
 import shutil
 import yaml
@@ -70,50 +72,37 @@ degree_histogram = nx.degree_histogram(G)
 nodes, edges = momepy.nx_to_gdf(net=G, points=True, lines=True)
 
 # ### Visualization
-remove_existing_layers(
-    [
-        "too short loops",
-        "ideal range loops",
-        "too long loops"
-    ]
-)
+remove_existing_layers(["too short loops", "ideal range loops", "too long loops"])
 
 ### Classify loop lengths
 
 # as in https://martinfleischmann.net/fixing-missing-geometries-in-a-polygonized-network/
-linestrings = edges.geometry.copy() # our geopandas.GeoSeries of linestrings representing street network
+linestrings = (
+    edges.geometry.copy()
+)  # our geopandas.GeoSeries of linestrings representing street network
 collection = shapely.GeometryCollection(linestrings.array)  # combine to a single object
 noded = shapely.node(collection)  # add missing nodes
-polygonized = shapely.polygonize(noded.geoms)  # polygonize based on an array of nodded parts
+polygonized = shapely.polygonize(
+    noded.geoms
+)  # polygonize based on an array of nodded parts
 polygons = gpd.GeoSeries(polygonized.geoms)  # create a GeoSeries from parts
 
 # create geodataframe of loops, where we will save evaluation column
-loops = gpd.GeoDataFrame(
-    geometry = polygons,
-    crs = edges.crs
-)
+loops = gpd.GeoDataFrame(geometry=polygons, crs=edges.crs)
 loops["length_km"] = loops.length / 1000
 
 loops["length_class"] = loops.length_km.apply(
     lambda x: classify_looplength(
-        length_km = x,
-        loop_length_min = loop_length_min,
-        loop_length_max = loop_length_max
+        length_km=x, loop_length_min=loop_length_min, loop_length_max=loop_length_max
     )
 )
 
-loops.to_file(
-    topo_folder + f"loops_length_classification.gpkg", 
-    index = False
-)
+loops.to_file(topo_folder + f"loops_length_classification.gpkg", index=False)
 
 for classification in loops.length_class.unique():
     fp = topo_folder + f"loops_{classification}.gpkg"
-    loops[loops["length_class"]==classification].to_file(
-        fp,
-        index = False
-    )
-    
+    loops[loops["length_class"] == classification].to_file(fp, index=False)
+
 layer_names = []
 for classification in loops.length_class.unique():
     layer_name = classification.replace("_", " ") + " loops"
@@ -125,7 +114,7 @@ for classification in loops.length_class.unique():
         layer_name,
         color=loop_classification_colors[classification],
         outline_color="0,0,0,0",
-        outline_width=0
+        outline_width=0,
     )
 
 group_name = "6 Loop lengths"

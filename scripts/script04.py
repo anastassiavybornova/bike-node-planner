@@ -1,3 +1,5 @@
+# ***** NETWORK ANALYSIS *****
+
 import os
 import shutil
 import yaml
@@ -163,12 +165,7 @@ if display_network_statistics:
 
         QgsProject.instance().addMapLayer(comp_layer)
 
-        draw_simple_line_layer(
-            comp_layer_name,
-            color=comp_colors[comp],
-            line_width=1,
-            line_style="dash",
-        )
+        draw_simple_line_layer(comp_layer_name, color=comp_colors[comp], line_width=1)
 
         comp_layer_names.append(comp_layer_name)
 

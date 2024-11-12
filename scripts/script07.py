@@ -1,3 +1,5 @@
+# ***** SUMMARIZE RESULTS AND MAKE PLOTS *****
+
 # import packages
 import sys
 import os
@@ -40,10 +42,10 @@ for plot in preexisting_plots:
 evaldict = {}
 
 for geomtype in [
-    "point", 
-    # "linestring", 
-    "polygon"
-    ]:
+    "point",
+    # "linestring",
+    "polygon",
+]:
     geompath_input = homepath + f"/data/input/{geomtype}/"
     geompath_output = homepath + f"/data/output/{geomtype}/"
     if os.path.exists(geompath_input):
@@ -226,14 +228,12 @@ for k, v in evaldict["point"].items():
 
 # Plot the edge length evaluation
 plot_edge_lengths(
-    homepath=homepath,
-    edge_classification_colors=edge_classification_colors
+    homepath=homepath, edge_classification_colors=edge_classification_colors
 )
 
 # Plot the loop length evaluation
 plot_loop_lengths(
-    homepath=homepath,
-    loop_classification_colors=loop_classification_colors
+    homepath=homepath, loop_classification_colors=loop_classification_colors
 )
 
 print("Plots saved to /results/plots/")
