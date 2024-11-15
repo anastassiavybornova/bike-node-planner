@@ -17,14 +17,31 @@ export = True
 
 # NOTE Fill out layout dictionary with layout name/types as keys and the list of all layers that should be displayed in the layout as values
 layout_dict = {
-    "edge_length": ["too long edges", "too short edges", "ideal range edges","above ideal edges"],
-    "loop_length": ["too long loops", "too short loops", "ideal range loops"],
-    "accessibility": [
+    "input_data": ["Study area", "Network edges"],
+    "agriculture": ["agriculture areas", "Network in agriculture areas"],
+    "nature": ["nature areas", "Network in nature areas"],
+    "verify": ["verify areas", "Network in verify areas"],
+    "sommerhus": ["sommerhus areas", "Network in sommerhus areas"],
+    "culture": ["culture areas", "Network in culture areas"],
+    "facilities": [
         "facility within reach",
         "facility outside reach",
-        "facility_heatmap",
     ],
-    "landscape_variation": ["culture areas", "Network in culture areas"],
+    "services": [
+        "service within reach",
+        "service outside reach",
+    ],
+    "points_of_interest": [
+        "poi within reach",
+        "poi outside reach",
+    ],
+    "edge_length": [
+        "too long edges",
+        "too short edges",
+        "ideal range edges",
+        "above ideal edges",
+    ],
+    "loop_length": ["too long loops", "too short loops", "ideal range loops"],
     "slope": ["Segments slope"],
 }
 
@@ -66,8 +83,17 @@ for layout_name, layout_layer_names in layout_dict.items():
     # Always include basemap and network edges
     layout_layer_names.extend(["Basemap", "Network edges"])
 
+    # Check that all desired layers exists
+    turn_on_layer_names = [l for l in layout_layer_names if l in all_layer_names]
+
+    non_existing_layer_names = [
+        l for l in layout_layer_names if l not in all_layer_names
+    ]
+    for l in non_existing_layer_names:
+        print(f"Skipping layer '{l}' - does not exist in the project")
+
     # Turn layers in list on
-    turn_on_layers(layout_layer_names)
+    turn_on_layers(turn_on_layer_names)
 
     # Remove layout if already exists
     remove_layout(layout_name)

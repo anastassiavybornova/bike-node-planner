@@ -159,8 +159,9 @@ for k, v in evaldict["point"].items():
 
 for pl, label in zip(point_layers, labels):
     render_heatmap(pl, label)
-    output_layers.append(label + "_heatmap")
+    output_layers.append(label + " heatmap")
 
+# print("test")
 # evaluate linestring layers
 # TODO
 # if evaldict["linestring"]:
@@ -220,5 +221,11 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+
+# Collapse all groups except the main group just created
+group_names = [group.name() for group in root.children() if group.nodeType() == 0]
+group_names.remove(main_group_name)
+for gn in group_names:
+    collapse_layer_group(gn)
 
 print("script02.py ended successfully.")

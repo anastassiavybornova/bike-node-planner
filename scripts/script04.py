@@ -193,6 +193,12 @@ if "Basemap" in layer_names:
 
 move_group(group_name)
 
+# Collapse all groups except the current one
+group_names = [group.name() for group in root.children() if group.nodeType() == 0]
+group_names.remove(group_name)
+for gn in group_names:
+    collapse_layer_group(gn)
+
 # make matplotlib plots of each component
 
 for comp in comps_index:
