@@ -17,7 +17,7 @@ export = True
 
 # NOTE Fill out layout dictionary with layout name/types as keys and the list of all layers that should be displayed in the layout as values
 layout_dict = {
-    "edge_length": ["above ideal edges", "too short edges", "ideal range edges"],
+    "edge_length": ["too long edges", "too short edges", "ideal range edges","above ideal edges"],
     "loop_length": ["too long loops", "too short loops", "ideal range loops"],
     "accessibility": [
         "facility within reach",
