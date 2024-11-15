@@ -29,7 +29,7 @@ homepath = QgsProject.instance().homePath()
 config_display = yaml.load(
     open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
 )
-display_network_statistics = config_display["display_network_statistics"]
+display_disconnected_components = config_display["display_disconnected_components"]
 
 # load custom functions
 exec(open(homepath + "/src/plot_func.py").read())
@@ -142,7 +142,7 @@ print(f"Network statistics saved to {stats_path}")
 ### Visualization
 remove_existing_layers(["Edges (beta)", "Nodes (beta)", "Input edges", "Input nodes"])
 
-if display_network_statistics:
+if display_disconnected_components:
 
     remove_existing_layers(["Component"])
 
