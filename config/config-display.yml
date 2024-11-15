@@ -5,4 +5,6 @@ display_technical: True
 display_evaluation_input: True
 display_evaluation_output: True
 display_slope: True
-display_network_statistics: True
+display_disconnected_components: True
+display_edge_lengths: True
+display_loop_lengths: True
