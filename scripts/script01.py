@@ -65,7 +65,7 @@ root = QgsProject.instance().layerTreeRoot()
 root.insertLayer(-1, basemap)
 
 # Add study area (if requested)
-if display_studyarea:
+if display_studyarea and os.path.exists(filepath_study):
 
     sa_layer = QgsVectorLayer(filepath_study, "Study area", "ogr")
     if not sa_layer.isValid():
@@ -88,7 +88,7 @@ assert (
     edges.crs == gdf_studyarea.crs == proj_crs
 ), "Edges and study area do not have the same CRS"
 
-if display_network:
+if display_network and os.path.exists(filepath_edges):
     edge_layer = QgsVectorLayer(filepath_edges, "Network edges", "ogr")
     if not edge_layer.isValid():
         print("Edge layer failed to load!")
@@ -113,7 +113,7 @@ if display_network:
     #         marker_size=3,
     #     )
 
-if display_technical:
+if display_technical and os.path.exists(fp_edges_raw):
 
     # read in raw nodes and edges to check CRS for plotting
     edges_raw = gpd.read_file(fp_edges_raw)
