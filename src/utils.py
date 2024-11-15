@@ -1,5 +1,6 @@
 import os
 os.environ["USE_PYGEOS"] = "0"
+import re
 import shutil
 import geopandas as gpd
 import pandas as pd
@@ -611,3 +612,57 @@ def order_edge_nodes(gdf):
 #     assert len(nodes_in_use) == len(nodes_in_use.id.unique())
 
 #     return nodes_in_use, edges_no_parallel, edges
+
+def load_evaluation_data(homepath):
+    # load evaluation data
+    evaldict = {}
+
+    for geomtype in [
+        "point",
+        # "linestring",
+        "polygon",
+    ]:
+        geompath_input = homepath + f"/data/input/{geomtype}/"
+        geompath_output = homepath + f"/data/output/{geomtype}/"
+        
+        if os.path.exists(geompath_input):
+
+            geomlayers = os.listdir(geompath_input)
+            geomlayers = [g for g in geomlayers if not ("gpkg-wal" in g or "gpkg-shm" in g or ".md" in g)]
+            evaldict[geomtype] = {}
+
+            for geomlayer in geomlayers:
+
+                geomlayer_name = geomlayer.replace(".gpkg", "")
+                evaldict[geomtype][geomlayer_name] = {}
+
+                if geomtype == "point":
+                    files = os.listdir(geompath_output)
+                    files = [f for f in files if not ("gpkg-wal" in f or "gpkg-shm" in f)]
+                    geomlayer_name_out = [f for f in files if geomlayer_name in f][0]
+                    bufferdistance = int(
+                        re.findall("_\d+", geomlayer_name_out)[0].replace("_", "")
+                    )
+                    evaldict[geomtype][geomlayer_name]["bufferdistance"] = bufferdistance
+                    evaldict[geomtype][geomlayer_name]["gpkg_within"] = gpd.read_file(
+                        geompath_output + geomlayer_name + f"_within_{bufferdistance}.gpkg"
+                    )
+                    evaldict[geomtype][geomlayer_name]["gpkg_outside"] = gpd.read_file(
+                        geompath_output + geomlayer_name + f"_outside_{bufferdistance}.gpkg"
+                    )
+
+                # not implemented yet
+                if geomtype == "linestring":
+                    pass
+
+                if geomtype == "polygon":
+                    files = os.listdir(geompath_output)
+                    files = [f for f in files if not ("gpkg-wal" in f or "gpkg-shm" in f)]
+                    geomlayer_name_out = [f for f in files if geomlayer_name in f][0]
+                    evaldict[geomtype][geomlayer_name]["bufferdistance"] = int(
+                        re.findall("_\d+", geomlayer_name_out)[0].replace("_", "")
+                    )
+                    evaldict[geomtype][geomlayer_name]["gpkg"] = gpd.read_file(
+                        geompath_output + geomlayer_name_out
+                    )
+    return evaldict

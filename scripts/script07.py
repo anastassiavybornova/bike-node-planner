@@ -17,14 +17,17 @@ import contextily as cx
 import re
 import glob
 import seaborn as sns
-
-# load custom functions
-exec(open(homepath + "/src/plot_func.py").read())
+import random
+random.seed(42)
 
 # define homepath variable (where is the qgis project saved?)
 homepath = QgsProject.instance().homePath()
 if homepath not in sys.path:
     sys.path.append(homepath)  # add project path to PATH
+
+# load custom functions
+exec(open(homepath + "/src/plot_func.py").read())
+exec(open(homepath + "/src/utils.py").read())
 
 # PATHS
 filepath_studyarea = homepath + "/data/input/studyarea/studyarea.gpkg"
@@ -38,61 +41,8 @@ for plot in preexisting_plots:
     except:
         pass
 
-# load evaluation data
-evaldict = {}
-
-for geomtype in [
-    "point",
-    # "linestring",
-    "polygon",
-]:
-    geompath_input = homepath + f"/data/input/{geomtype}/"
-    geompath_output = homepath + f"/data/output/{geomtype}/"
-    if os.path.exists(geompath_input):
-
-        geomlayers = os.listdir(geompath_input)
-        geomlayers = [g for g in geomlayers if not ("gpkg-wal" in g or "gpkg-shm" in g)]
-        evaldict[geomtype] = {}
-        # read in configs for this geometry type
-        config_geomtype = yaml.load(
-            open(homepath + f"/config/config-{geomtype}.yml"), Loader=yaml.FullLoader
-        )
-
-        for geomlayer in geomlayers:
-
-            geomlayer_name = geomlayer.replace(".gpkg", "")
-            evaldict[geomtype][geomlayer_name] = {}
-
-            if geomtype == "point":
-                files = os.listdir(geompath_output)
-                files = [f for f in files if not ("gpkg-wal" in f or "gpkg-shm" in f)]
-                geomlayer_name_out = [f for f in files if geomlayer_name in f][0]
-                bufferdistance = int(
-                    re.findall("_\d+", geomlayer_name_out)[0].replace("_", "")
-                )
-                evaldict[geomtype][geomlayer_name]["bufferdistance"] = bufferdistance
-                evaldict[geomtype][geomlayer_name]["gpkg_within"] = gpd.read_file(
-                    geompath_output + geomlayer_name + f"_within_{bufferdistance}.gpkg"
-                )
-                evaldict[geomtype][geomlayer_name]["gpkg_outside"] = gpd.read_file(
-                    geompath_output + geomlayer_name + f"_outside_{bufferdistance}.gpkg"
-                )
-
-            # not implemented yet
-            if geomtype == "linestring":
-                pass
-
-            if geomtype == "polygon":
-                files = os.listdir(geompath_output)
-                files = [f for f in files if not ("gpkg-wal" in f or "gpkg-shm" in f)]
-                geomlayer_name_out = [f for f in files if geomlayer_name in f][0]
-                evaldict[geomtype][geomlayer_name]["bufferdistance"] = int(
-                    re.findall("_\d+", geomlayer_name_out)[0].replace("_", "")
-                )
-                evaldict[geomtype][geomlayer_name]["gpkg"] = gpd.read_file(
-                    geompath_output + geomlayer_name_out
-                )
-
+# load evaldict
+evaldict = load_evaluation_data(homepath)
 
 # load colors configs (user defined, or if not: automated, or if not: generate now)
 config_colors = yaml.load(
@@ -119,122 +69,61 @@ network_edges = gpd.read_file(filepath_edges)
 ### READ IN STATS
 eval_stats = json.load(open(homepath + "/results/stats/stats_evaluation.json", "r"))
 
-fig, ax = plt.subplots(1, 1)
+### STUDY AREA (OUTPUT OF SCRIPT01)
+try:
+    plot_study_area(study_area, network_edges, homepath)
+    print("Plotted study area")
+except:
+    print("Failed to plot study area, passing")
 
-# plot study area
-study_area.plot(ax=ax, color=rgb2hex("250,181,127"), alpha=0.5, zorder=1)
-# plot network
-network_edges.plot(ax=ax, color="black", linewidth=1)
-cx.add_basemap(ax=ax, source=cx.providers.CartoDB.Voyager, crs=study_area.crs)
-
-ax.set_title("Study area & network")
-
-ax.set_axis_off()
-
-fig.savefig(
-    homepath + "/results/plots/studyarea_network.png", dpi=300, bbox_inches="tight"
-)
-
+### POINT AND POLYGON LAYERS (OUTPUT OF SCRIPT02)
 # for each polygon layer, plot the amounts of network within
-for k, v in evaldict["polygon"].items():
-
-    # k is the name of the layer
-    # v is a dict: v["gpkg"] contains the network _within_
-    #              v["bufferdistance"] contains the bufferdistance (in meters)
-    # plot in color config_colors[k]
-
-    # get stats on percent within
-    percent_within = np.round(
-        100
-        * eval_stats[k]["within"]
-        / (eval_stats[k]["outside"] + eval_stats[k]["within"]),
-        1,
-    )
-
-    # get bufferdistance
-    bufferdistance = v["bufferdistance"]
-
-    # plot
-    fig, ax = plt.subplots(1, 1)
-    network_edges.plot(
-        ax=ax,
-        color="#D3D3D3",
-        linewidth=0.8,
-        linestyle="solid",
-        zorder=0,
-    )
-    v["gpkg"].plot(
-        ax=ax,
-        color=rgb2hex(config_colors[k]),
-        linewidth=1.5,
-        zorder=1,
-        label=f"{percent_within}%",
-    )
-    ax.set_title(f"{k.capitalize()} within {bufferdistance}m from network")
-    ax.set_axis_off()
-    ax.legend(loc="lower right")
-
-    fig.savefig(homepath + f"/results/plots/{k}.png", dpi=300, bbox_inches="tight")
-
-    plt.close()
+for layerkey, layervalue in evaldict["polygon"].items():
+    try:
+        plot_polygon_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath)
+        print(f"Plotted {layerkey} polygon layer")
+    except:
+        print(f"Failed to plot {layerkey} polygon layer, passing")
 
 # for each point layer, plot points reached / unreached separately (colors!)
-for k, v in evaldict["point"].items():
+for layerkey, layervalue in evaldict["point"].items():
+    try:
+        plot_point_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath)
+        print(f"Plotted {layerkey} point layer")
+    except:
+        print(f"Failed to plot {layerkey} point layer, passing")
 
-    # k is the layername
-    # v is a dict: v["bufferdistance"], v["gpkg_within"], v["gpkg_without"]
+### SLOPES (OUTPUT OF SCRIPT03)
+try:
+    plot_slopes(homepath)
+    print("Plotted slopes")
+except:
+    print("Failed to plot slopes, passing")
 
-    # get stats on percent within / outside
+### COMPONENTS (OUTPUT OF SCRIPT04)
+try:
+    plot_components(homepath=homepath)
+    print("Plotted disconnected components")
+except:
+    print("Failed to plot disconnected components, passing")
 
-    percent_within = np.round(100 * eval_stats[k]["within"] / eval_stats[k]["total"], 1)
-
-    percent_outside = np.round(100 - percent_within, 1)
-
-    # get bufferdistance
-    bufferdistance = v["bufferdistance"]
-
-    fig, ax = plt.subplots(1, 1)
-    network_edges.plot(
-        ax=ax,
-        color="#D3D3D3",
-        linewidth=0.8,
-        linestyle="solid",
-        zorder=0,
+### EDGE LENGTHS (OUTPUT OF SCRIPT05)
+try:
+    plot_edge_lengths(
+        homepath=homepath, edge_classification_colors=edge_classification_colors
     )
+    print("Plotted edge lengths")
+except:
+    print("Failed to plot edge lengths, passing")
 
-    v["gpkg_outside"].plot(
-        ax=ax,
-        color=rgb2hex(config_colors[k]),
-        zorder=1,
-        label=f"Outside reach ({percent_outside}%)",
-        markersize=2,
-        alpha=0.3,
+### LOOP LENGTHS (OUTPUT OF SCRIPT06)
+try:
+    plot_loop_lengths(
+        homepath=homepath, loop_classification_colors=loop_classification_colors
     )
-
-    v["gpkg_within"].plot(
-        ax=ax,
-        color=rgb2hex(config_colors[k]),
-        zorder=2,
-        label=f"Within reach ({percent_within}%)",
-        markersize=2,
-    )
-    ax.set_title(f"{k.capitalize()} within {bufferdistance}m from network")
-    ax.set_axis_off()
-    ax.legend(loc="lower right")
-
-    fig.savefig(homepath + f"/results/plots/{k}.png", dpi=300, bbox_inches="tight")
-
-    plt.close()
-
-# Plot the edge length evaluation
-plot_edge_lengths(
-    homepath=homepath, edge_classification_colors=edge_classification_colors
-)
-
-# Plot the loop length evaluation
-plot_loop_lengths(
-    homepath=homepath, loop_classification_colors=loop_classification_colors
-)
+    print("Plotted loop lengths")
+except:
+    print("Failed to plot loop lengths, passing")
 
 print("Plots saved to /results/plots/")
 print("script07.py ended successfully.")
