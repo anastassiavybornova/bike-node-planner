@@ -32,6 +32,12 @@ config = yaml.load(
 )
 [loop_length_min, loop_length_max] = config["loop_length_range"]
 
+# display?
+config_display = yaml.load(
+    open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
+)
+display_loop_lengths = config_display["display_loop_lengths"]
+
 # load custom functions
 exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/eval_func.py").read())
@@ -103,28 +109,27 @@ for classification in loops.length_class.unique():
     fp = topo_folder + f"loops_{classification}.gpkg"
     loops[loops["length_class"] == classification].to_file(fp, index=False)
 
-layer_names = []
-for classification in loops.length_class.unique():
-    layer_name = classification.replace("_", " ") + " loops"
-    layer_names.append(layer_name)
-    fp = topo_folder + f"loops_{classification}.gpkg"
-    layer = QgsVectorLayer(fp, layer_name, "ogr")
-    QgsProject.instance().addMapLayer(layer)
-    draw_simple_polygon_layer(
-        layer_name,
-        color=loop_classification_colors[classification],
-        outline_color="0,0,0,0",
-        outline_width=0,
-    )
+if display_loop_lengths:
+    layer_names = []
+    for classification in loops.length_class.unique():
+        layer_name = classification.replace("_", " ") + " loops"
+        layer_names.append(layer_name)
+        fp = topo_folder + f"loops_{classification}.gpkg"
+        layer = QgsVectorLayer(fp, layer_name, "ogr")
+        QgsProject.instance().addMapLayer(layer)
+        draw_simple_polygon_layer(
+            layer_name,
+            color=loop_classification_colors[classification],
+            outline_color="0,0,0,0",
+            outline_width=0,
+        )
 
-group_name = "6 Loop lengths"
-group_layers(
-    group_name=group_name,
-    layer_names=layer_names,
-    remove_group_if_exists=True,
-)
-move_group(group_name)
+    group_name = "6 Loop lengths"
+    group_layers(
+        group_name=group_name,
+        layer_names=layer_names,
+        remove_group_if_exists=True,
+    )
+    move_group(group_name)
 
 print("script06.py ended successfully.")
-
-# TODO: summary (matplotlib) plots as part of current script05 /to be script 6/

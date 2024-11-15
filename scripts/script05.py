@@ -33,6 +33,12 @@ config = yaml.load(
 [ideal_length_lower, ideal_length_upper] = config["ideal_length_range"]
 max_length = config["max_length"]
 
+# display?
+config_display = yaml.load(
+    open(homepath + "/config/config-display.yml"), Loader=yaml.FullLoader
+)
+display_edge_lengths = config_display["display_edge_lengths"]
+
 # load custom functions
 exec(open(homepath + "/src/plot_func.py").read())
 exec(open(homepath + "/src/eval_func.py").read())
@@ -100,26 +106,27 @@ for classification in edges.length_class.unique():
     fp = topo_folder + f"edges_{classification}.gpkg"
     edges[edges["length_class"] == classification].to_file(fp, index=False)
 
-layer_names = []
-for classification in edges.length_class.unique():
-    layer_name = classification.replace("_", " ") + " edges"
-    layer_names.append(layer_name)
-    fp = topo_folder + f"edges_{classification}.gpkg"
-    layer = QgsVectorLayer(fp, layer_name, "ogr")
-    QgsProject.instance().addMapLayer(layer)
-    draw_simple_line_layer(
-        layer_name,
-        color=edge_classification_colors[classification],
-        line_width=1,
-        line_style="solid",  # TODO
-    )
+if display_edge_lengths:
+    layer_names = []
+    for classification in edges.length_class.unique():
+        layer_name = classification.replace("_", " ") + " edges"
+        layer_names.append(layer_name)
+        fp = topo_folder + f"edges_{classification}.gpkg"
+        layer = QgsVectorLayer(fp, layer_name, "ogr")
+        QgsProject.instance().addMapLayer(layer)
+        draw_simple_line_layer(
+            layer_name,
+            color=edge_classification_colors[classification],
+            line_width=1,
+            line_style="solid",  # TODO
+        )
 
-group_name = "5 Edge lengths"
-group_layers(
-    group_name=group_name,
-    layer_names=layer_names,
-    remove_group_if_exists=True,
-)
-move_group(group_name)
+    group_name = "5 Edge lengths"
+    group_layers(
+        group_name=group_name,
+        layer_names=layer_names,
+        remove_group_if_exists=True,
+    )
+    move_group(group_name)
 
 print("script05.py ended successfully.")
