@@ -307,6 +307,12 @@ if os.path.exists(dem_fp):
     # Turn off DEM layer
     turn_off_layers(["DEM terrain"])
 
+    # Collapse groups names other than the one just created
+    group_names = [group.name() for group in root.children() if group.nodeType() == 0]
+    group_names.remove(group_name)
+    for gn in group_names:
+        collapse_layer_group(gn)
+
     print("script03.py ended successfully.")
 else:
     print("No DEM input file found, skipping slope evaluation.")

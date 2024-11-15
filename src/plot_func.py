@@ -938,3 +938,25 @@ def plot_components(homepath):
     plt.close()
 
     return None
+
+
+def collapse_layer_group(group_name):
+
+    root = QgsProject.instance().layerTreeRoot()
+    nodes = root.children()
+
+    for n in nodes:
+        if isinstance(n, QgsLayerTreeGroup):
+            if n.isExpanded() == True and n.name() == group_name:
+                n.setExpanded(False)
+
+
+def expand_layer_group(group_name):
+
+    root = QgsProject.instance().layerTreeRoot()
+    nodes = root.children()
+
+    for n in nodes:
+        if isinstance(n, QgsLayerTreeGroup):
+            if n.name() == group_name and n.isExpanded() == False:
+                n.setExpanded(True)

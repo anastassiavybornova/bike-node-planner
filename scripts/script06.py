@@ -132,4 +132,10 @@ if display_loop_lengths:
     )
     move_group(group_name)
 
+    # Collapse previously created groups
+    group_names = [group.name() for group in root.children() if group.nodeType() == 0]
+    group_names.remove(group_name)
+    for gn in group_names:
+        collapse_layer_group(gn)
+
 print("script06.py ended successfully.")

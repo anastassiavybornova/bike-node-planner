@@ -171,7 +171,6 @@ for pl, label in zip(point_layers, labels):
 # evaluate polygon layers
 if evaldict["polygon"]:
     for k, v in evaldict["polygon"].items():
-        print(f"Evaluating {k}...")
         mydist = v["bufferdistance"]
         (input_name_current, output_name_current, res_current) = (
             evaluate_export_plot_poly(
@@ -222,5 +221,11 @@ layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().value
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
+
+# Collapse all groups except the main group just created
+group_names = [group.name() for group in root.children() if group.nodeType() == 0]
+group_names.remove(main_group_name)
+for gn in group_names:
+    collapse_layer_group(gn)
 
 print("script02.py ended successfully.")
