@@ -693,7 +693,7 @@ def render_heatmap(
     # layer = QgsProject.instance().mapLayersByName(layer_name)[0]
 
     clone = layer.clone()
-    clone.setName(layer_name + "_heatmap")
+    clone.setName(layer_name + " heatmap")
     QgsProject.instance().addMapLayer(clone)
 
     renderer = QgsHeatmapRenderer()
@@ -728,11 +728,13 @@ def find_largest_bbox(layers):
             bbox.combineExtentWith(layer.extent())
     return bbox
 
+
 ### PLOTTING FUNCTIONS FOR SUMMARY RESULTS (SCRIPT07)
 
+
 def plot_study_area(study_area, network_edges, homepath):
-    
-    fig, ax = plt.subplots(1, 1, figsize = (10,10))
+
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 
     # plot study area
     study_area.plot(ax=ax, color=rgb2hex("250,181,127"), alpha=0.5, zorder=1)
@@ -752,7 +754,10 @@ def plot_study_area(study_area, network_edges, homepath):
 
     return None
 
-def plot_polygon_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath):
+
+def plot_polygon_layer(
+    eval_stats, layerkey, layervalue, network_edges, config_colors, homepath
+):
 
     # layerkey is the name of the layer
     # layervalue is a dict: layervalue["gpkg"] contains the network _within_
@@ -771,7 +776,7 @@ def plot_polygon_layer(eval_stats, layerkey, layervalue, network_edges, config_c
     bufferdistance = layervalue["bufferdistance"]
 
     # plot
-    fig, ax = plt.subplots(1, 1, figsize = (10,10))
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     network_edges.plot(
         ax=ax,
         color="#D3D3D3",
@@ -790,27 +795,34 @@ def plot_polygon_layer(eval_stats, layerkey, layervalue, network_edges, config_c
     ax.set_axis_off()
     ax.legend(loc="lower right")
 
-    fig.savefig(homepath + f"/results/plots/{layerkey}.png", dpi=300, bbox_inches="tight")
+    fig.savefig(
+        homepath + f"/results/plots/{layerkey}.png", dpi=300, bbox_inches="tight"
+    )
 
     plt.close()
 
     return None
 
-def plot_point_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath):
+
+def plot_point_layer(
+    eval_stats, layerkey, layervalue, network_edges, config_colors, homepath
+):
 
     # layerkey is the layername
     # layervalue is a dict: layervalue["bufferdistance"], layervalue["gpkg_within"], layervalue["gpkg_without"]
 
     # get stats on percent within / outside
 
-    percent_within = np.round(100 * eval_stats[layerkey]["within"] / eval_stats[layerkey]["total"], 1)
+    percent_within = np.round(
+        100 * eval_stats[layerkey]["within"] / eval_stats[layerkey]["total"], 1
+    )
 
     percent_outside = np.round(100 - percent_within, 1)
 
     # get bufferdistance
     bufferdistance = layervalue["bufferdistance"]
 
-    fig, ax = plt.subplots(1, 1, figsize = (10,10))
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
     network_edges.plot(
         ax=ax,
         color="#D3D3D3",
@@ -839,11 +851,14 @@ def plot_point_layer(eval_stats, layerkey, layervalue, network_edges, config_col
     ax.set_axis_off()
     ax.legend(loc="lower right")
 
-    fig.savefig(homepath + f"/results/plots/{layerkey}.png", dpi=300, bbox_inches="tight")
+    fig.savefig(
+        homepath + f"/results/plots/{layerkey}.png", dpi=300, bbox_inches="tight"
+    )
 
     plt.close()
 
     return None
+
 
 def plot_slopes(homepath):
 
@@ -860,22 +875,20 @@ def plot_slopes(homepath):
     slope_colors = config_color["slope"]
     slope_colors = [rgb2hex(c) for c in slope_colors]
 
-
     edges_slope["bucket"] = pd.cut(
-        edges_slope.ave_slope,
-        slope_ranges,
-        include_lowest=True,
-        labels = [0, 1, 2, 3]
+        edges_slope.ave_slope, slope_ranges, include_lowest=True, labels=[0, 1, 2, 3]
     )
 
-    fig, ax = plt.subplots(1, 1, figsize = (10,10))
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 
     for i in range(4):
         if i < 3:
             my_label = f"{slope_ranges[i]}-{slope_ranges[i+1]}%"
         else:
             my_label = f">{slope_ranges[i]}%"
-        edges_slope[edges_slope.bucket==i].plot(ax=ax, color = slope_colors[i], label = my_label)
+        edges_slope[edges_slope.bucket == i].plot(
+            ax=ax, color=slope_colors[i], label=my_label
+        )
 
     ax.set_title("Average slope values")
     ax.set_axis_off()
@@ -887,11 +900,12 @@ def plot_slopes(homepath):
 
     return None
 
+
 def plot_components(homepath):
 
     comppath = homepath + "/data/output/network/components/"
-    comp_files = sorted([f for f in os.listdir(comppath) if f[-5:]==".gpkg"])
-    if len(comp_files)>0:
+    comp_files = sorted([f for f in os.listdir(comppath) if f[-5:] == ".gpkg"])
+    if len(comp_files) > 0:
         comp_idx = [int(re.findall("\d+", f)[0]) for f in comp_files]
         comp_dict = {}
         for file, idx in zip(comp_files, comp_idx):
@@ -906,16 +920,20 @@ def plot_components(homepath):
         for k, v in comp_colors.items():
             comp_colors[k] = rgb2hex(v)
 
-    fig, ax = plt.subplots(1,1, figsize = (10,10))
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
 
     for idx in comp_idx:
-        comp_dict[idx].plot(ax=ax, color = comp_colors[idx], label = f"Component {idx}")
+        comp_dict[idx].plot(ax=ax, color=comp_colors[idx], label=f"Component {idx}")
 
     ax.set_title("Disconnected components")
     ax.set_axis_off()
     ax.legend(loc="lower right")
 
-    fig.savefig(homepath + f"/results/plots/disconnected-components.png", dpi=300, bbox_inches="tight")
+    fig.savefig(
+        homepath + f"/results/plots/disconnected-components.png",
+        dpi=300,
+        bbox_inches="tight",
+    )
 
     plt.close()
 

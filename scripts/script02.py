@@ -159,8 +159,9 @@ for k, v in evaldict["point"].items():
 
 for pl, label in zip(point_layers, labels):
     render_heatmap(pl, label)
-    output_layers.append(label + "_heatmap")
+    output_layers.append(label + " heatmap")
 
+# print("test")
 # evaluate linestring layers
 # TODO
 # if evaldict["linestring"]:
@@ -170,6 +171,7 @@ for pl, label in zip(point_layers, labels):
 # evaluate polygon layers
 if evaldict["polygon"]:
     for k, v in evaldict["polygon"].items():
+        print(f"Evaluating {k}...")
         mydist = v["bufferdistance"]
         (input_name_current, output_name_current, res_current) = (
             evaluate_export_plot_poly(
