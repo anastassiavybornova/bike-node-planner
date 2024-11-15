@@ -8,8 +8,15 @@ Provide the following user settings by editing and saving the `.yml` files, foun
 
 **Optionally**, you can also customize the following default settings:
 
+For [script02](../docs/step06_run_evaluation.md#script02py-network-evaluation) outputs, 
 * in `config-colors-eval.yml`: colors used for plotting all evaluation layers from `/data/input/point/` and `/data/input/polygon/`
-* in `config-colors-slope.yml`: colors used for plotting the slope ranges
-* in `config-display.yml`: for each of the evaluation layers, decide whether they should be displayed in QGIS by default
+
+For [script03](../docs/step06_run_evaluation.md#script03py-elevation-slope) outputs,
 * in `config-slope.yml`: the segment length and the slope ranges used for computation of elevation for the network
+* in `config-colors-slope.yml`: colors used for plotting the slope ranges
+
+For [script05](../docs/step06_run_evaluation.md#script05py-edge-length-classification) and [script06](../docs/step06_run_evaluation.md#script06py-loop-length-classification):
 * in `config-topological-analysis.yml`: the length ranges for edge length analysis and loop length analysis
+
+For scripts 01-06:
+* in `config-display.yml`: for each of the evaluation layers, decide whether they should be displayed in QGIS by default
