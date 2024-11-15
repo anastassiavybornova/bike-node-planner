@@ -91,6 +91,8 @@ For each **polygon layer**, the BikeNodePlanner finds the parts of the network t
 
 You can explore the results of the evaluation by (de)selecting layers in the QGIS project. For example, if you have provided a polygon layer `nature.gpkg`, you can now select "Nature/Network in nature areas" within the "Evaluate network" layer to explore which parts of the network run through the nature layer. Or, if you have provided a point layer `museums.gpkg`, you can now select "Museums" within the "Evaluate network" layer to explore which museums within vs. outside reach (dark vs. light color) of the network.
 
+> **Note:** This script can take a few minutes to run, during which time QGIS will appear to have frozen ❄️ - no need to worry!
+
 <p align="center"><img alt="Output layer of script 02" src="../docs/screenshots/script02.png" width=80%></p>
 
 **Once you see the message `script02.py ended successfully`, you can move on to the next script.**
