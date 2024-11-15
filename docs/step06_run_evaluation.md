@@ -59,7 +59,7 @@ The BikeNodePlanner consists of several scripts, which have to be run in the spe
 
 ***
 
-<!-- ## `script00.py`: Sanity check of all input data
+<!-- ## `script00.py`: Checking input data
 
 script00 checks for correctness of all data. When you run this script, warnings, error messages, and instructions on how to correct your input data will be printed out in Python console. If needed, correct your input data and run the script00 again. -->
 
