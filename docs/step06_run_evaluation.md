@@ -59,17 +59,13 @@ The BikeNodePlanner consists of several scripts, which have to be run in the spe
 
 ***
 
-<!-- ## `script00.py`: Checking input data
+## `script00.py`: Checking input data
 
-script00 checks for correctness of all data. When you run this script, warnings, error messages, and instructions on how to correct your input data will be printed out in Python console. If needed, correct your input data and run the script00 again. -->
+script00 checks for correctness of all data. When you run this script, warnings, error messages, and instructions on how to correct your input data will be printed out in Python console. If needed, correct your input data and run the script00 again.
 
-<!-- **Once you see the message `All input data is correct`, you can move on to the next script, script01.** -->
+Once script00 has run successfully, you will see the message: `Done! You can now run script01.py.`
 
-<!-- **TODO insert screenshot**
-
-<p align="center"><img alt="Output of script 00" src="/docs/screenshots/script00.png" width=80%></p> -->
-
-<!-- *** -->
+<p align="center"><img alt="Output of script 00" src="../docs/screenshots/script00.png" width=80%></p>
 
 ## `script01.py`: Visualization of the study area
 
