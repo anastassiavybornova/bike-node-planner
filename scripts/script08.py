@@ -21,7 +21,7 @@ layout_dict = {
     "agriculture": ["agriculture areas", "Network in agriculture areas"],
     "nature": ["nature areas", "Network in nature areas"],
     "verify": ["verify areas", "Network in verify areas"],
-    "sommerhus": ["sommerhus areas", "Network in sommerhus areas"],
+    "summerhouse": ["summerhouse areas", "Network in summerhouse areas"],
     "culture": ["culture areas", "Network in culture areas"],
     "facilities": [
         "facility within reach",

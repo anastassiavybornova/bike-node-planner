@@ -4,7 +4,7 @@ Provide the following user settings by editing and saving the `.yml` files, foun
 
 * in `config.yml`: a projected CRS for your study area (default is set to "EPSG:25832" for Denmark)
 * in `config-point.yml`: distance thresholds (in meters) for each point layer in `/data/input/point/` (for the 3 example layers "facility", "poi", and "service", default is set to 100m, 750m and 1500m, respectively)
-* in `config-polygon.yml`: buffer distances (in meters) for each polygon layer in `/data/input/polygon/` (for the 5 example layers "agriculture", "culture", "nature", "sommerhus", and "verify", default is set to 50m, 100m, 200m and 250m, respectively)
+* in `config-polygon.yml`: buffer distances (in meters) for each polygon layer in `/data/input/polygon/` (for the 5 example layers "agriculture", "culture", "nature", "sommerhouse", and "verify", default is set to 50m, 100m, 200m and 250m, respectively)
 
 **Optionally**, you can also customize the following default settings:
 
