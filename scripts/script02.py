@@ -79,153 +79,162 @@ for geomtype in geomtypes:
         except:
             pass
 
-# define root
-root = QgsProject.instance().layerTreeRoot()
+if any(evaldict.values()): # if any of the "point", "polygon" dicts is non-empty,
+    
+    ### CREATE EVALUATION LAYER IN QGIS
 
-# make main group for layers
-main_group_name = "2 Evaluation"
+    # define root
+    root = QgsProject.instance().layerTreeRoot()
 
-# Check if group already exists
-for group in [child for child in root.children() if child.nodeType() == 0]:
-    if group.name() == main_group_name:
-        root.removeChildNode(group)
+    # make main group for layers
+    main_group_name = "2 Evaluation"
 
-# Initialize list of layers for layer grouping
-input_layers = []
-output_layers = []
+    # Check if group already exists
+    for group in [child for child in root.children() if child.nodeType() == 0]:
+        if group.name() == main_group_name:
+            root.removeChildNode(group)
 
-# load colors for plotting of evaluation layers, if available; if not, create own palette
-config_colors = yaml.load(
-    open(homepath + "/config/config-colors-eval.yml"), Loader=yaml.FullLoader
-)
+    # Initialize list of layers for layer grouping
+    input_layers = []
+    output_layers = []
 
-if not config_colors:
-    # get colors (as rgb strings) from seaborn colorblind palette
-    layernames = sorted([item for v in evaldict.values() for item in v.keys()])
-    layercolors = sns.color_palette("colorblind", len(layernames))
-    config_colors = {}
-    for k, v in zip(layernames, layercolors):
-        config_colors[k] = (
-            str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
-        )
-    # and save as separate yml
-    with open(homepath + "/config/config-colors-eval-auto.yml", "w") as opened_file:
-        yaml.dump(config_colors, opened_file, indent=6)
+    # load colors for plotting of evaluation layers, if available; if not, create own palette
+    config_colors = yaml.load(
+        open(homepath + "/config/config-colors-eval.yml"), Loader=yaml.FullLoader
+    )
 
-# initialize stats results dictionary
-res = {}
+    if not config_colors:
+        # get colors (as rgb strings) from seaborn colorblind palette
+        layernames = sorted([item for v in evaldict.values() for item in v.keys()])
+        layercolors = sns.color_palette("colorblind", len(layernames))
+        config_colors = {}
+        for k, v in zip(layernames, layercolors):
+            config_colors[k] = (
+                str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
+            )
+        # and save as separate yml
+        with open(homepath + "/config/config-colors-eval-auto.yml", "w") as opened_file:
+            yaml.dump(config_colors, opened_file, indent=6)
 
-# evaluate point layers
-if evaldict["point"]:
-    for k, v in evaldict["point"].items():
-        # create darker value for reached items
-        rgb_shaded = rgb_shade(config_colors[k])
-        mydist = v["bufferdistance"]
-        (
-            output_name_within_current,
-            output_name_outside_current,
-            res_current,
-        ) = evaluate_export_plot_point(
-            input_fp=v["filepath"],
-            within_reach_output_fp=v["filepath"]
-            .replace("input", "output")
-            .replace(".gpkg", f"_within_{mydist}.gpkg"),
-            outside_reach_output_fp=v["filepath"]
-            .replace("input", "output")
-            .replace(".gpkg", f"_outside_{mydist}.gpkg"),
-            network_edges=edges,
-            dist=mydist,
-            name=k,
-            output_color_reached=config_colors[k],
-            output_color_not_reached=rgb_shaded,
-            display_output=config_display["display_evaluation_output"],
-            output_size_reached=4,
-            output_size_not_reached=2,
-            output_alpha="255",
-        )
+    # initialize stats results dictionary
+    res = {}
 
-        output_layers.append(output_name_within_current)
-        output_layers.append(output_name_outside_current)
-        res = res | res_current
-
-point_layers = []
-labels = []
-
-for k, v in evaldict["point"].items():
-    input_fp = v["filepath"]
-    point_layer = QgsVectorLayer(input_fp, k, "ogr")
-    point_layers.append(point_layer)
-    labels.append(k)
-
-for pl, label in zip(point_layers, labels):
-    render_heatmap(pl, label)
-    output_layers.append(label + " heatmap")
-
-# print("test")
-# evaluate linestring layers
-# TODO
-# if evaldict["linestring"]:
-#     # not implemented
-#     pass
-
-# evaluate polygon layers
-if evaldict["polygon"]:
-    for k, v in evaldict["polygon"].items():
-        mydist = v["bufferdistance"]
-        (input_name_current, output_name_current, res_current) = (
-            evaluate_export_plot_poly(
+    # evaluate point layers
+    if evaldict["point"]:
+        for k, v in evaldict["point"].items():
+            # create darker value for reached items
+            rgb_shaded = rgb_shade(config_colors[k])
+            mydist = v["bufferdistance"]
+            (
+                output_name_within_current,
+                output_name_outside_current,
+                res_current,
+            ) = evaluate_export_plot_point(
                 input_fp=v["filepath"],
-                output_fp=v["filepath"]
+                within_reach_output_fp=v["filepath"]
                 .replace("input", "output")
-                .replace(".gpkg", f"_{mydist}.gpkg"),
+                .replace(".gpkg", f"_within_{mydist}.gpkg"),
+                outside_reach_output_fp=v["filepath"]
+                .replace("input", "output")
+                .replace(".gpkg", f"_outside_{mydist}.gpkg"),
                 network_edges=edges,
                 dist=mydist,
                 name=k,
-                type_col="types",
-                fill_color_rgb=config_colors[k],
-                outline_color_rgb=config_colors[k],
-                line_color_rgb=config_colors[k],
-                line_width=1,
-                line_style="solid",
-                plot_categorical=False,
-                fill_alpha="100",
-                outline_alpha="200",
-                display_input=config_display["display_evaluation_input"],
+                output_color_reached=config_colors[k],
+                output_color_not_reached=rgb_shaded,
                 display_output=config_display["display_evaluation_output"],
+                output_size_reached=4,
+                output_size_not_reached=2,
+                output_alpha="255",
             )
-        )
-        input_layers.append(input_name_current)
-        output_layers.append(output_name_current)
-        res = res | res_current
 
-# save results of summary statistics
-with open(homepath + "/results/stats/stats_evaluation.json", "w") as opened_file:
-    json.dump(res, opened_file, indent=6)
+            output_layers.append(output_name_within_current)
+            output_layers.append(output_name_outside_current)
+            res = res | res_current
 
-### VISUALIZATION (order layers)
-all_layers = input_layers + output_layers
+    point_layers = []
+    labels = []
 
-main_group = root.insertGroup(0, main_group_name)
+    for k, v in evaldict["point"].items():
+        input_fp = v["filepath"]
+        point_layer = QgsVectorLayer(input_fp, k, "ogr")
+        point_layers.append(point_layer)
+        labels.append(k)
 
-# evaldict[geomtype].keys() contains all the group layers (geomtype is one of "point", "polygon")
-for geomtype, geomdict in evaldict.items():
-    for sublayer in geomdict.keys():
-        layernames = [n for n in all_layers if sublayer in n or sublayer.lower() in n]
-        sub_group = main_group.addGroup(sublayer)
-        for n in layernames:
-            add_layer_to_group(n, sub_group)
+    for pl, label in zip(point_layers, labels):
+        render_heatmap(pl, label)
+        output_layers.append(label + " heatmap")
 
-move_group(main_group_name)
+    # print("test")
+    # evaluate linestring layers
+    # TODO
+    # if evaldict["linestring"]:
+    #     # not implemented
+    #     pass
 
-layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+    # evaluate polygon layers
+    if evaldict["polygon"]:
+        for k, v in evaldict["polygon"].items():
+            mydist = v["bufferdistance"]
+            (input_name_current, output_name_current, res_current) = (
+                evaluate_export_plot_poly(
+                    input_fp=v["filepath"],
+                    output_fp=v["filepath"]
+                    .replace("input", "output")
+                    .replace(".gpkg", f"_{mydist}.gpkg"),
+                    network_edges=edges,
+                    dist=mydist,
+                    name=k,
+                    type_col="types",
+                    fill_color_rgb=config_colors[k],
+                    outline_color_rgb=config_colors[k],
+                    line_color_rgb=config_colors[k],
+                    line_width=1,
+                    line_style="solid",
+                    plot_categorical=False,
+                    fill_alpha="100",
+                    outline_alpha="200",
+                    display_input=config_display["display_evaluation_input"],
+                    display_output=config_display["display_evaluation_output"],
+                )
+            )
+            input_layers.append(input_name_current)
+            output_layers.append(output_name_current)
+            res = res | res_current
 
-if "Basemap" in layer_names:
-    move_basemap_back(basemap_name="Basemap")
+    # save results of summary statistics
+    with open(homepath + "/results/stats/stats_evaluation.json", "w") as opened_file:
+        json.dump(res, opened_file, indent=6)
 
-# Collapse all groups except the main group just created
-group_names = [group.name() for group in root.children() if group.nodeType() == 0]
-group_names.remove(main_group_name)
-for gn in group_names:
-    collapse_layer_group(gn)
+    ### VISUALIZATION (order layers)
+    all_layers = input_layers + output_layers
 
-print("script02.py ended successfully.")
+    main_group = root.insertGroup(0, main_group_name)
+
+    # evaldict[geomtype].keys() contains all the group layers (geomtype is one of "point", "polygon")
+    for geomtype, geomdict in evaldict.items():
+        for sublayer in geomdict.keys():
+            layernames = [n for n in all_layers if sublayer in n or sublayer.lower() in n]
+            sub_group = main_group.addGroup(sublayer)
+            for n in layernames:
+                add_layer_to_group(n, sub_group)
+
+    move_group(main_group_name)
+
+    layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+
+    if "Basemap" in layer_names:
+        move_basemap_back(basemap_name="Basemap")
+
+    # Collapse all groups except the main group just created
+    group_names = [group.name() for group in root.children() if group.nodeType() == 0]
+    group_names.remove(main_group_name)
+    for gn in group_names:
+        collapse_layer_group(gn)
+    print("Evaluation layer created.")
+
+### MESSAGE IN CASE NO EVAL DATA IS PROVIDED
+else:
+    print("No point or polygon files provided, will not run evaluation in script02.")
+
+print("script02.py ended.")
