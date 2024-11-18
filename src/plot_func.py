@@ -960,3 +960,11 @@ def expand_layer_group(group_name):
         if isinstance(n, QgsLayerTreeGroup):
             if n.name() == group_name and n.isExpanded() == False:
                 n.setExpanded(True)
+
+
+def remove_existing_group(group_name):
+
+    root = QgsProject.instance().layerTreeRoot()
+    for group in [child for child in root.children() if child.nodeType() == 0]:
+        if group.name() == group_name:
+            root.removeChildNode(group)
