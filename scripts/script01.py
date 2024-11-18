@@ -45,7 +45,7 @@ display_technical = config_display["display_technical"]
 # set to projected CRS
 QgsProject.instance().setCrs(QgsCoordinateReferenceSystem(proj_crs))
 
-# Add basemap
+# Remove existing layers
 remove_existing_layers(
     [
         "Basemap",
@@ -56,6 +56,12 @@ remove_existing_layers(
         "Network nodes (raw data)",
     ]
 )
+
+# Remove existing group
+group_name = "1 Raw data"
+remove_existing_group(group_name)
+
+# Add basemap
 epsg = proj_crs.replace(":", "")
 url = f"type=xyz&url=https://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png&zmax=19&zmin=0&crs={epsg}"
 basemap = QgsRasterLayer(url, "Basemap", "wms")
@@ -64,24 +70,7 @@ if basemap.isValid():
 root = QgsProject.instance().layerTreeRoot()
 root.insertLayer(-1, basemap)
 
-# Add study area (if requested)
-if display_studyarea and os.path.exists(filepath_study):
-
-    sa_layer = QgsVectorLayer(filepath_study, "Study area", "ogr")
-    if not sa_layer.isValid():
-        print("Study area layer failed to load!")
-    else:
-        QgsProject.instance().addMapLayer(sa_layer)
-        draw_simple_polygon_layer(
-            "Study area",
-            color="250,181,127,128",
-            outline_color="black",
-            outline_width=0.5,
-        )
-    zoom_to_layer("Study area")
-
-
-# Make sure that network extent is not larger than study area
+# Make sure that crs matches
 edges = gpd.read_file(filepath_edges)
 gdf_studyarea = gpd.read_file(filepath_study)
 assert (
@@ -93,13 +82,17 @@ if display_network and os.path.exists(filepath_edges):
     if not edge_layer.isValid():
         print("Edge layer failed to load!")
     else:
-        QgsProject.instance().addMapLayer(edge_layer)
+        QgsProject.instance().addMapLayer(edge_layer, False)
+        add_layer_to_position(edge_layer, -1)
         draw_simple_line_layer(
             "Network edges",
             color="0,0,0,180",
             line_width=0.7,
             line_style="solid",
         )
+
+        # move_layer("Network edges", position=-2)
+
     # node_layer = QgsVectorLayer(filepath_nodes_studyarea, "Network nodes", "ogr")
     # if not node_layer.isValid():
     #     print("Node layer failed to load!")
@@ -112,6 +105,23 @@ if display_network and os.path.exists(filepath_edges):
     #         outline_width=0.5,
     #         marker_size=3,
     #     )
+
+# Add study area (if requested)
+if display_studyarea and os.path.exists(filepath_study):
+
+    sa_layer = QgsVectorLayer(filepath_study, "Study area", "ogr")
+    if not sa_layer.isValid():
+        print("Study area layer failed to load!")
+    else:
+        QgsProject.instance().addMapLayer(sa_layer, False)
+        add_layer_to_position(sa_layer, -1)
+        draw_simple_polygon_layer(
+            "Study area",
+            color="250,181,127,128",
+            outline_color="black",
+            outline_width=0.5,
+        )
+        zoom_to_layer("Study area")
 
 if display_technical and os.path.exists(fp_edges_raw) and os.path.exists(fp_nodes_raw):
 
@@ -180,8 +190,12 @@ os.makedirs(homepath + "/results/", exist_ok=True)
 for subfolder in ["plots", "stats", "pdf"]:
     os.makedirs(homepath + f"/results/{subfolder}", exist_ok=True)
 
-layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
+# Collapse all groups
+group_names = [group.name() for group in root.children() if group.nodeType() == 0]
+for gn in group_names:
+    collapse_layer_group(gn)
 
+layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
 if "Basemap" in layer_names:
     move_basemap_back(basemap_name="Basemap")
