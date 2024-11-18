@@ -133,3 +133,5 @@ for layout_name, layout_layer_names in layout_dict.items():
         image_export_settings.cropToContents = True
         image_export_settings.dpi = 300
         exporter.exportToImage(img_path, image_export_settings)
+
+print("script08.py ended successfully.")
