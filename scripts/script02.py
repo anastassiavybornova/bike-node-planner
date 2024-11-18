@@ -80,8 +80,8 @@ for geomtype in geomtypes:
         except:
             pass
 
-if any(evaldict.values()): # if any of the "point", "polygon" dicts is non-empty,
-    
+if any(evaldict.values()):  # if any of the "point", "polygon" dicts is non-empty,
+
     ### CREATE EVALUATION LAYER IN QGIS
 
     # define root
@@ -90,10 +90,8 @@ if any(evaldict.values()): # if any of the "point", "polygon" dicts is non-empty
     # make main group for layers
     main_group_name = "2 Evaluation"
 
-    # Check if group already exists
-    for group in [child for child in root.children() if child.nodeType() == 0]:
-        if group.name() == main_group_name:
-            root.removeChildNode(group)
+    # Remove group if already exists
+    remove_existing_group(main_group_name)
 
     # Initialize list of layers for layer grouping
     input_layers = []
@@ -211,7 +209,9 @@ if any(evaldict.values()): # if any of the "point", "polygon" dicts is non-empty
     # evaldict[geomtype].keys() contains all the group layers (geomtype is one of "point", "polygon")
     for geomtype, geomdict in evaldict.items():
         for sublayer in geomdict.keys():
-            layernames = [n for n in all_layers if sublayer in n or sublayer.lower() in n]
+            layernames = [
+                n for n in all_layers if sublayer in n or sublayer.lower() in n
+            ]
             sub_group = main_group.addGroup(sublayer)
             for n in layernames:
                 add_layer_to_group(n, sub_group)
