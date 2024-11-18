@@ -315,6 +315,9 @@ if os.path.exists(dem_fp):
 
     print("script03.py ended successfully.")
 else:
+    # if file exists from previous runs
+    if os.path.exists(stats_path):
+        os.remove(stats_path)
     print("No DEM input file found, skipping slope evaluation.")
     print(
         "Please provide an input file dem.tif in the data/input/dem folder if you want to evaluate the network slope."
