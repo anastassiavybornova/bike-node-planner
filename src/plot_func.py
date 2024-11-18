@@ -969,3 +969,10 @@ def move_layer(layer_name, position):
 
     # remove original
     root.removeLayer(layer)
+
+
+def add_layer_to_position(layer, position):
+
+    root = QgsProject.instance().layerTreeRoot()
+
+    root.insertLayer(position, layer)
