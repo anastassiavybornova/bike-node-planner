@@ -113,7 +113,7 @@ if display_network and os.path.exists(filepath_edges):
     #         marker_size=3,
     #     )
 
-if display_technical and os.path.exists(fp_edges_raw):
+if display_technical and os.path.exists(fp_edges_raw) and os.path.exists(fp_nodes_raw):
 
     # read in raw nodes and edges to check CRS for plotting
     edges_raw = gpd.read_file(fp_edges_raw)
