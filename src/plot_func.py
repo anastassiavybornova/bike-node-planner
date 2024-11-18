@@ -46,25 +46,6 @@ def rgb_shade(rgb_string, shade=0.6):
     return rgb_shaded_string
 
 
-def move_study_area_front(layer_name="Study area"):
-    # get basemap layer
-    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
-
-    # clone
-    cloned_layer = layer.clone()
-
-    # add clone to instance, but not map/TOC
-    QgsProject.instance().addMapLayer(cloned_layer, False)
-
-    root = QgsProject.instance().layerTreeRoot()
-
-    # insert at bottom of TOC
-    root.insertLayer(0, cloned_layer)
-
-    # remove original
-    root.removeLayer(layer)
-
-
 def move_group(group_name, position=0):
     root = QgsProject.instance().layerTreeRoot()
 
@@ -968,3 +949,23 @@ def remove_existing_group(group_name):
     for group in [child for child in root.children() if child.nodeType() == 0]:
         if group.name() == group_name:
             root.removeChildNode(group)
+
+
+def move_layer(layer_name, position):
+
+    # get basemap layer
+    layer = QgsProject.instance().mapLayersByName(layer_name)[0]
+
+    # clone
+    cloned_layer = layer.clone()
+
+    # add clone to instance, but not map/TOC
+    QgsProject.instance().addMapLayer(cloned_layer, False)
+
+    root = QgsProject.instance().layerTreeRoot()
+
+    # insert at bottom of TOC
+    root.insertLayer(position, cloned_layer)
+
+    # remove original
+    root.removeLayer(layer)
