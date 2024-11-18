@@ -44,30 +44,33 @@ for plot in preexisting_plots:
 # load evaldict
 evaldict = load_evaluation_data(homepath)
 
-# load colors configs (user defined, or if not: automated, or if not: generate now)
-config_colors = yaml.load(
-    open(homepath + "/config/config-colors-eval.yml"), Loader=yaml.FullLoader
-)
-if not config_colors:
+if any(evaldict.values()):
+    # load colors configs (user defined, or if not: automated, or if not: generate now)
     config_colors = yaml.load(
-        open(homepath + "/config/config-colors-eval-auto.yml"), Loader=yaml.FullLoader
+        open(homepath + "/config/config-colors-eval.yml"), Loader=yaml.FullLoader
     )
-if not config_colors:
-    # get colors (as rgb strings) from seaborn colorblind palette
-    layernames = sorted([item for v in evaldict.values() for item in v.keys()])
-    layercolors = sns.color_palette("colorblind", len(layernames))
-    config_colors = {}
-    for k, v in zip(layernames, layercolors):
-        config_colors[k] = (
-            str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
+    if not config_colors:
+        config_colors = yaml.load(
+            open(homepath + "/config/config-colors-eval-auto.yml"), Loader=yaml.FullLoader
         )
+    if not config_colors:
+        # get colors (as rgb strings) from seaborn colorblind palette
+        layernames = sorted([item for v in evaldict.values() for item in v.keys()])
+        layercolors = sns.color_palette("colorblind", len(layernames))
+        config_colors = {}
+        for k, v in zip(layernames, layercolors):
+            config_colors[k] = (
+                str([int(rgba * 255) for rgba in v]).replace("[", "").replace("]", "")
+            )
 
 ### READ IN NETWORK DATA
 study_area = gpd.read_file(filepath_studyarea)
 network_edges = gpd.read_file(filepath_edges)
 
 ### READ IN STATS
-eval_stats = json.load(open(homepath + "/results/stats/stats_evaluation.json", "r"))
+eval_path = homepath + "/results/stats/stats_evaluation.json"
+if os.path.exists(eval_path):
+    eval_stats = json.load(open(eval_path, "r"))
 
 ### STUDY AREA (OUTPUT OF SCRIPT01)
 try:
@@ -78,27 +81,30 @@ except:
 
 ### POINT AND POLYGON LAYERS (OUTPUT OF SCRIPT02)
 # for each polygon layer, plot the amounts of network within
-for layerkey, layervalue in evaldict["polygon"].items():
-    try:
-        plot_polygon_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath)
-        print(f"Plotted {layerkey} polygon layer")
-    except:
-        print(f"Failed to plot {layerkey} polygon layer, passing")
+if evaldict["polygon"]:
+    for layerkey, layervalue in evaldict["polygon"].items():
+        try:
+            plot_polygon_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath)
+            print(f"Plotted {layerkey} polygon layer")
+        except:
+            print(f"Failed to plot {layerkey} polygon layer, passing")
 
 # for each point layer, plot points reached / unreached separately (colors!)
-for layerkey, layervalue in evaldict["point"].items():
-    try:
-        plot_point_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath)
-        print(f"Plotted {layerkey} point layer")
-    except:
-        print(f"Failed to plot {layerkey} point layer, passing")
+if evaldict["point"]:
+    for layerkey, layervalue in evaldict["point"].items():
+        try:
+            plot_point_layer(eval_stats, layerkey, layervalue, network_edges, config_colors, homepath)
+            print(f"Plotted {layerkey} point layer")
+        except:
+            print(f"Failed to plot {layerkey} point layer, passing")
 
 ### SLOPES (OUTPUT OF SCRIPT03)
-try:
-    plot_slopes(homepath)
-    print("Plotted slopes")
-except:
-    print("Failed to plot slopes, passing")
+if os.path.exists(homepath + "/data/output/elevation/edges_slope.gpkg"):
+    try:
+        plot_slopes(homepath)
+        print("Plotted slopes")
+    except:
+        print("Failed to plot slopes, passing")
 
 ### COMPONENTS (OUTPUT OF SCRIPT04)
 try:
