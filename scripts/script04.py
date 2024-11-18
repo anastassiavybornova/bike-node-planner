@@ -56,7 +56,6 @@ graph_file = homepath + "/data/output/network/network_graph.pickle"
 stats_path = homepath + "/results/stats/stats_network.json"  # store output here
 
 # load data
-# nodes = gpd.read_file(filepath_nodes_input)
 edges_in = gpd.read_file(filepath_edges_input)
 
 # convert to networkx object with momepy
@@ -112,9 +111,6 @@ nodes.to_file(filepath_node_output, mode="w")
 
 with open(graph_file, "wb") as f:
     pickle.dump(G, f, pickle.HIGHEST_PROTOCOL)
-# # to read back in:
-# with open(graph_file, 'rb') as f:
-#     G = pickle.load(f)
 
 ### save comp edges as SEPARATE files (for plotting)
 comppath = homepath + "/data/output/network/components/"
@@ -180,8 +176,7 @@ if display_disconnected_components:
 layer_names = [layer.name() for layer in QgsProject.instance().mapLayers().values()]
 
 turn_off_layer_names = [
-    "Network edges",
-    # "Network nodes"
+    "Network edges"
 ]
 
 turn_off_layer_names = [t for t in turn_off_layer_names if t in layer_names]
