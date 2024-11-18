@@ -10,6 +10,7 @@ import seaborn as sns
 from ast import literal_eval
 from qgis.core import *
 import warnings
+import shutil
 
 warnings.filterwarnings("ignore")
 
@@ -202,10 +203,6 @@ if any(evaldict.values()): # if any of the "point", "polygon" dicts is non-empty
             output_layers.append(output_name_current)
             res = res | res_current
 
-    # save results of summary statistics
-    with open(homepath + "/results/stats/stats_evaluation.json", "w") as opened_file:
-        json.dump(res, opened_file, indent=6)
-
     ### VISUALIZATION (order layers)
     all_layers = input_layers + output_layers
 
@@ -233,8 +230,16 @@ if any(evaldict.values()): # if any of the "point", "polygon" dicts is non-empty
         collapse_layer_group(gn)
     print("Evaluation layer created.")
 
+    # save results of summary statistics
+    with open(homepath + "/results/stats/stats_evaluation.json", "w") as opened_file:
+        json.dump(res, opened_file, indent=6)
+
 ### MESSAGE IN CASE NO EVAL DATA IS PROVIDED
 else:
+    # remove previous eval data
+    evalpath = homepath + "/results/stats/stats_evaluation.json"
+    if os.path.exists(evalpath):
+        os.remove(evalpath)
     print("No point or polygon files provided, will not run evaluation in script02.")
 
 print("script02.py ended.")
