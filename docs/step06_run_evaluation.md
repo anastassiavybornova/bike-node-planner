@@ -38,7 +38,7 @@ In QGIS,
 9. Once you see the message `Script XXX ended successfully` in the console window, save the project (disquette icon or `cmd+s`). You can now explore the outputs of the script; use the `Layer overview` to navigate between different layers.
 10. To get more information on a particular feature on the map, use the ["Identify features"](https://docs.qgis.org/3.34/en/docs/user_manual/introduction/general_tools.html#identify) tool in QGIS.
 
-<p align="center"><img alt="Running the scripts in the QGIS Python console" src="../docs/screenshots/qgis-run.png" width=95%></p>
+<p align="center"><img alt="Running the scripts in the QGIS Python console" src="../docs/screenshots/qgis-overview.jpeg" width=95%></p>
 
 ## Troubleshooting
 
