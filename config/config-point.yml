@@ -5,5 +5,5 @@
 # and X is the distance threshold in meters.
 # for example:
 "facility": 100
-"poi": 750
-"service": 1500
+"service": 750
+"poi": 1500
