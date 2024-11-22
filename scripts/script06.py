@@ -78,7 +78,7 @@ degree_histogram = nx.degree_histogram(G)
 nodes, edges = momepy.nx_to_gdf(net=G, points=True, lines=True)
 
 # ### Visualization
-remove_existing_layers(["too short loops", "ideal range loops", "too long loops"])
+remove_existing_layers(["Too short loops", "Ideal range loops", "Too long loops"])
 
 ### Classify loop lengths
 
@@ -113,6 +113,7 @@ if display_loop_lengths:
     layer_names = []
     for classification in loops.length_class.unique():
         layer_name = classification.replace("_", " ") + " loops"
+        layer_name = layer_name[0].upper() + layer_name[1:]
         layer_names.append(layer_name)
         fp = topo_folder + f"loops_{classification}.gpkg"
         layer = QgsVectorLayer(fp, layer_name, "ogr")

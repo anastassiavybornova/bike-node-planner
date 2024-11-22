@@ -67,7 +67,8 @@ for geomtype in geomtypes:
 
 # remove existing layers...
 eval_layers = [item for v in evaldict.values() for item in v]
-remove_existing_layers(eval_layers)
+eval_layers_capitalized = [l.title() for l in eval_layers]
+remove_existing_layers(eval_layers_capitalized)
 
 # remove existing OUTPUT files, if any
 for geomtype in geomtypes:
@@ -105,6 +106,7 @@ if any(evaldict.values()):  # if any of the "point", "polygon" dicts is non-empt
     if not config_colors:
         # get colors (as rgb strings) from seaborn colorblind palette
         layernames = sorted([item for v in evaldict.values() for item in v.keys()])
+        # layer_names_capitalized = [l.title() for l in layernames]
         layercolors = sns.color_palette("colorblind", len(layernames))
         config_colors = {}
         for k, v in zip(layernames, layercolors):
@@ -161,8 +163,8 @@ if any(evaldict.values()):  # if any of the "point", "polygon" dicts is non-empt
         labels.append(k)
 
     for pl, label in zip(point_layers, labels):
-        render_heatmap(pl, label)
-        output_layers.append(label + " heatmap")
+        render_heatmap(pl, label.title())
+        output_layers.append(label.title() + " heatmap")
 
     # print("test")
     # evaluate linestring layers
@@ -210,7 +212,9 @@ if any(evaldict.values()):  # if any of the "point", "polygon" dicts is non-empt
     for geomtype, geomdict in evaldict.items():
         for sublayer in geomdict.keys():
             layernames = [
-                n for n in all_layers if sublayer in n or sublayer.lower() in n
+                n
+                for n in all_layers
+                if sublayer in n or sublayer.lower() in n or sublayer.title() in n
             ]
             sub_group = main_group.addGroup(sublayer)
             for n in layernames:

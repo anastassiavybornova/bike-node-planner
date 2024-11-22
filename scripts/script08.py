@@ -18,30 +18,30 @@ export = True
 # NOTE Fill out layout dictionary with layout name/types as keys and the list of all layers that should be displayed in the layout as values
 layout_dict = {
     "input_data": ["Study area", "Network edges"],
-    "agriculture": ["agriculture areas", "Network in agriculture areas"],
-    "nature": ["nature areas", "Network in nature areas"],
-    "verify": ["verify areas", "Network in verify areas"],
-    "summerhouse": ["summerhouse areas", "Network in summerhouse areas"],
-    "culture": ["culture areas", "Network in culture areas"],
+    "agriculture": ["Agriculture areas", "Network in agriculture areas"],
+    "nature": ["Nature areas", "Network in nature areas"],
+    "verify": ["Verify areas", "Network in verify areas"],
+    "summerhouse": ["Summerhouse areas", "Network in summerhouse areas"],
+    "culture": ["Culture areas", "Network in culture areas"],
     "facilities": [
-        "facility within reach",
-        "facility outside reach",
+        "Facility within reach",
+        "Facility outside reach",
     ],
     "services": [
-        "service within reach",
-        "service outside reach",
+        "Service within reach",
+        "Service outside reach",
     ],
     "points_of_interest": [
-        "poi within reach",
-        "poi outside reach",
+        "Poi within reach",
+        "Poi outside reach",
     ],
     "edge_length": [
-        "too long edges",
-        "too short edges",
-        "ideal range edges",
-        "above ideal edges",
+        "Too long edges",
+        "Too short edges",
+        "Ideal range edges",
+        "Above ideal edges",
     ],
-    "loop_length": ["too long loops", "too short loops", "ideal range loops"],
+    "loop_length": ["Too long loops", "Too short loops", "Ideal range loops"],
     "slope": ["Segments slope"],
 }
 

@@ -81,10 +81,10 @@ nodes, edges = momepy.nx_to_gdf(net=G, points=True, lines=True)
 # ### Visualization
 remove_existing_layers(
     [
-        "too short edges",
-        "ideal range edges",
-        "above ideal edges",
-        "too long edges",
+        "Too short edges",
+        "Ideal range edges",
+        "Above ideal edges",
+        "Too long edges",
     ]
 )
 
@@ -110,6 +110,7 @@ if display_edge_lengths:
     layer_names = []
     for classification in edges.length_class.unique():
         layer_name = classification.replace("_", " ") + " edges"
+        layer_name = layer_name[0].upper() + layer_name[1:]
         layer_names.append(layer_name)
         fp = topo_folder + f"edges_{classification}.gpkg"
         layer = QgsVectorLayer(fp, layer_name, "ogr")
