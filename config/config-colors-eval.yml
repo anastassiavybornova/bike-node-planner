@@ -6,3 +6,13 @@
 # "nature": "0,128,0"
 # unless you provide custom colors for all layers, 
 # the BikeNodePlanner will generate colors automatically.
+
+
+# agriculture: 221, 170, 51 # yellow
+# culture: 136, 34, 85 # wine
+# facility: 0, 119, 187 # blue
+# nature: 17, 119, 51 # green
+# poi: 51, 187, 238 # cyan
+# service: 0, 153, 136 # teal
+# summerhouse: 204, 102, 119 # rose
+# verify: 238, 119, 51 # orange

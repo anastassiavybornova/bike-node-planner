@@ -106,7 +106,7 @@ def evaluate_export_plot_point(
     output_layer_name_outside = None
 
     if display_output:
-        output_layer_name_outside = f"{name} outside reach"
+        output_layer_name_outside = f"{name.title()} outside reach"
         vlayer_outside = QgsVectorLayer(
             outside_reach_output_fp, output_layer_name_outside, "ogr"
         )
@@ -118,7 +118,7 @@ def evaluate_export_plot_point(
             outline_width=0,
         )
 
-        output_layer_name_within = f"{name} within reach"
+        output_layer_name_within = f"{name.title()} within reach"
         vlayer_within = QgsVectorLayer(
             within_reach_output_fp, output_layer_name_within, "ogr"
         )
@@ -211,7 +211,7 @@ def evaluate_export_plot_poly(
 
     # plot
     if display_input:
-        input_layer_name = f"{name} areas"
+        input_layer_name = f"{name.title()} areas"
 
         vlayer_in = QgsVectorLayer(input_fp, input_layer_name, "ogr")
 
@@ -340,15 +340,19 @@ def evaluate_point_layer(points, edges, points_buffer):
 
     return points
 
+
 ### TOPOLOGICAL EVALUATION
 
+
 def classify_edgelength(length_km, ideal_length_lower, ideal_length_upper, max_length):
-    '''
+    """
     length_km: length in km
     ideal_length_lower, ideal_length upper: lower and upper threshold for length's ideal range
     max_length: maximum tolerable length
-    '''
-    assert (ideal_length_lower < ideal_length_upper) and (ideal_length_upper < max_length), "Please provide valid length ranges"
+    """
+    assert (ideal_length_lower < ideal_length_upper) and (
+        ideal_length_upper < max_length
+    ), "Please provide valid length ranges"
 
     if length_km < ideal_length_lower:
         classification = "too_short"
@@ -358,16 +362,17 @@ def classify_edgelength(length_km, ideal_length_lower, ideal_length_upper, max_l
         classification = "above_ideal"
     else:
         classification = "too_long"
-    
+
     return classification
 
+
 def classify_looplength(length_km, loop_length_min, loop_length_max):
-    '''
+    """
     length_km: length in km
     ideal_length_lower, ideal_length upper: lower and upper threshold for length's ideal range
     max_length: maximum tolerable length
-    '''
-    assert (loop_length_min < loop_length_max), "Please provide valid length ranges"
+    """
+    assert loop_length_min < loop_length_max, "Please provide valid length ranges"
 
     if length_km < loop_length_min:
         classification = "too_short"
@@ -375,5 +380,5 @@ def classify_looplength(length_km, loop_length_min, loop_length_max):
         classification = "ideal_range"
     else:
         classification = "too_long"
-    
+
     return classification
