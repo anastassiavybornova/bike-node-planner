@@ -17,32 +17,50 @@ export = True
 
 # NOTE Fill out layout dictionary with layout name/types as keys and the list of all layers that should be displayed in the layout as values
 layout_dict = {
-    "input_data": ["Study area", "Network edges"],
-    "agriculture": ["Agriculture areas", "Network in agriculture areas"],
-    "nature": ["Nature areas", "Network in nature areas"],
-    "verify": ["Verify areas", "Network in verify areas"],
-    "summerhouse": ["Summerhouse areas", "Network in summerhouse areas"],
-    "culture": ["Culture areas", "Network in culture areas"],
+    "input_data": ["Basemap", "Network edges", "Study area"],
+    "agriculture": ["Basemap", "Network edges", "Agriculture areas", "Network in agriculture areas"],
+    "nature": ["Basemap", "Network edges", "Nature areas", "Network in nature areas"],
+    "verify": ["Basemap", "Network edges", "Verify areas", "Network in verify areas"],
+    "summerhouse": ["Basemap", "Network edges", "Summerhouse areas", "Network in summerhouse areas"],
+    "culture": ["Basemap", "Network edges", "Culture areas", "Network in culture areas"],
     "facilities": [
+        "Basemap",
+        "Network edges",
         "Facility within reach",
         "Facility outside reach",
     ],
     "services": [
+        "Basemap",
+        "Network edges",
         "Service within reach",
         "Service outside reach",
     ],
     "points_of_interest": [
+        "Basemap",
+        "Network edges",
         "Poi within reach",
         "Poi outside reach",
     ],
     "edge_length": [
+        "Basemap",
+        "Network edges",
         "Too long edges",
         "Too short edges",
         "Ideal range edges",
         "Above ideal edges",
     ],
-    "loop_length": ["Too long loops", "Too short loops", "Ideal range loops"],
-    "slope": ["Segments slope"],
+    "loop_length": [
+        "Basemap",
+        "Network edges",
+        "Too long loops",
+        "Too short loops",
+        "Ideal range loops"
+    ],
+    "slope": [
+        "Basemap",
+        "Network edges",
+        "Segments slope"
+    ],
 }
 
 # add all component layers to the list of layers
@@ -50,8 +68,7 @@ all_layers = QgsProject.instance().mapLayers().values()
 component_layer_names = [
     layer.name() for layer in all_layers if "Component" in layer.name()
 ]
-layout_dict["disconnected_components"] = component_layer_names
-
+layout_dict["disconnected_components"] = component_layer_names + ["Basemap"]
 
 # Define map extent and ratio
 layers_for_plotting = []
@@ -79,9 +96,6 @@ for layout_name, layout_layer_names in layout_dict.items():
         layer.name() for layer in QgsProject.instance().mapLayers().values()
     ]
     turn_off_layers(all_layer_names)
-
-    # Always include basemap and network edges
-    layout_layer_names.extend(["Basemap", "Network edges"])
 
     # Check that all desired layers exists
     turn_on_layer_names = [l for l in layout_layer_names if l in all_layer_names]
