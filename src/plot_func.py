@@ -519,7 +519,9 @@ def remove_existing_layers(nameparts):
     existing_layers = [
         layer.id() for layer in QgsProject.instance().mapLayers().values()
     ]
-    layers_to_remove = [l for l in existing_layers if any([e in l for e in nameparts])]
+    layers_to_remove = [
+        l for l in existing_layers if any([e in l or e.lower() in l for e in nameparts])
+    ]
     for r in layers_to_remove:
         QgsProject.instance().removeMapLayer(r)
     return None
