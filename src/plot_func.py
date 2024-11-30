@@ -75,12 +75,14 @@ def move_basemap_back(basemap_name="Basemap"):
 
 
 def turn_off_layers(layer_names):
-    for l in layer_names:
-        layer = QgsProject.instance().mapLayersByName(l)[0]
 
-        QgsProject.instance().layerTreeRoot().findLayer(
-            layer.id()
-        ).setItemVisibilityChecked(False)
+    for l in layer_names:
+
+        for layer in QgsProject.instance().mapLayersByName(l):
+            # layer = QgsProject.instance().mapLayersByName(l)[0]
+            QgsProject.instance().layerTreeRoot().findLayer(
+                layer.id()
+            ).setItemVisibilityChecked(False)
 
 
 def turn_on_layers(layer_names):
