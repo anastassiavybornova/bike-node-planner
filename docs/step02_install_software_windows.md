@@ -6,10 +6,6 @@ Follow these step-by-step instructions to set up QGIS and Python for the BikeNod
 
 1. The BikeNodePlanner is developed to run with QGIS-LTR 3.28 Firenze, but might also work with later or earlier versions. If you already have QGIS installed, you can check your version by clicking on `About QGIS-LTR`, as shown below. To download the latest stable release of QGIS or to upgrade it to the 3.28 version, see [https://www.qgis.org/en/site/forusers/download.html](https://www.qgis.org/en/site/forusers/download.html).
 
-<p align="center"><img alt="Check your QGIS version" src="/docs/screenshots/qgis-version.png" width=80%></p>
-
-***
-
 2. Find out the path to the Python installation for the QGIS app on your local machine. That is, find the full path to the `python3X` application file located in your QGIS installation folder. Typically, this will be similar to
 
 ```bash
@@ -42,7 +38,7 @@ To do so, simply:
 
 ***
 
-4. Use the path from step 3 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 3, and hit enter.) Note that you have to be connected to the internet for the installs to work.
+4. Use the path from step 2 (abbreviated as `<qgispythonpath>` below) to run the commands below in your commmand line interface. (Copy each line below separately, paste it in your command line interface, replace `<qgispythonpath>` in quotation marks by the path from step 3, and hit enter.) Note that you have to be connected to the internet for the installs to work.
 
 ```bash
 "<qgispythonpath>" -m pip install --upgrade shapely
